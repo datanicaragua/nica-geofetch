@@ -35,7 +35,7 @@ DEFAULT_PROVIDER_DATA: dict[str, Any] = {
         "retries": 2,
         "backoff_seconds": 1,
         "polite_delay_seconds": 1,
-        "user_agent": "Nica-GeoFetch/0.1 (+https://github.com/DataNicaTools/nica-geofetch)",
+        "user_agent": "Nica-GeoFetch/0.1 (+https://github.com/datanicaragua/nica-geofetch)",
     },
 }
 
@@ -105,7 +105,7 @@ def load_provider_config(path: Path | None = None) -> ProviderConfig:
             user_agent=str(
                 network.get(
                     "user_agent",
-                    "Nica-GeoFetch/0.1 (+https://github.com/DataNicaTools/nica-geofetch)",
+                    "Nica-GeoFetch/0.1 (+https://github.com/datanicaragua/nica-geofetch)",
                 )
             ),
         )

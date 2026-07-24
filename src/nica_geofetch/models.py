@@ -10,6 +10,14 @@ from typing import Any
 from shapely.geometry.base import BaseGeometry
 
 
+class RetrievalMode(StrEnum):
+    """How the exact source bytes entered a validation workflow."""
+
+    REMOTE_DOWNLOAD = "remote_download"
+    MANUAL_IMPORT = "manual_import"
+    SEED_INPUT = "seed_input"
+
+
 class OutputFormat(StrEnum):
     """Formats supported by MVP-1."""
 
@@ -36,7 +44,7 @@ class ProviderConfig:
     retries: int = 2
     backoff_seconds: float = 1.0
     polite_delay_seconds: float = 1.0
-    user_agent: str = "Nica-GeoFetch/0.1 (+https://github.com/DataNicaTools/nica-geofetch)"
+    user_agent: str = "Nica-GeoFetch/0.1 (+https://github.com/datanicaragua/nica-geofetch)"
 
 
 @dataclass(frozen=True)
@@ -72,6 +80,16 @@ class DiagnosticReport:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class DownloadMetadata:
+    """HTTP metadata captured after streaming and before source validation."""
+
+    source_url: str
+    retrieved_at_utc: str
+    response_content_type: str | None
+    byte_size: int
+
+
 @dataclass
 class ValidationIssue:
     """One validation finding."""
@@ -104,9 +122,14 @@ class ValidationReport:
 
     source_path: Path
     source_url: str | None
+    source_layer: str
+    retrieval_mode: RetrievalMode
     level: int
     sha256: str
     checked_utc: str
+    retrieved_at_utc: str
+    response_content_type: str | None
+    byte_size: int
     features: list[KMLFeature] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
     placemark_count: int = 0
@@ -127,12 +150,19 @@ class ValidationReport:
         result: dict[str, Any] = {
             "source_path": str(self.source_path),
             "source_url": self.source_url,
+            "source_layer": self.source_layer,
+            "retrieval_mode": self.retrieval_mode.value,
             "level": self.level,
             "sha256": self.sha256,
             "checked_utc": self.checked_utc,
+            "retrieved_at_utc": self.retrieved_at_utc,
+            "response_content_type": self.response_content_type,
+            "byte_size": self.byte_size,
             "valid": self.valid,
+            "validation_status": "valid" if self.valid else "invalid",
             "placemark_count": self.placemark_count,
             "polygon_feature_count": self.polygon_feature_count,
+            "geometry_count": self.polygon_feature_count,
             "ground_overlay_count": self.ground_overlay_count,
             "network_link_count": self.network_link_count,
             "repaired_geometry_count": self.repaired_geometry_count,
@@ -198,6 +228,7 @@ class WorkflowResult:
         return [
             {
                 "level": report.level,
+                "retrieval_mode": report.retrieval_mode.value,
                 "valid": report.valid,
                 "features": report.polygon_feature_count,
                 "sha256": report.sha256,

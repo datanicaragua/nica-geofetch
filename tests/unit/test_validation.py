@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from nica_geofetch.models import RetrievalMode
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 
 
@@ -49,6 +50,17 @@ def test_local_ogc_error_rejected(fixtures_directory: Path) -> None:
     )
     assert not report.valid
     assert report.issues[0].code == "ogc_error"
+
+
+def test_seed_input_retrieval_mode(fixtures_directory: Path) -> None:
+    report = IneterPfafstetterProvider().import_local(
+        fixtures_directory / "vector_level4.kml",
+        4,
+        retrieval_mode=RetrievalMode.SEED_INPUT,
+    )
+    assert report.retrieval_mode is RetrievalMode.SEED_INPUT
+    assert report.source_layer.endswith("nivel4_2025")
+    assert report.byte_size == (fixtures_directory / "vector_level4.kml").stat().st_size
 
 
 def test_level_code_length_validation(

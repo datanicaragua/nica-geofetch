@@ -1,5 +1,7 @@
 # Nica-GeoFetch
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/datanicaragua/nica-geofetch/blob/main/notebooks/NicaGeoFetch_Colab.ipynb)
+
 **Reproducible access to trusted institutional geodata for Nicaragua.**
 
 Nica-GeoFetch is a focused Python package and technical CLI for discovering,
@@ -42,10 +44,16 @@ interchange, and the Shapefile ZIP exists for compatibility.
 
 ## Beginner flow
 
-Open [notebooks/NicaGeoFetch_Colab.ipynb](notebooks/NicaGeoFetch_Colab.ipynb)
-in Google Colab. The notebook is in Spanish, uses package functions, defaults
-to temporary Colab storage, and mounts Google Drive only after an explicit
-choice.
+Open the public [NicaGeoFetch_Colab.ipynb](notebooks/NicaGeoFetch_Colab.ipynb)
+by itself in a fresh Google Colab runtime. It installs from the configurable
+Git ref at `https://github.com/datanicaragua/nica-geofetch`, also supports
+manual package ZIP upload, uses package APIs, defaults to temporary storage,
+and mounts Google Drive only after an explicit choice. Before the first release
+the default ref is `main`; released workflows should pin a stable tag.
+
+Repository contributors should instead use
+[NicaGeoFetch_Developer.ipynb](notebooks/NicaGeoFetch_Developer.ipynb), which
+requires the repository root and installs in editable mode.
 
 ## Security and reproducibility
 

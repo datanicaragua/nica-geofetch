@@ -27,6 +27,10 @@ dependencies = [
   "shapely>=2.0,<3",
 ]
 
+[project.urls]
+Repository = "https://github.com/datanicaragua/nica-geofetch"
+Issues = "https://github.com/datanicaragua/nica-geofetch/issues"
+
 [project.optional-dependencies]
 dev = [
   "mypy>=1.11,<2",

@@ -11,7 +11,7 @@ import responses
 from nica_geofetch.diagnostics import classify_request_exception
 from nica_geofetch.download import SecureDownloader, validate_remote_url
 from nica_geofetch.exceptions import DownloadError, SecurityError
-from nica_geofetch.models import DownloadSettings
+from nica_geofetch.models import DownloadMetadata, DownloadSettings
 
 OFFICIAL_URL = "https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml?test=1"
 ALLOWED_HOSTS = ("geoserveridefn.ineter.gob.ni",)
@@ -83,7 +83,11 @@ def test_response_size_limit_removes_part_file(tmp_path: Path) -> None:
     )
     destination = tmp_path / "source.kml"
     with pytest.raises(DownloadError) as raised:
-        downloader(max_bytes=50).download(OFFICIAL_URL, destination, lambda path: path)
+        downloader(max_bytes=50).download(
+            OFFICIAL_URL,
+            destination,
+            lambda path, _metadata: path,
+        )
     assert raised.value.category == "response_size_limit"
     assert not destination.exists()
     assert not (tmp_path / "source.kml.part").exists()
@@ -95,10 +99,12 @@ def test_atomic_file_handling(tmp_path: Path) -> None:
     responses.add(responses.GET, OFFICIAL_URL, status=200, body=body)
     destination = tmp_path / "source.kml"
 
-    def validate_part(part: Path) -> bytes:
+    def validate_part(part: Path, metadata: DownloadMetadata) -> bytes:
         assert part.name.endswith(".part")
         assert part.exists()
         assert not destination.exists()
+        assert metadata.source_url == OFFICIAL_URL
+        assert metadata.byte_size == len(body)
         return part.read_bytes()
 
     result = downloader().download(OFFICIAL_URL, destination, validate_part)

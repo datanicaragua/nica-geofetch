@@ -24,5 +24,7 @@ jobs:
       - run: mypy src
       - run: pytest -q
       - run: python -m nica_geofetch.cli --help
+      - run: python scripts/publication_audit.py
+      - run: pre-commit run --all-files
     env:
       RUN_INETER_LIVE_TEST: "0"

@@ -19,7 +19,7 @@ from nica_geofetch.diagnostics import (
     utc_now,
 )
 from nica_geofetch.exceptions import DownloadError, SecurityError
-from nica_geofetch.models import DiagnosticReport, DownloadSettings
+from nica_geofetch.models import DiagnosticReport, DownloadMetadata, DownloadSettings
 
 LOGGER = logging.getLogger(__name__)
 TRANSIENT_STATUSES = {429, 500, 502, 503, 504}
@@ -178,7 +178,12 @@ class SecureDownloader:
             category, message = classify_request_exception(exc)
             return failure_report(official_url=url, category=category, message=message)
 
-    def download(self, url: str, destination: Path, validator: Callable[[Path], T]) -> T:
+    def download(
+        self,
+        url: str,
+        destination: Path,
+        validator: Callable[[Path, DownloadMetadata], T],
+    ) -> T:
         """Stream to a `.part` file, validate, and atomically move on success."""
 
         validate_remote_url(url, self.allowed_hosts)
@@ -234,7 +239,13 @@ class SecureDownloader:
                 if content_problem:
                     category, message = content_problem
                     raise DownloadError(message, category=category)
-                validation_result = validator(part_path)
+                metadata = DownloadMetadata(
+                    source_url=url,
+                    retrieved_at_utc=utc_now(),
+                    response_content_type=response.headers.get("Content-Type"),
+                    byte_size=total,
+                )
+                validation_result = validator(part_path, metadata)
                 os.replace(part_path, destination)
                 return validation_result
         except PermissionError as exc:

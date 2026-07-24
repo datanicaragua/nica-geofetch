@@ -14,7 +14,12 @@ from nica_geofetch.manifests import (
     write_provenance_summary,
     write_source_manifest,
 )
-from nica_geofetch.models import OutputFormat, ValidationReport, WorkflowResult
+from nica_geofetch.models import (
+    OutputFormat,
+    RetrievalMode,
+    ValidationReport,
+    WorkflowResult,
+)
 from nica_geofetch.packaging import create_final_archive
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 
@@ -68,13 +73,19 @@ def import_local_workflow(
     formats: Iterable[str | OutputFormat],
     output_directory: Path,
     repair: bool = False,
+    retrieval_mode: RetrievalMode = RetrievalMode.MANUAL_IMPORT,
     provider: IneterPfafstetterProvider | None = None,
 ) -> WorkflowResult:
     """Copy, validate, convert, audit, and package one manually supplied KML."""
 
     active_provider = provider or IneterPfafstetterProvider()
     output = _prepare_output(output_directory)
-    report = active_provider.import_local(input_path, level, repair=repair)
+    report = active_provider.import_local(
+        input_path,
+        level,
+        repair=repair,
+        retrieval_mode=retrieval_mode,
+    )
     raw_path = output / "raw" / f"ineter_pfafstetter_2025_level{level}.kml"
     if input_path.resolve() != raw_path.resolve():
         shutil.copy2(input_path, raw_path)

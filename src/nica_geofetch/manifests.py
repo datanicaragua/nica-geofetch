@@ -44,14 +44,15 @@ def write_audit_reports(
         "Institutional source data is third-party material and is not covered by "
         "the Apache-2.0 software license.",
         "",
-        "| Level | Valid | Placemarks | Polygon features | Errors | Warnings | SHA-256 |",
-        "|---:|:---:|---:|---:|---:|---:|---|",
+        "| Level | Retrieval mode | Valid | Placemarks | Polygon features | Errors | Warnings | SHA-256 |",
+        "|---:|---|:---:|---:|---:|---:|---:|---|",
     ]
     for report in reports:
         errors = sum(issue.severity == "error" for issue in report.issues)
         warnings = sum(issue.severity == "warning" for issue in report.issues)
         lines.append(
-            f"| {report.level} | {'yes' if report.valid else 'no'} | "
+            f"| {report.level} | {report.retrieval_mode.value} | "
+            f"{'yes' if report.valid else 'no'} | "
             f"{report.placemark_count} | {report.polygon_feature_count} | "
             f"{errors} | {warnings} | `{report.sha256}` |"
         )
@@ -80,10 +81,18 @@ def write_source_manifest(
             "provider": "ineter-pfafstetter",
             "dataset_id": "ineter-pfafstetter-2025",
             "level": report.level,
-            "official_source_url": report.source_url,
+            "source_url": report.source_url,
+            "source_layer": report.source_layer,
+            "retrieval_mode": report.retrieval_mode.value,
+            "retrieved_at_utc": report.retrieved_at_utc,
+            "response_content_type": report.response_content_type,
+            "byte_size": report.byte_size,
             "local_raw_file": report.source_path.relative_to(output_directory).as_posix(),
             "sha256": report.sha256,
-            "validated_utc": report.checked_utc,
+            "validation_status": "valid" if report.valid else "invalid",
+            "placemark_count": report.placemark_count,
+            "geometry_count": report.polygon_feature_count,
+            "validated_at_utc": report.checked_utc,
             "attribution": (
                 "Source: INETER, national hydrographic units adjusted to Pfafstetter, 2025."
             ),
@@ -97,7 +106,7 @@ def write_source_manifest(
     return _write_json(
         output_directory / "source_manifest.json",
         {
-            "schema_version": 1,
+            "schema_version": 2,
             "software_license": "Apache-2.0",
             "software_license_scope": "Nica-GeoFetch software and synthetic fixtures only",
             "sources": sources,
@@ -130,7 +139,8 @@ def write_provenance_summary(
     for report in reports:
         outputs = ", ".join(sorted(by_level[report.level].outputs))
         lines.append(
-            f"- Level {report.level}: {report.polygon_feature_count} polygon features; "
+            f"- Level {report.level} ({report.retrieval_mode.value}): "
+            f"{report.polygon_feature_count} polygon features; "
             f"source SHA-256 `{report.sha256}`; outputs: {outputs}."
         )
     path = output_directory / "provenance_summary.md"

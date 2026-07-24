@@ -14,7 +14,12 @@ from shapely.geometry import GeometryCollection, MultiPolygon, Polygon
 from shapely.geometry.base import BaseGeometry
 
 from nica_geofetch.diagnostics import utc_now
-from nica_geofetch.models import KMLFeature, ValidationIssue, ValidationReport
+from nica_geofetch.models import (
+    KMLFeature,
+    RetrievalMode,
+    ValidationIssue,
+    ValidationReport,
+)
 
 KML_NAMESPACE = "http://www.opengis.net/kml/2.2"
 KML = f"{{{KML_NAMESPACE}}}"
@@ -214,6 +219,11 @@ def validate_kml(
     plausible_bounds: tuple[float, float, float, float],
     provider_id: str = "ineter-pfafstetter",
     source_url: str | None = None,
+    source_layer: str = "",
+    retrieval_mode: RetrievalMode = RetrievalMode.MANUAL_IMPORT,
+    retrieved_at_utc: str | None = None,
+    response_content_type: str | None = None,
+    byte_size: int | None = None,
     repair: bool = False,
 ) -> ValidationReport:
     """Validate a KML and return normalized polygon features plus audit findings."""
@@ -224,9 +234,14 @@ def validate_kml(
     report = ValidationReport(
         source_path=path,
         source_url=source_url,
+        source_layer=source_layer,
+        retrieval_mode=retrieval_mode,
         level=level,
         sha256=sha256_file(path),
         checked_utc=checked_utc,
+        retrieved_at_utc=retrieved_at_utc or checked_utc,
+        response_content_type=response_content_type,
+        byte_size=byte_size if byte_size is not None else path.stat().st_size,
     )
     if path.stat().st_size == 0:
         return _content_error_report(report, code="empty_kml", message="The KML file is empty.")
@@ -380,8 +395,12 @@ def validate_kml(
                             "pfaf_code_source": code_source or "",
                             "source_provider": provider_id,
                             "source_url": source_url or "",
+                            "source_layer": source_layer,
+                            "retrieval_mode": retrieval_mode.value,
                             "source_sha256": report.sha256,
-                            "retrieved_utc": checked_utc,
+                            "retrieved_at_utc": report.retrieved_at_utc,
+                            "response_content_type": response_content_type or "",
+                            "source_byte_size": str(report.byte_size),
                         }
                     )
                     report.features.append(

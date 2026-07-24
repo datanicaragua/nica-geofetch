@@ -69,3 +69,22 @@
 - Updated project status, handoff, roadmap, registry, phase log, and prompt
   registry to the accepted MVP-1 state.
 - Next milestone is MVP-2 source clarification and hardening, not platform expansion.
+
+## 2026-07-24 - MVP-1 public-release hardening
+
+- Read all continuity documents in the prompt-specified order and confirmed a
+  clean `main` baseline at `154c25d`.
+- Split the notebook into a public fresh-Colab workflow and a developer-only
+  repository-local editable workflow.
+- Added GitHub bootstrap with configurable `GIT_REF`, pre-release default
+  `main`, stable-tag guidance, and manual package-ZIP fallback.
+- Added README Colab badges targeting `datanicaragua/nica-geofetch`.
+- Added semantic equivalence tests for all four manually verified INETER URLs.
+- Added explicit retrieval modes and remote response/source metadata to reports,
+  normalized feature provenance, and manifest schema version 2.
+- Ran the opt-in live level 4 test successfully: 12 polygon features; temporary
+  data removed.
+- Added a human-controlled four-level command, publication checklist, and local
+  tracked-file/institutional-data/secret audit.
+- Expanded the offline suite from 27 to 38 passing tests. Final staged
+  pre-commit and acceptance reruns precede the local hardening commit.

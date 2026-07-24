@@ -8,6 +8,22 @@ import pytest
 
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 
+MANUALLY_VERIFIED_URLS = {
+    level: (
+        "https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml?"
+        f"layers=wsINETER-RH%3AUnidad_Hidrol%C3%B3gica_Nacional_nivel{level}_2025"
+        "&mode=download&kmattr=true&kmplacemark=true"
+    )
+    for level in (4, 5, 6, 7)
+}
+
+
+def semantic_url(url: str) -> tuple[str, str, str, dict[str, list[str]]]:
+    """Normalize URL components so query ordering and percent-encoding are semantic."""
+
+    parsed = urlsplit(url)
+    return parsed.scheme, parsed.netloc, parsed.path, parse_qs(parsed.query)
+
 
 def test_unicode_url_encoding_and_required_parameters() -> None:
     provider = IneterPfafstetterProvider()
@@ -20,6 +36,14 @@ def test_unicode_url_encoding_and_required_parameters() -> None:
         "kmattr": ["true"],
         "kmplacemark": ["true"],
     }
+
+
+@pytest.mark.parametrize("level", [4, 5, 6, 7])
+def test_configured_url_is_semantically_equivalent_to_manually_verified_url(
+    level: int,
+) -> None:
+    generated = IneterPfafstetterProvider().build_url(level)
+    assert semantic_url(generated) == semantic_url(MANUALLY_VERIFIED_URLS[level])
 
 
 def test_provider_lists_only_mvp_dataset() -> None:

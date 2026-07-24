@@ -2,8 +2,9 @@
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_Foundation_v0.2` is complete. MVP-1 is
-implemented, verified, and checkpointed at `aaba58b`.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicReleaseHardening_v0.1` has
+implemented the local hardening changes and is at final quality-gate/commit
+closeout.
 
 ## Complete
 
@@ -16,17 +17,24 @@ implemented, verified, and checkpointed at `aaba58b`.
   isolation, and 27-test offline suite implemented.
 - Supplied level 4 KML converted offline to every requested format and reopened.
 - All acceptance checks and pre-commit hooks pass.
+- Public notebook bootstraps from GitHub without requiring a repository checkout
+  and supports package-ZIP upload; the developer notebook remains editable/local.
+- Reports and manifests distinguish all retrieval modes and contain complete
+  remote HTTP/source provenance.
+- Live level 4 test passed with 12 features and automatic temporary cleanup.
+- Local publication audit and 38 offline tests pass.
 
 ## Incomplete
 
-Nothing remains inside MVP-1. External source-license clarification and a
-human-authorized live endpoint check belong to MVP-2.
+Final staged pre-commit/acceptance reruns and the local hardening commit remain
+inside this task. GitHub CI, a real badge-launched fresh-Colab run, visibility
+approval, and v0.1.0 release approval are intentionally external human gates.
 
 ## NEXT_ACTION
 
-Begin MVP-2 by obtaining and recording an authoritative INETER statement for
-licensing, redistribution, attribution, and update cadence. Before making any
-change, run the resume checks below. Do not add a second provider yet.
+Finish the local hardening commit, then stop. A human owner must review
+`docs/PUBLICATION_CHECKLIST.md` and explicitly authorize any remote, push,
+visibility change, or release. No such action is authorized by this handoff.
 
 ## Verify environment
 
@@ -34,7 +42,7 @@ change, run the resume checks below. Do not add a second provider yet.
 python --version
 python -m pip install -e ".[dev]"
 git status --short --branch
-python scripts\audit_seed_inputs.py
+python scripts\publication_audit.py
 ```
 
 ## Resume
@@ -45,6 +53,7 @@ ruff check .
 mypy src
 pytest -q
 python -m nica_geofetch.cli --help
+pre-commit run --all-files
 ```
 
 ## Known risks
@@ -54,12 +63,15 @@ python -m nica_geofetch.cli --help
 - Real level 7 input is large (about 35 MB and 2,337 placemarks), so parsing
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
+- The public Colab GitHub bootstrap cannot complete until the target repository
+  exists and is visible.
 
 ## Relevant files
 
 - `AGENTS.md`
 - `docs/PROJECT_STATUS.md`
 - `docs/ARCHITECTURE.md`
+- `docs/PUBLICATION_CHECKLIST.md`
 - `configs/providers/ineter_pfafstetter_2025.yml`
 - `registry/datasets.yml`
 - `scripts/audit_seed_inputs.py`
@@ -67,6 +79,6 @@ python -m nica_geofetch.cli --help
 
 ## Dirty working tree
 
-Expected after the closeout documentation commit: clean tracked working tree.
+Expected after the hardening closeout commit: clean tracked working tree.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

@@ -22,6 +22,8 @@ This page is the durable entry point for maintainers, users, and future agents.
 - [DATA_GOVERNANCE.md](DATA_GOVERNANCE.md): allowed artifacts and source-data handling.
 - [LEGAL_AND_ATTRIBUTION.md](LEGAL_AND_ATTRIBUTION.md): known restrictions and attribution.
 - [SEED_AUDIT.md](SEED_AUDIT.md): non-sensitive seed schema and count findings.
+- [PUBLICATION_CHECKLIST.md](PUBLICATION_CHECKLIST.md): human-controlled audit,
+  visibility, Colab, and release gates.
 - [../DATA_TERMS.md](../DATA_TERMS.md): user-facing separation of software and dataset terms.
 - [../SECURITY.md](../SECURITY.md): downloader threat model and vulnerability reporting.
 
@@ -32,7 +34,9 @@ This page is the durable entry point for maintainers, users, and future agents.
 - [../README.md](../README.md): English quick start.
 - [../README.es.md](../README.es.md): Spanish quick start.
 - [../notebooks/NicaGeoFetch_Colab.ipynb](../notebooks/NicaGeoFetch_Colab.ipynb):
-  beginner-friendly Colab workflow.
+  public, self-bootstrapping beginner Colab workflow.
+- [../notebooks/NicaGeoFetch_Developer.ipynb](../notebooks/NicaGeoFetch_Developer.ipynb):
+  repository-local editable development workflow.
 
 ## Project process
 

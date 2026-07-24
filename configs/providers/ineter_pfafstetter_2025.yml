@@ -21,7 +21,7 @@ network:
   retries: 2
   backoff_seconds: 1
   polite_delay_seconds: 1
-  user_agent: "Nica-GeoFetch/0.1 (+https://github.com/DataNicaTools/nica-geofetch)"
+  user_agent: "Nica-GeoFetch/0.1 (+https://github.com/datanicaragua/nica-geofetch)"
 notes:
   - Query strings are constructed with urllib.parse.urlencode.
   - WFS is intentionally not used; these layers were not exposed as WFS FeatureTypes.

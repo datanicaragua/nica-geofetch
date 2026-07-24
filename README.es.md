@@ -1,5 +1,7 @@
 # Nica-GeoFetch
 
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/datanicaragua/nica-geofetch/blob/main/notebooks/NicaGeoFetch_Colab.ipynb)
+
 **Acceso reproducible a geodatos institucionales de Nicaragua.**
 
 Descubre, descarga, valida y prepara datos geoespaciales confiables de
@@ -28,9 +30,15 @@ nica-geofetch import-local --level 4 --input nivel4.kml \
   --formats gpkg geojson shapefile --output outputs
 ```
 
-GeoPackage es el formato analítico recomendado. El cuaderno
-[notebooks/NicaGeoFetch_Colab.ipynb](notebooks/NicaGeoFetch_Colab.ipynb)
-ofrece un flujo introductorio en español.
+GeoPackage es el formato analítico recomendado. El cuaderno público
+[NicaGeoFetch_Colab.ipynb](notebooks/NicaGeoFetch_Colab.ipynb) funciona abierto
+por sí solo en un Colab nuevo: instala desde la referencia configurable del
+repositorio público y ofrece carga manual del ZIP del paquete. Antes de la
+primera versión usa `main`; después debe fijarse una etiqueta estable.
+
+El cuaderno [NicaGeoFetch_Developer.ipynb](notebooks/NicaGeoFetch_Developer.ipynb)
+es solo para contribuir al repositorio: requiere `pyproject.toml` e instalación
+editable.
 
 ## Términos de datos
 

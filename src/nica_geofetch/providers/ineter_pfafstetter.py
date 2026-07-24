@@ -10,7 +10,13 @@ from urllib.parse import urlencode
 from nica_geofetch.config import download_settings, load_provider_config
 from nica_geofetch.download import SecureDownloader
 from nica_geofetch.exceptions import ValidationError
-from nica_geofetch.models import DiagnosticReport, ProviderConfig, ValidationReport
+from nica_geofetch.models import (
+    DiagnosticReport,
+    DownloadMetadata,
+    ProviderConfig,
+    RetrievalMode,
+    ValidationReport,
+)
 from nica_geofetch.providers.base import Provider
 from nica_geofetch.validation import validate_kml
 
@@ -78,6 +84,10 @@ class IneterPfafstetterProvider(Provider):
         *,
         repair: bool = False,
         source_url: str | None = None,
+        retrieval_mode: RetrievalMode = RetrievalMode.MANUAL_IMPORT,
+        retrieved_at_utc: str | None = None,
+        response_content_type: str | None = None,
+        byte_size: int | None = None,
     ) -> ValidationReport:
         """Validate a local KML using provider aliases and provenance."""
 
@@ -91,6 +101,11 @@ class IneterPfafstetterProvider(Provider):
             plausible_bounds=self.config.plausible_bounds,
             provider_id=self.provider_id,
             source_url=source_url,
+            source_layer=self.config.layers[level],
+            retrieval_mode=retrieval_mode,
+            retrieved_at_utc=retrieved_at_utc,
+            response_content_type=response_content_type,
+            byte_size=byte_size,
             repair=repair,
         )
 
@@ -110,12 +125,16 @@ class IneterPfafstetterProvider(Provider):
         destination = raw_directory / f"ineter_pfafstetter_2025_level{level}.kml"
         client = downloader or self._downloader(ca_bundle)
 
-        def validator(part_path: Path) -> ValidationReport:
+        def validator(part_path: Path, metadata: DownloadMetadata) -> ValidationReport:
             report = self.import_local(
                 part_path,
                 level,
                 repair=repair,
                 source_url=url,
+                retrieval_mode=RetrievalMode.REMOTE_DOWNLOAD,
+                retrieved_at_utc=metadata.retrieved_at_utc,
+                response_content_type=metadata.response_content_type,
+                byte_size=metadata.byte_size,
             )
             if not report.valid:
                 errors = "; ".join(

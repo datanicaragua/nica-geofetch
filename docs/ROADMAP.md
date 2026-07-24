@@ -12,6 +12,13 @@
 MVP-1 is complete. Every acceptance command and the offline real-seed level 4
 workflow pass as recorded in `PROJECT_STATUS.md`.
 
+## Public-release hardening gate
+
+The local code/notebook hardening is complete, but publication is gated by
+`PUBLICATION_CHECKLIST.md`. GitHub CI, real fresh-Colab execution from the
+public badge, visibility authorization, and stable-tag verification must pass
+before v0.1.0. These gates do not expand provider or platform scope.
+
 ## Next milestone - MVP-2 hardening and source clarification
 
 1. Obtain and record an authoritative INETER statement for licensing,
