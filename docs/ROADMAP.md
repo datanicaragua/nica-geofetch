@@ -9,7 +9,8 @@
 - KML, GeoPackage, GeoJSON, and Shapefile ZIP output.
 - Audits, provenance, checksums, final ZIP, CLI, Colab notebook, and offline tests.
 
-The MVP is complete only when every command in `PROJECT_STATUS.md` passes.
+MVP-1 is complete. Every acceptance command and the offline real-seed level 4
+workflow pass as recorded in `PROJECT_STATUS.md`.
 
 ## Next milestone - MVP-2 hardening and source clarification
 

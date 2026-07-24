@@ -41,7 +41,9 @@ datasets:
     redistribution_status: Institutional clarification required before public redistribution
     provider_status: configured
     implementation_status: implemented
-    quality_status: seed inputs structurally audited; implementation verification in progress
+    quality_status: >-
+      Implemented and offline validated; level 4 converts without repair;
+      levels 5-7 contain source geometry issues requiring explicit repair
     last_checked_utc: "2026-07-24T00:00:00Z"
     update_frequency: unknown
     contact: Consult official INETER channels

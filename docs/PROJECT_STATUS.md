@@ -1,9 +1,9 @@
 # Project status
 
-- **Current milestone:** MVP-1 - Foundation and INETER Pfafstetter Provider
+- **Current milestone:** MVP-1 - Foundation and INETER Pfafstetter Provider (complete)
 - **Current branch:** `main`
-- **Latest stable commit:** none yet (checkpoint commits pending)
-- **Last update:** 2026-07-24T20:59:33Z
+- **Latest stable commit:** `aaba58b` - `feat: implement Nica-GeoFetch MVP-1 foundation`
+- **Last update:** 2026-07-24T21:59:20Z
 
 ## Implemented capabilities
 
@@ -24,15 +24,18 @@
 - PDF rights statement: text-extracted and visually verified.
 - `ruff check .`: passed.
 - `mypy src`: passed (17 source files).
-- `pytest -q`: passed (27 offline tests); final clean rerun pending.
+- `pytest -q`: passed (27 offline tests).
 - `python -m nica_geofetch.cli --help`: passed.
 - Notebook: valid nbformat v4 and smoke assertions passed.
+- `pre-commit run --all-files`: passed all six hooks.
 
 ## Current limitations
 
 Levels 5-7 contain 2, 1, and 2 invalid source geometries respectively and
 require the user's explicit `--repair` decision for conversion. Live INETER
-access remains opt-in and has not been required for validation.
+access remains opt-in and was not run during offline acceptance. Python 3.12
+was verified locally; Python 3.11 is configured in CI but was not available in
+this desktop environment.
 
 ## Blocked items
 
@@ -40,5 +43,6 @@ None.
 
 ## Next recommended action
 
-Run the final clean acceptance suite, create local checkpoint commits, and
-replace this in-progress status with exact commit hashes and a clean Git state.
+Begin MVP-2 with written INETER clarification of licensing, redistribution,
+attribution, and update cadence. Do not add another provider until that review
+and an opt-in live schema-drift check are recorded.

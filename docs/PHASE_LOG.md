@@ -13,14 +13,15 @@
 - Initial install exposed the expected ordering issue that `README.md` did not
   yet exist; governance scaffolding corrected it.
 
-## 2026-07-24 - Phase 1: governance and continuity (in progress)
+## 2026-07-24 - Phase 1: governance and continuity
 
 - Added bilingual project identity, contribution, security, software/data
   licensing separation, registry, provider configuration, strategic vision,
   architecture, roadmap, legal, governance, beginner, troubleshooting, and
   continuity documentation.
 - Added a concise agent resume protocol and explicit no-push/no-publication rules.
-- Relevant checks: seed audit passed; packaging checks pending.
+- Relevant phase check: seed audit passed. Packaging checks were completed in
+  Phase 3.
 
 ## 2026-07-24 - Phase 2: core provider
 
@@ -51,9 +52,20 @@
   access diagnosis, sequential download, manual upload fallback, simple-cell
   fallback, final summary, and ZIP download.
 
-## 2026-07-24 - Phase 5: quality assurance (in progress)
+## 2026-07-24 - Phase 5: quality assurance
 
 - Added 27 offline tests covering the requested network, validation,
   conversion, interface, notebook, and continuity behaviors.
-- Current evidence: 27 tests passed; ruff passed; mypy passed; CLI help passed.
-- Final clean rerun and closeout metadata remain.
+- Final evidence: 27 tests passed; ruff passed; mypy passed; CLI help passed;
+  notebook validation passed; all pre-commit hooks passed.
+- Verified the archived prompt has 841 lines and zero line differences from the
+  supplied attachment.
+
+## 2026-07-24 - Phase 6: closeout
+
+- Created stable implementation commit `aaba58b`.
+- Confirmed only synthetic KML fixtures are tracked; real institutional inputs
+  and all converted outputs remain ignored.
+- Updated project status, handoff, roadmap, registry, phase log, and prompt
+  registry to the accepted MVP-1 state.
+- Next milestone is MVP-2 source clarification and hardening, not platform expansion.

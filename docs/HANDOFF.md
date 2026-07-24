@@ -2,8 +2,8 @@
 
 ## What was being done
 
-Executing prompt `NicaGeoFetch_CodexDesktop_MVP1_Foundation_v0.2`. The complete
-MVP implementation exists and is in final QA/commit closeout.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_Foundation_v0.2` is complete. MVP-1 is
+implemented, verified, and checkpointed at `aaba58b`.
 
 ## Complete
 
@@ -15,18 +15,18 @@ MVP implementation exists and is in final QA/commit closeout.
 - Secure provider, validation, conversion, packaging, CLI, notebook, live-test
   isolation, and 27-test offline suite implemented.
 - Supplied level 4 KML converted offline to every requested format and reopened.
+- All acceptance checks and pre-commit hooks pass.
 
 ## Incomplete
 
-- Final clean acceptance rerun.
-- Local checkpoint commits and commit hashes in continuity files.
-- Final status/registry update and clean-tree confirmation.
+Nothing remains inside MVP-1. External source-license clarification and a
+human-authorized live endpoint check belong to MVP-2.
 
 ## NEXT_ACTION
 
-Run the final acceptance commands from `.venv`, create logical local commits,
-write their hashes to `PROJECT_STATUS.md` and `PROMPT_REGISTRY.md`, then verify
-that `git status --short --branch` is clean.
+Begin MVP-2 by obtaining and recording an authoritative INETER statement for
+licensing, redistribution, attribution, and update cadence. Before making any
+change, run the resume checks below. Do not add a second provider yet.
 
 ## Verify environment
 
@@ -40,14 +40,12 @@ python scripts\audit_seed_inputs.py
 ## Resume
 
 ```powershell
+$env:PATH = "$PWD\.venv\Scripts;$env:PATH"
 ruff check .
 mypy src
 pytest -q
 python -m nica_geofetch.cli --help
 ```
-
-During initial implementation some commands are expected to fail until their
-modules exist. Fix the smallest failing layer and rerun the focused check.
 
 ## Known risks
 
@@ -69,5 +67,6 @@ modules exist. Fix the smallest failing layer and rerun the focused check.
 
 ## Dirty working tree
 
-Implementation and documentation changes are currently uncommitted.
-`seed_inputs/`, `.venv/`, `.pytest_tmp/`, and `tmp/` are ignored local artifacts.
+Expected after the closeout documentation commit: clean tracked working tree.
+`seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
+ignored local artifacts and must remain untracked.
