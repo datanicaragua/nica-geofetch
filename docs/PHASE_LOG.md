@@ -86,5 +86,9 @@
   data removed.
 - Added a human-controlled four-level command, publication checklist, and local
   tracked-file/institutional-data/secret audit.
-- Expanded the offline suite from 27 to 38 passing tests. Final staged
-  pre-commit and acceptance reruns precede the local hardening commit.
+- Expanded the offline suite from 27 to 38 passing tests.
+- Final results: editable installation, ruff, mypy, 38 tests, both nbformat
+  validations, notebook smoke tests, publication audit, CLI help, and all six
+  pre-commit hooks passed.
+- Created stable hardening commit `a52e32d`; no remote or publication action
+  was performed.

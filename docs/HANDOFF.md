@@ -2,9 +2,8 @@
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicReleaseHardening_v0.1` has
-implemented the local hardening changes and is at final quality-gate/commit
-closeout.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicReleaseHardening_v0.1` is complete.
+The local hardening implementation is checkpointed at `a52e32d`.
 
 ## Complete
 
@@ -16,7 +15,7 @@ closeout.
 - Secure provider, validation, conversion, packaging, CLI, notebook, live-test
   isolation, and 27-test offline suite implemented.
 - Supplied level 4 KML converted offline to every requested format and reopened.
-- All acceptance checks and pre-commit hooks pass.
+- MVP foundation and hardening acceptance checks and pre-commit hooks pass.
 - Public notebook bootstraps from GitHub without requiring a repository checkout
   and supports package-ZIP upload; the developer notebook remains editable/local.
 - Reports and manifests distinguish all retrieval modes and contain complete
@@ -26,15 +25,16 @@ closeout.
 
 ## Incomplete
 
-Final staged pre-commit/acceptance reruns and the local hardening commit remain
-inside this task. GitHub CI, a real badge-launched fresh-Colab run, visibility
-approval, and v0.1.0 release approval are intentionally external human gates.
+Nothing remains inside the authorized local hardening task. GitHub CI, a real
+badge-launched fresh-Colab run, visibility approval, and v0.1.0 release
+approval are intentionally external human gates.
 
 ## NEXT_ACTION
 
-Finish the local hardening commit, then stop. A human owner must review
-`docs/PUBLICATION_CHECKLIST.md` and explicitly authorize any remote, push,
-visibility change, or release. No such action is authorized by this handoff.
+A human owner must review `docs/PUBLICATION_CHECKLIST.md` and explicitly
+authorize any remote, push, visibility change, or release. After visibility,
+run GitHub CI and the real fresh-Colab gate before considering v0.1.0. No such
+action is authorized by this handoff.
 
 ## Verify environment
 

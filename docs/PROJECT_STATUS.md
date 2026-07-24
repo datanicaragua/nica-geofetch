@@ -2,9 +2,8 @@
 
 - **Current milestone:** MVP-1 public-release hardening (locally complete; publication gated)
 - **Current branch:** `main`
-- **Latest stable baseline:** `154c25d` - `docs: close MVP-1 execution and handoff`
-- **Hardening commit:** pending final quality gates
-- **Last update:** 2026-07-24T22:52:48Z
+- **Latest stable commit:** `a52e32d` - `feat: harden MVP-1 for public release audit`
+- **Last update:** 2026-07-24T23:00:10Z
 
 ## Implemented capabilities
 
@@ -31,7 +30,7 @@
 - PDF rights statement: text-extracted and visually verified.
 - `ruff check .`: passed.
 - `mypy src`: passed (17 source files).
-- `pytest -q`: passed (38 offline tests during hardening; final gate rerun pending).
+- `pytest -q`: passed (38 offline tests).
 - `python -m nica_geofetch.cli --help`: passed.
 - Both notebooks: valid nbformat v4 and smoke assertions passed.
 - Fresh-Colab bootstrap simulation: passed without `pyproject.toml`.
@@ -39,7 +38,7 @@
 - Opt-in live level 4 test: passed with 12 polygon features; temporary data removed.
 - Publication audit: passed with no forbidden institutional data or supported
   secret signature.
-- `pre-commit run --all-files`: pending final staged-file run.
+- `pre-commit run --all-files`: passed all six hooks on the staged hardening tree.
 
 ## Current limitations
 
