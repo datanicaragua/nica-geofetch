@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use Nica-GeoFetch, please cite the software and the source institution."
+title: "Nica-GeoFetch"
+type: software
+version: 0.1.0
+date-released: 2026-07-24
+license: Apache-2.0
+authors:
+  - name: "DataNicaTools contributors"
+repository-code: "https://github.com/DataNicaTools/nica-geofetch"
+abstract: "Reproducible access to trusted institutional geodata for Nicaragua."
+keywords:
+  - Nicaragua
+  - geospatial
+  - INETER
+  - Pfafstetter

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Synthetic Pfafstetter test fixture</name>
+    <Placemark id="synthetic.1">
+      <name>generated-feature-one</name>
+      <description><![CDATA[
+        <h4>Synthetic attributes</h4>
+        <ul class="textattributes">
+          <li><strong><span class="atr-name">n4</span>:</strong>
+              <span class="atr-value">1234</span></li>
+          <li><strong><span class="atr-name">label</span>:</strong>
+              <span class="atr-value">Área sintética uno</span></li>
+        </ul>
+      ]]></description>
+      <MultiGeometry>
+        <Point><coordinates>-86.0,12.0</coordinates></Point>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -86.10,12.00 -86.00,12.00 -86.00,12.10 -86.10,12.10 -86.10,12.00
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+    <Placemark id="synthetic.2">
+      <name>5678</name>
+      <description><![CDATA[
+        <ul><li><span class="atr-name">label</span>:
+        <span class="atr-value">Área sintética dos</span></li></ul>
+      ]]></description>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -85.90,12.00 -85.80,12.00 -85.80,12.10 -85.90,12.10 -85.90,12.00
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

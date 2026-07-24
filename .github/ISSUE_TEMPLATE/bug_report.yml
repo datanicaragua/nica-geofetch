@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible Nica-GeoFetch problem using synthetic or redacted data.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not upload institutional datasets, credentials, proxy details, or private paths."
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What happened and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include the command and a synthetic minimal example.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version and Python
+    validations:
+      required: true

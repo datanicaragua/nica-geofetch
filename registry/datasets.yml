@@ -1,0 +1,64 @@
+schema:
+  version: 1
+  description: >-
+    MVP registry for institutional dataset discovery and implementation state.
+    A planned entry is not an availability, quality, license, or redistribution claim.
+  required_fields:
+    - dataset_id
+    - title
+    - institution
+    - thematic_domain
+    - geographic_scope
+    - official_source_url
+    - access_protocol
+    - source_formats
+    - supported_levels
+    - expected_geometry
+    - attribution
+    - license_status
+    - redistribution_status
+    - provider_status
+    - implementation_status
+    - quality_status
+    - last_checked_utc
+    - update_frequency
+    - contact
+    - notes
+
+datasets:
+  - dataset_id: ineter-pfafstetter-2025
+    title: INETER Pfafstetter-adjusted national hydrographic units, 2025
+    institution: Instituto Nicaragüense de Estudios Territoriales (INETER)
+    thematic_domain: hydrology
+    geographic_scope: Nicaragua
+    official_source_url: https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml
+    access_protocol: WMS KML reflector
+    source_formats: [KML]
+    supported_levels: [4, 5, 6, 7]
+    expected_geometry: Polygon or MultiPolygon
+    attribution: "Source: INETER, national hydrographic units adjusted to Pfafstetter, 2025."
+    license_status: No explicit open-data license identified
+    redistribution_status: Institutional clarification required before public redistribution
+    provider_status: configured
+    implementation_status: implemented
+    quality_status: seed inputs structurally audited; implementation verification in progress
+    last_checked_utc: "2026-07-24T00:00:00Z"
+    update_frequency: unknown
+    contact: Consult official INETER channels
+    notes:
+      - WFS is not used because the configured layers were not exposed as FeatureTypes.
+      - GeoPackage is the recommended analytical output.
+
+planned_examples:
+  - rivers and water bodies
+  - protected areas
+  - ecosystems and land cover
+  - municipalities and departments
+  - elevation models
+  - population
+  - economic indicators
+  - agricultural datasets
+  - health facilities
+  - infrastructure
+  - climate and hydrometeorological data
+  - natural-hazard and exposure datasets

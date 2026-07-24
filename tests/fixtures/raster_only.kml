@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Synthetic raster-only fixture</name>
+    <GroundOverlay>
+      <name>Not institutional data</name>
+      <Icon><href>synthetic.png</href></Icon>
+      <LatLonBox>
+        <north>13</north><south>12</south><east>-85</east><west>-86</west>
+      </LatLonBox>
+    </GroundOverlay>
+  </Document>
+</kml>

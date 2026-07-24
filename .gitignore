@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.pytest_tmp/
+.mypy_cache/
+.ruff_cache/
+.pre-commit-cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Build and local outputs
+build/
+dist/
+outputs/
+tmp/
+*.part
+
+# Institutional source data must never be committed.
+seed_inputs/
+*.kml
+*.kmz
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+!tests/fixtures/*.kml
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,28 @@
+provider_id: ineter-pfafstetter
+title: INETER Pfafstetter-adjusted national hydrographic units, 2025
+endpoint: https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml
+allowed_hosts:
+  - geoserveridefn.ineter.gob.ni
+layers:
+  4: "wsINETER-RH:Unidad_Hidrológica_Nacional_nivel4_2025"
+  5: "wsINETER-RH:Unidad_Hidrológica_Nacional_nivel5_2025"
+  6: "wsINETER-RH:Unidad_Hidrológica_Nacional_nivel6_2025"
+  7: "wsINETER-RH:Unidad_Hidrológica_Nacional_nivel7_2025"
+code_aliases:
+  4: [n4, pfaf_n4, pfaf4, code_pfafs, pfaf_code]
+  5: [n5, pfaf_n5, pfaf5, code_pfafs, pfaf_code]
+  6: [n6_, n6, pfaf_n6, pfaf6, code_pfafs, pfaf_code]
+  7: [code_pfafs, pfaf_n7, pfaf7, pfaf_code, n7]
+plausible_bounds: [-88.5, 9.5, -82.0, 15.5]
+network:
+  timeout_connect_seconds: 10
+  timeout_read_seconds: 90
+  max_response_bytes: 100000000
+  retries: 2
+  backoff_seconds: 1
+  polite_delay_seconds: 1
+  user_agent: "Nica-GeoFetch/0.1 (+https://github.com/DataNicaTools/nica-geofetch)"
+notes:
+  - Query strings are constructed with urllib.parse.urlencode.
+  - WFS is intentionally not used; these layers were not exposed as WFS FeatureTypes.
+  - TLS verification is mandatory; a custom CA bundle may be supplied.

@@ -1,0 +1,67 @@
+# Decision log
+
+## D001 - Project identity
+
+**Decision:** Use ecosystem `DataNicaTools`, project `Nica-GeoFetch`, repository
+`nica-geofetch`, package `nica_geofetch`, CLI `nica-geofetch`, and notebook
+`NicaGeoFetch_Colab.ipynb`.
+
+**Rationale:** The name clearly communicates national context, geospatial scope,
+and reproducible retrieval while keeping ecosystem and implementation names
+consistent.
+
+## D002 - KML instead of WFS
+
+**Decision:** Use the official WMS KML reflector with encoded `layers`,
+`mode=download`, `kmattr=true`, and `kmplacemark=true`. Do not depend on WFS.
+
+**Rationale:** Prior verification found that the target layers were not exposed
+as WFS FeatureTypes. KML is the observed institutional access path.
+
+## D003 - No public data mirroring in MVP-1
+
+**Decision:** Publish software, URLs, metadata, checksums, audit summaries,
+conversion tools, documentation, and synthetic fixtures only.
+
+**Rationale:** A mirror expands operational and legal responsibility before
+dataset redistribution rights and maintenance capacity are established.
+
+## D004 - GeoPackage is the recommended analytical format
+
+**Decision:** Preserve KML and support GeoJSON/Shapefile compatibility, but
+recommend GeoPackage for analysis.
+
+**Rationale:** GeoPackage supports Unicode, long field names, explicit CRS,
+multiple geometry types and layers, and fewer sidecar-file hazards.
+
+## D005 - Separate software and dataset licensing
+
+**Decision:** License source code and synthetic fixtures under Apache-2.0.
+Treat institutional datasets as third-party content under their own terms.
+
+**Rationale:** A software license cannot grant rights in independently sourced
+institutional data. No explicit open-data license has been identified here.
+
+## D006 - No web UI before downloader stability
+
+**Decision:** MVP-1 exposes a Python API, technical CLI, and beginner Colab
+notebook only.
+
+**Rationale:** Stable download, validation, provenance, and recovery semantics
+are prerequisites for a responsible public UI or service.
+
+## D007 - Small provider interface
+
+**Decision:** Implement one concrete provider behind a minimal abstract
+interface; do not build a plugin marketplace.
+
+**Rationale:** A single provider cannot justify a generalized framework.
+Extension seams exist without speculative complexity.
+
+## D008 - Validate before atomic rename
+
+**Decision:** Remote bytes stay in a `.part` file until provider-specific KML
+validation passes, then move atomically to the final raw path.
+
+**Rationale:** HTTP success does not prove usable vector KML; servers can return
+OGC XML errors, HTML, raster overlays, or malformed content.
