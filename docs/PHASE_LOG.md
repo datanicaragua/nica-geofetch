@@ -133,3 +133,18 @@
 - Expanded the offline suite from 40 to 49 tests. Editable installation, ruff,
   mypy, pytest, both notebook validations, CLI help, and the publication audit
   pass before push.
+- Created and pushed `c6d5829` to the existing `origin/main` without force or
+  history rewrite.
+- GitHub Actions run `30164223783` passed both Python 3.11 and 3.12 jobs.
+- Reconfirmed a clean synchronized tree, exact remote, synthetic-only tracked
+  geodata, no detected secrets, correct authorship/legal notices, and no
+  notebook credential mechanism before changing visibility.
+- Changed the existing repository from private to public using the prompt's
+  explicit conditional authorization.
+- Verified anonymous HTTP 200 responses for the repository, raw notebook, and
+  Colab badge. A new temporary Python environment installed from public `main`,
+  resolved `c6d5829`, imported the package, and reported version `0.1.0`; the
+  environment was then removed.
+- Left the interactive public-Colab run and v0.1.0 release as human gates. No
+  tag, release, PyPI upload, data release, or institutional-data archive was
+  created.

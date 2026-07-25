@@ -1,12 +1,12 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-25T15:29:59Z`
+- **last_updated_utc:** `2026-07-25T15:54:12Z`
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicationAndColabFix_v0.1` is in
-progress. Local implementation and quality gates are complete; the verified
-commit, push, GitHub Actions gate, and conditional visibility change remain.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicationAndColabFix_v0.1` is complete.
+The implementation is checkpointed at `c6d5829`, and the existing GitHub
+repository is public.
 
 ## Complete
 
@@ -39,18 +39,24 @@ commit, push, GitHub Actions gate, and conditional visibility change remain.
   are documented.
 - Local installation, ruff, mypy, 49 tests, notebook validation, CLI help, and
   publication audit pass.
+- Commit `c6d5829` was pushed normally to the existing `origin/main`.
+- GitHub Actions run `30164223783` passed on Python 3.11 and 3.12.
+- Repository visibility changed from private to public under the prompt's
+  conditional authorization.
+- Anonymous repository, raw-notebook, and Colab-badge requests returned HTTP
+  200. A clean temporary environment installed the public Git requirement,
+  resolved `c6d5829`, imported `nica_geofetch`, and printed `0.1.0`.
 
 ## Incomplete
 
-The local change is not yet committed or pushed. GitHub Actions for the new
-HEAD and the authorized conditional visibility change remain. A real
-badge-launched fresh-Colab run and v0.1.0 release approval remain human gates.
+The real badge-launched fresh-Colab run and v0.1.0 release approval remain
+human gates. No tag, GitHub release, PyPI package, data release, or
+institutional-data archive was created.
 
 ## NEXT_ACTION
 
-Create the verified local commit, push it to the existing `origin/main`, wait
-for GitHub Actions, and apply the visibility authorization in the active prompt
-only if every publication gate passes.
+NEXT_ACTION:
+Human public-Colab validation from a fresh anonymous runtime.
 
 ## Verify environment
 
@@ -79,8 +85,8 @@ pre-commit run --all-files
 - Real level 7 input is large (about 35 MB and 2,337 placemarks), so parsing
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
-- The public Colab GitHub bootstrap cannot complete until the target repository
-  exists and is visible.
+- The automated public Git installation passes, but interactive Colab behavior
+  still requires the human top-to-bottom test.
 - HydroBASINS or another comparable source must never be substituted under the
   INETER dataset identifier.
 
@@ -98,6 +104,6 @@ pre-commit run --all-files
 
 ## Dirty working tree
 
-Expected after the context/lineage closeout commit: clean tracked working tree.
+Expected after the publication/Colab closeout commit: clean tracked working tree.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

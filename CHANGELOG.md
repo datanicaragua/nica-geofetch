@@ -34,3 +34,5 @@ All notable changes are documented here.
   source-versus-generated artifact SHA-256 values.
 - Governance now records the ISO 8601/UTC update policy without adding
   manually maintained dates to the README files.
+- The existing GitHub repository was activated publicly after local audit and
+  Python 3.11/3.12 CI passed; no release or institutional data was published.

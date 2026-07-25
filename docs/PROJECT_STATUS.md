@@ -1,10 +1,10 @@
 # Project status
 
 - **Current milestone:** MVP-1 public repository activation and Colab bootstrap
-  correction (local changes complete; push/CI/visibility pending)
+  correction (complete; human public-Colab validation pending)
 - **Current branch:** `main`
-- **Latest stable commit:** `d4cd9d4` - `feat: close MVP-1 context and data lineage`
-- **last_updated_utc:** `2026-07-25T15:29:59Z`
+- **Latest stable commit:** `c6d5829` - `fix: harden public Colab bootstrap and publication metadata`
+- **last_updated_utc:** `2026-07-25T15:54:12Z`
 
 ## Implemented capabilities
 
@@ -66,24 +66,23 @@ require the user's explicit `--repair` decision for conversion. Python 3.12
 was verified locally; Python 3.11 is configured in CI but was not available in
 this desktop environment.
 
-The expected `origin` is configured and `main` matched `origin/main` before
-this task. GitHub reports the repository as private and the authenticated owner
-as `ADMIN`. The previous CI run for `76141b6` passed, but the new publication
-commit and its CI run are still pending.
+The expected `origin` is configured. GitHub reports
+`datanicaragua/nica-geofetch` as public and the authenticated owner as `ADMIN`.
+CI run `30164223783` passed on `c6d5829` for Python 3.11 and 3.12. Anonymous
+HTTP access to the repository, raw notebook, and Colab badge returned 200.
+A clean temporary Python environment installed the Colab Git requirement from
+public `main`, resolved `c6d5829`, imported the package, and printed `0.1.0`.
 
 ## Blocked items
 
-- GitHub Actions must pass for the new pushed HEAD.
 - A real fresh-Colab run from the public badge is pending.
-- Public visibility is authorized by the active prompt only after every
-  automated gate passes.
 - Institutional redistribution terms remain unclarified; no source data may be
   attached to a software release.
+- `v0.1.0` remains blocked until the human Colab workflow is accepted.
 
 ## Next recommended action
 
-Commit and push only the verified publication/Colab changes to the existing
-`origin/main`, wait for GitHub Actions on that HEAD, and change the existing
-repository to public only if every gate in `docs/PUBLICATION_CHECKLIST.md`
-passes. Do not tag or release `v0.1.0`; the interactive public-Colab test
-remains a human gate.
+Open the public README badge in a fresh anonymous Colab runtime and run the
+notebook from top to bottom. Record bootstrap, N4 diagnosis/download, final ZIP,
+fallback, and beginner-experience results in `docs/PUBLICATION_CHECKLIST.md`.
+Do not tag or release `v0.1.0` until that human gate passes.
