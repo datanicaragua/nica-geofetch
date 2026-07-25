@@ -8,7 +8,8 @@ revisarlas y convertirlas a formatos de análisis sin esconder la procedencia.
 1. Abra `notebooks/NicaGeoFetch_Colab.ipynb` en Colab.
 2. Ejecute la celda de instalación. Antes de la primera versión instala desde
    `main`; para una versión publicada use una etiqueta estable. Si GitHub no
-   funciona, seleccione la instalación mediante ZIP del paquete.
+   funciona o el repositorio aún es privado, use `INSTALL_SOURCE = "zip"` y
+   cargue el paquete. No pegue tokens de GitHub en el cuaderno.
 3. Seleccione el proveedor INETER.
 4. Marque uno o más niveles: 4, 5, 6 y 7.
 5. Elija KML, GeoPackage, GeoJSON, Shapefile ZIP o todos.

@@ -60,3 +60,17 @@ The INETER/HydroBASINS distinction is applied concretely in
 No explicit open-data license has been identified for the implemented 2025
 layers. `license_status` and `redistribution_status` remain explicit registry
 fields. Absence of a technical access barrier is not a redistribution grant.
+
+## Date and update policy
+
+1. Git commits, tags, and releases are the canonical software-history record.
+2. `PROJECT_STATUS.md` and `HANDOFF.md` record `last_updated_utc`.
+3. Dataset registry entries use `last_checked_utc` or
+   `last_live_verified_utc` when applicable.
+4. Manifests and audit reports retain retrieval, validation, and generation
+   timestamps.
+5. Case studies or source-access documents may use `Last reviewed` when their
+   factual status can become stale.
+6. Machine-readable timestamps use ISO 8601 and UTC.
+7. README files avoid static update dates that create unnecessary manual
+   maintenance.

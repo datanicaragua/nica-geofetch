@@ -75,6 +75,20 @@ Start at [docs/index.md](docs/index.md). The current implementation state is in
 point is [docs/HANDOFF.md](docs/HANDOFF.md). The first provider's access and
 non-equivalence lessons are documented in the
 [INETER Pfafstetter case study](docs/CASE_STUDY_INETER_PFAFSTETTER.md).
+Development-process transparency is documented discreetly in
+[AI-assisted development](docs/AI_ASSISTED_DEVELOPMENT.md).
+
+## Author and project leadership
+
+**Gustavo Ernesto Martínez Cárdenas**
+
+Lead Data Scientist and Architect, DataNicaTools
+
+- [DataNicaTools](https://github.com/datanicaragua)
+- [GitHub](https://github.com/gustavoemc)
+- [LinkedIn](https://www.linkedin.com/in/gustavoernestom)
+
+Developed as part of the DataNicaTools ecosystem.
 
 ## Scope
 

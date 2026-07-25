@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import builtins
 import os
 import re
 import subprocess
 import sys
+import types
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +19,25 @@ from nbformat.validator import validate
 from nica_geofetch.cli import main
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+
+
+def public_notebook() -> Any:
+    """Load the public notebook used by bootstrap simulations."""
+
+    return nbformat.read(
+        REPOSITORY_ROOT / "notebooks/NicaGeoFetch_Colab.ipynb",
+        as_version=4,
+    )
+
+
+def public_bootstrap_cell() -> Any:
+    """Return the tagged public bootstrap cell."""
+
+    return next(
+        cell
+        for cell in public_notebook().cells
+        if "bootstrap" in cell.get("metadata", {}).get("tags", [])
+    )
 
 
 def test_cli_help_smoke() -> None:
@@ -75,6 +96,10 @@ def test_public_notebook_structure_and_safety() -> None:
         'INSTALL_SOURCE = "github"',
         'INSTALL_SOURCE == "zip"',
         "etiqueta estable",
+        "La instalación anónima desde GitHub requiere que el repositorio sea público",
+        "No pegue tokens de GitHub",
+        "import nica_geofetch",
+        "BOOTSTRAP_OK",
     ):
         assert expected in source
     assert "verify=False" not in source
@@ -93,27 +118,138 @@ def test_developer_notebook_is_repo_local_and_editable() -> None:
 def test_fresh_colab_bootstrap_does_not_require_pyproject(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
+    capsys: Any,
 ) -> None:
-    notebook = nbformat.read(
-        REPOSITORY_ROOT / "notebooks/NicaGeoFetch_Colab.ipynb",
-        as_version=4,
-    )
-    bootstrap = next(
-        cell for cell in notebook.cells if "bootstrap" in cell.get("metadata", {}).get("tags", [])
-    )
+    bootstrap = public_bootstrap_cell()
     calls: list[list[str]] = []
 
-    def fake_check_call(command: list[str]) -> int:
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
         calls.append(command)
-        return 0
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
 
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setattr(subprocess, "check_call", fake_check_call)
+    monkeypatch.setattr(subprocess, "run", fake_run)
     assert not (tmp_path / "pyproject.toml").exists()
-    exec(compile(bootstrap.source, "public-colab-bootstrap", "exec"), {})
+    namespace: dict[str, Any] = {}
+    exec(compile(bootstrap.source, "public-colab-bootstrap", "exec"), namespace)
     assert calls
     requirement = calls[0][-1]
     assert "git+https://github.com/datanicaragua/nica-geofetch.git@main" in requirement
+    assert namespace["BOOTSTRAP_OK"] is True
+    output = capsys.readouterr().out
+    assert "Versión instalada:" in output
+    assert "Referencia Git seleccionada: main" in output
+    assert "Fuente de instalación: github" in output
+
+
+@pytest.mark.parametrize(
+    ("diagnostic", "expected"),
+    [
+        ("fatal: repository not found", "repositorio no está disponible"),
+        ("fatal: authentication failed", "rechazó la autenticación"),
+        ("ERROR: Cannot find command 'git'", "Git no está disponible"),
+        ("ERROR: wheel build failed", "pip no pudo instalar"),
+    ],
+)
+def test_failed_github_bootstrap_is_beginner_readable_and_stops_imports(
+    monkeypatch: pytest.MonkeyPatch,
+    diagnostic: str,
+    expected: str,
+) -> None:
+    bootstrap = public_bootstrap_cell()
+
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(command, 1, stdout="", stderr=diagnostic)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    namespace: dict[str, Any] = {}
+    with pytest.raises(RuntimeError, match=expected):
+        exec(compile(bootstrap.source, "public-colab-bootstrap", "exec"), namespace)
+    assert namespace["BOOTSTRAP_OK"] is False
+
+    controls = next(cell for cell in public_notebook().cells if cell.get("id") == "controles")
+    with pytest.raises(RuntimeError, match="La instalación no se completó"):
+        exec(compile(controls.source, "public-colab-controls", "exec"), namespace)
+    assert "json" not in namespace
+
+
+def test_private_repository_guidance_contains_no_token_mechanism() -> None:
+    source = public_bootstrap_cell().source
+    assert "Para probar un repositorio privado" in source
+    assert "INSTALL_SOURCE" in source and "zip" in source
+    assert "No pegue tokens de GitHub ni credenciales" in source
+    assert "github_pat_" not in source
+    assert "ghp_" not in source
+    assert "getpass" not in source
+
+
+def test_zip_bootstrap_fallback_and_package_verification(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bootstrap = public_bootstrap_cell()
+    source = bootstrap.source.replace(
+        'INSTALL_SOURCE = "github"',
+        'INSTALL_SOURCE = "zip"',
+        1,
+    )
+    calls: list[list[str]] = []
+
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    files_module = types.ModuleType("google.colab.files")
+    files_module.upload = lambda: {"nica-geofetch-package.zip": b"synthetic"}  # type: ignore[attr-defined]
+    colab_module = types.ModuleType("google.colab")
+    colab_module.files = files_module  # type: ignore[attr-defined]
+    google_module = types.ModuleType("google")
+    google_module.colab = colab_module  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "google", google_module)
+    monkeypatch.setitem(sys.modules, "google.colab", colab_module)
+    monkeypatch.setitem(sys.modules, "google.colab.files", files_module)
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    namespace: dict[str, Any] = {}
+    exec(compile(source, "public-colab-zip-bootstrap", "exec"), namespace)
+    assert namespace["BOOTSTRAP_OK"] is True
+    assert calls[0][-1] == "nica-geofetch-package.zip"
+    assert calls[1][-1] == "ipywidgets>=8.1,<9"
+    assert namespace["installation_source"] == "zip: nica-geofetch-package.zip"
+
+
+def test_post_install_import_failure_is_wrapped_for_beginners(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bootstrap = public_bootstrap_cell()
+
+    def fake_run(command: list[str], **_kwargs: Any) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    original_import = builtins.__import__
+
+    def fake_import(
+        name: str,
+        globals: dict[str, Any] | None = None,
+        locals: dict[str, Any] | None = None,
+        fromlist: tuple[str, ...] = (),
+        level: int = 0,
+    ) -> Any:
+        if name == "nica_geofetch":
+            raise ModuleNotFoundError(name)
+        return original_import(name, globals, locals, fromlist, level)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    with pytest.raises(RuntimeError, match="todavía no puede importarse"):
+        exec(compile(bootstrap.source, "public-colab-bootstrap", "exec"), {})
+
+
+def test_public_notebook_bootstrap_is_first_executable_cell() -> None:
+    code_cells = [cell for cell in public_notebook().cells if cell.cell_type == "code"]
+    assert "bootstrap" in code_cells[0].get("metadata", {}).get("tags", [])
+    assert code_cells[0].get("id") == "bootstrap"
+    controls_source = code_cells[1].source
+    assert controls_source.index("BOOTSTRAP_OK") < controls_source.index("from nica_geofetch")
 
 
 def test_live_script_is_opt_in_and_off_by_default() -> None:
@@ -165,6 +301,37 @@ def test_registry_source_relationships_are_explicit_and_non_substituting() -> No
     assert comparable["relationship"] == "comparable_not_equivalent"
     assert "provider_id" not in comparable
     assert "official_source_url" not in comparable
+
+
+def test_authorship_ai_disclosure_and_update_policy() -> None:
+    readme = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
+    readme_es = (REPOSITORY_ROOT / "README.es.md").read_text(encoding="utf-8")
+    ai_disclosure = (REPOSITORY_ROOT / "docs/AI_ASSISTED_DEVELOPMENT.md").read_text(
+        encoding="utf-8"
+    )
+    governance = (REPOSITORY_ROOT / "docs/DATA_GOVERNANCE.md").read_text(encoding="utf-8")
+    status = (REPOSITORY_ROOT / "docs/PROJECT_STATUS.md").read_text(encoding="utf-8")
+    handoff = (REPOSITORY_ROOT / "docs/HANDOFF.md").read_text(encoding="utf-8")
+
+    for content in (readme, readme_es):
+        assert "Gustavo Ernesto Martínez Cárdenas" in content
+        assert "https://github.com/datanicaragua" in content
+        assert "https://github.com/gustavoemc" in content
+        assert "https://www.linkedin.com/in/gustavoernestom" in content
+        assert "AI_ASSISTED_DEVELOPMENT.md" in content
+        assert "Last updated" not in content
+        assert "Última actualización" not in content
+    for expected in (
+        "human-led and AI-assisted",
+        "Codex and ChatGPT",
+        "model_at_execution: GPT-5.6 Sol",
+        "reasoning_effort: Extra High",
+        "AI tools are not",
+    ):
+        assert expected in ai_disclosure
+    assert "Date and update policy" in governance
+    assert "last_updated_utc" in status
+    assert "last_updated_utc" in handoff
 
 
 def test_no_real_institutional_data_is_tracked() -> None:

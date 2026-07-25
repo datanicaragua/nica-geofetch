@@ -45,4 +45,6 @@ This page is the durable entry point for maintainers, users, and future agents.
 - [../AGENTS.md](../AGENTS.md): concise scope and resume protocol.
 - [../CONTRIBUTING.md](../CONTRIBUTING.md): contribution checks and data rules.
 - [../prompts/PROMPT_REGISTRY.md](../prompts/PROMPT_REGISTRY.md): immutable prompt history.
+- [AI_ASSISTED_DEVELOPMENT.md](AI_ASSISTED_DEVELOPMENT.md): proportionate
+  disclosure of human-led, AI-assisted development and verification.
 - [../CHANGELOG.md](../CHANGELOG.md): user-visible changes.

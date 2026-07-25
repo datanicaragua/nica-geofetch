@@ -10,6 +10,7 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_KML_PREFIX = "tests/fixtures/"
 FORBIDDEN_DATA_SUFFIXES = {
+    ".geojson",
     ".gpkg",
     ".kmz",
     ".shp",

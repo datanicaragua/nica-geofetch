@@ -1,9 +1,12 @@
 # Handoff
 
+- **last_updated_utc:** `2026-07-25T15:29:59Z`
+
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_ContextLineageCloseout_v0.1` is complete.
-The context and data-lineage implementation is checkpointed at `d4cd9d4`.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicationAndColabFix_v0.1` is in
+progress. Local implementation and quality gates are complete; the verified
+commit, push, GitHub Actions gate, and conditional visibility change remain.
 
 ## Complete
 
@@ -28,21 +31,26 @@ The context and data-lineage implementation is checkpointed at `d4cd9d4`.
   checksums while retaining version 2 source fields.
 - The registry and indexed case study distinguish authoritative INETER from
   planned, non-equivalent HydroBASINS comparison; no new provider was added.
+- Public Colab now catches and explains GitHub/private, authentication,
+  missing-Git, pip, and post-install import failures in Spanish.
+- A failed or skipped bootstrap blocks downstream package imports; ZIP/wheel
+  fallback and package API use are preserved.
+- README authorship, AI-assisted-development disclosure, and UTC/date policy
+  are documented.
+- Local installation, ruff, mypy, 49 tests, notebook validation, CLI help, and
+  publication audit pass.
 
 ## Incomplete
 
-Nothing remains inside the authorized local closeout. GitHub CI, a real
-badge-launched fresh-Colab run, repository/visibility approval, and v0.1.0
-release approval are intentionally external human gates.
+The local change is not yet committed or pushed. GitHub Actions for the new
+HEAD and the authorized conditional visibility change remain. A real
+badge-launched fresh-Colab run and v0.1.0 release approval remain human gates.
 
 ## NEXT_ACTION
 
-A human owner must review `docs/PUBLICATION_CHECKLIST.md`, then explicitly
-authorize creation/visibility of `datanicaragua/nica-geofetch` and the initial
-software-only push. After that push, run GitHub CI and the badge-launched
-fresh-Colab gate. Pin the notebook to a stable tag and consider v0.1.0 only
-after those results and the legal review are recorded. No remote action is
-authorized by this handoff.
+Create the verified local commit, push it to the existing `origin/main`, wait
+for GitHub Actions, and apply the visibility authorization in the active prompt
+only if every publication gate passes.
 
 ## Verify environment
 

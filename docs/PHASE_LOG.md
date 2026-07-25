@@ -116,3 +116,20 @@
 - Preserved the successful 2026-07-24 N4 live-test evidence because download
   behavior did not change. Created implementation commit `d4cd9d4`; no remote,
   push, visibility change, publication, or release was performed.
+
+## 2026-07-25 - Public repository activation preparation
+
+- Confirmed the existing `origin` is exactly
+  `https://github.com/datanicaragua/nica-geofetch.git`, local `main` initially
+  matched `origin/main`, GitHub visibility was private, and the authenticated
+  owner had `ADMIN` permission.
+- Confirmed CI run `30162144484` passed on the previous HEAD `76141b6`.
+- Hardened the public Colab bootstrap with classified Spanish diagnostics,
+  immediate `import nica_geofetch` verification, installed-version/ref/source
+  output, private-repository ZIP guidance, and a downstream import guard.
+- Preserved the developer notebook and package-API workflow.
+- Added professional authorship, proportionate AI-development disclosure, and
+  the ISO 8601/UTC date/update policy.
+- Expanded the offline suite from 40 to 49 tests. Editable installation, ruff,
+  mypy, pytest, both notebook validations, CLI help, and the publication audit
+  pass before push.

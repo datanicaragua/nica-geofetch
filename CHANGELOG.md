@@ -15,6 +15,10 @@ All notable changes are documented here.
 - Publication checklist and tracked-file/institutional-data/secret audit.
 - INETER Pfafstetter case study, controlled source relationships, metadata-origin
   groups, component value gate, and registry lineage status.
+- Beginner-readable Colab bootstrap diagnostics, immediate package import
+  verification, and guards that stop downstream imports after a failed install.
+- Professional project authorship and proportionate AI-assisted-development
+  disclosure.
 
 ### Changed
 
@@ -28,3 +32,5 @@ All notable changes are documented here.
   institution/relationship, metadata basis, format/CRS/geometry facts,
   transformation steps, software/configuration versions, warnings, and
   source-versus-generated artifact SHA-256 values.
+- Governance now records the ISO 8601/UTC update policy without adding
+  manually maintained dates to the README files.

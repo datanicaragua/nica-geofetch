@@ -50,7 +50,23 @@ afirma que los datos de INETER sean datos abiertos. Consulte
 [DATA_TERMS.md](DATA_TERMS.md) y solicite aclaración institucional antes de
 redistribuir copias completas.
 
+## Documentación
+
 La documentación central está enlazada desde [docs/index.md](docs/index.md).
 El [caso de estudio de INETER Pfafstetter](docs/CASE_STUDY_INETER_PFAFSTETTER.md)
 explica la ruta de acceso institucional, la procedencia y por qué un producto
 global comparable no debe sustituir silenciosamente la referencia nacional.
+La transparencia del proceso se documenta discretamente en
+[desarrollo asistido por IA](docs/AI_ASSISTED_DEVELOPMENT.md).
+
+## Autoría y liderazgo del proyecto
+
+**Gustavo Ernesto Martínez Cárdenas**
+
+Científico de Datos Principal y Arquitecto de DataNicaTools
+
+- [DataNicaTools](https://github.com/datanicaragua)
+- [GitHub](https://github.com/gustavoemc)
+- [LinkedIn](https://www.linkedin.com/in/gustavoernestom)
+
+Desarrollado como parte del ecosistema DataNicaTools.
