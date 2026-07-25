@@ -15,6 +15,8 @@ This page is the durable entry point for maintainers, users, and future agents.
 - [STRATEGIC_VISION.md](STRATEGIC_VISION.md): five-stage DataNicaTools direction.
 - [ARCHITECTURE.md](ARCHITECTURE.md): package boundaries, data flow, and extension seams.
 - [PROVIDER_DEVELOPMENT.md](PROVIDER_DEVELOPMENT.md): the deliberately small provider contract.
+- [CASE_STUDY_INETER_PFAFSTETTER.md](CASE_STUDY_INETER_PFAFSTETTER.md):
+  evidence, access, lineage, and non-equivalence lessons from the first provider.
 - [../registry/datasets.yml](../registry/datasets.yml): machine-readable dataset registry.
 
 ## Data, attribution, and safety

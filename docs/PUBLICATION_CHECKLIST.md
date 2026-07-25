@@ -15,6 +15,7 @@ visibility changes, or a release.
 | Live download evidence | Passed locally | On 2026-07-24, the opt-in script downloaded only level 4, validated 12 polygon features, and removed its temporary output. |
 | Fresh Colab execution | **Partially passed / blocker** | Automated bootstrap simulation passes from a directory without `pyproject.toml`. A real fresh-Colab run from the public URL remains impossible until the repository is visible. |
 | README review | Passed locally | English and Spanish READMEs contain the required Colab badge, public/developer distinction, and data-term warning. |
+| Context and lineage review | Passed locally | Strategic role, component value gate, metadata origins, source relationships, registry status, and the indexed INETER case study are documented; manifest schema v3 is covered by offline tests. |
 | Legal notice review | Passed locally with limitation | Apache-2.0/software and third-party data terms are separated. No explicit open-data license was identified; institutional clarification remains recommended before redistributing data. |
 | Public visibility gate | **Pending / blocker** | A human owner must review this checklist and explicitly authorize repository creation/visibility. This task did not do so. |
 | v0.1.0 release gate | **Pending / blocker** | Requires passing GitHub CI, a real fresh-Colab run, stable-tag pin review, public visibility approval, and final release-note/legal review. |

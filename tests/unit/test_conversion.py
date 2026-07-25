@@ -10,7 +10,12 @@ import geopandas as gpd
 import responses
 
 from nica_geofetch.conversion import shapefile_field_mapping
-from nica_geofetch.models import OutputFormat, RetrievalMode
+from nica_geofetch.models import (
+    METADATA_ORIGIN_VALUES,
+    SOURCE_RELATIONSHIP_VALUES,
+    OutputFormat,
+    RetrievalMode,
+)
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 from nica_geofetch.validation import sha256_file
 from nica_geofetch.workflows import download_workflow, import_local_workflow
@@ -61,11 +66,50 @@ def test_local_import_all_conversions_reopen_and_package(
     checksums = json.loads((output / "checksums_sha256.json").read_text(encoding="utf-8"))
     assert checksums["files"]["raw/ineter_pfafstetter_2025_level4.kml"]
     manifest = json.loads((output / "source_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["schema_version"] == 3
+    assert set(manifest["metadata_origin_vocabulary"]) == METADATA_ORIGIN_VALUES
+    assert set(manifest["source_relationship_vocabulary"]) == SOURCE_RELATIONSHIP_VALUES
     source = manifest["sources"][0]
+    legacy_v2_fields = {
+        "source_url",
+        "source_layer",
+        "retrieval_mode",
+        "retrieved_at_utc",
+        "response_content_type",
+        "byte_size",
+        "sha256",
+        "validation_status",
+        "placemark_count",
+        "geometry_count",
+    }
+    assert legacy_v2_fields <= set(source)
     assert source["retrieval_mode"] == "manual_import"
     assert source["source_url"] is None
     assert source["source_layer"].endswith("nivel4_2025")
     assert source["byte_size"] > 0
+    assert source["source_relationship"] == "authoritative"
+    assert source["original_sha256"] == source["sha256"]
+    assert source["source_byte_size"] == source["byte_size"]
+    assert source["original_source_format"] == "KML"
+    assert source["crs"] == {"source": "EPSG:4326", "normalized": "EPSG:4326"}
+    assert set(source["metadata_basis"]) == METADATA_ORIGIN_VALUES | {"uncertainties"}
+    assert "source_file" in source["metadata_basis"]["user_supplied"]
+    artifacts = source["generated_artifacts"]
+    assert {artifact["format"] for artifact in artifacts} == {
+        "kml",
+        "gpkg",
+        "geojson",
+        "shapefile",
+    }
+    assert all(len(artifact["sha256"]) == 64 for artifact in artifacts)
+    assert (
+        next(item for item in artifacts if item["format"] == "kml")["artifact_role"]
+        == "preserved_source"
+    )
+    assert {item["artifact_role"] for item in artifacts if item["format"] != "kml"} == {
+        "derived_output"
+    }
+    assert "convert_requested_formats" in source["transformation_steps"]
     assert result.archive_path.exists()
 
 
@@ -94,7 +138,7 @@ def test_remote_download_manifest_contains_complete_http_provenance(
     )
     assert result.reports[0].retrieval_mode is RetrievalMode.REMOTE_DOWNLOAD
     manifest = json.loads((output / "source_manifest.json").read_text(encoding="utf-8"))
-    assert manifest["schema_version"] == 2
+    assert manifest["schema_version"] == 3
     source = manifest["sources"][0]
     required = {
         "source_url",
@@ -118,3 +162,7 @@ def test_remote_download_manifest_contains_complete_http_provenance(
     assert source["validation_status"] == "valid"
     assert source["placemark_count"] == 2
     assert source["geometry_count"] == 2
+    assert source["source_relationship"] == "authoritative"
+    assert "source_file" not in source["metadata_basis"]["user_supplied"]
+    assert "source_url" in source["metadata_basis"]["derived"]
+    assert "source_url" not in source["metadata_basis"]["source_declared"]

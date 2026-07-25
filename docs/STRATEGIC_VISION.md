@@ -1,8 +1,12 @@
 # Strategic vision
 
-Nica-GeoFetch is intended to become a reproducible access and interoperability
-layer for trusted institutional geospatial datasets relevant to Nicaragua. It
-will grow in explicit stages so the project earns reliability before adding
+Nica-GeoFetch is a reproducible acquisition, validation, provenance, and
+preparation layer for institutional datasets used across the DataNicaTools
+ecosystem. It supplies trusted foundational datasets to downstream notebooks,
+analyses, models, and applications. It is not an end-user risk, climate,
+health, agriculture, hydrology, or other thematic application.
+
+The project will grow in explicit stages so it earns reliability before adding
 surface area.
 
 ## Stage 1 - Reproducible downloader
@@ -33,9 +37,10 @@ stable.
 
 ## Stage 5 - DataNicaTools integration
 
-Support domain applications and analyses in hydrology, climate, drought,
-flooding, natural hazards, ecosystems, protected areas, agriculture and
-AgTech, population, economy, health, infrastructure, and territorial planning.
+Support future domain applications and analyses in hydrology; climate; drought
+and flooding; ecosystems; protected areas; population; municipalities; economy;
+agriculture and AgTech; health; infrastructure; natural hazards; and
+territorial planning.
 
 Only Stage 1 is implemented in MVP-1. Stages 2-5 are direction, not current
 capabilities or commitments to redistribute source data.

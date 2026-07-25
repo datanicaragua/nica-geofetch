@@ -24,6 +24,37 @@
    level, validation findings, and any requested geometry repair.
 7. Do not publish or upload outputs automatically.
 
+## Metadata origin
+
+Nica-GeoFetch may detect, infer, or derive technical metadata, but does not
+present those observations as values explicitly supplied by an institution.
+Generated manifest metadata uses the compact origin categories documented in
+[ARCHITECTURE.md](ARCHITECTURE.md). `metadata_basis.uncertainties` identifies
+unresolved license, redistribution, or completeness questions.
+
+## Source relationships and substitution
+
+Every implemented or planned source relationship uses one of these values:
+
+| Relationship | Meaning |
+|---|---|
+| `authoritative` | Primary institutional reference targeted by the provider. |
+| `official_mirror` | Officially operated mirror of the same source. |
+| `institutional_copy` | Copy held by another institution, with lineage recorded. |
+| `derived_from_authoritative` | Product created from the authoritative source through explicit transformations. |
+| `comparable_not_equivalent` | Useful for comparison but not assumed identical. |
+| `fallback_non_equivalent` | Explicit fallback that changes the data basis. |
+| `unverified` | Relationship or lineage has not been established. |
+
+No source is silently substituted. Alternatives require explicit selection and
+their relationship must be recorded in provenance. A global product does not
+inherit the identifier of a national official product. Source unavailability
+does not make a comparable dataset equivalent; local import of the same
+official source remains the MVP fallback.
+
+The INETER/HydroBASINS distinction is applied concretely in
+[CASE_STUDY_INETER_PFAFSTETTER.md](CASE_STUDY_INETER_PFAFSTETTER.md).
+
 ## License status
 
 No explicit open-data license has been identified for the implemented 2025

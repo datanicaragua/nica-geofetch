@@ -17,6 +17,24 @@ the source's rate limits and expected geometry.
 Do not generalize the interface speculatively. A second implemented provider
 should motivate only the abstractions it demonstrably shares with INETER.
 
+## Human-guided source resolution
+
+Provider research follows this sequence:
+
+1. official primary source;
+2. another service from the same institution;
+3. official or institutional mirror;
+4. academic repository linked to the producer;
+5. regional institutional repository;
+6. comparable international product;
+7. unverified source.
+
+This is a human-guided provider-development method, not an automated search,
+crawler, or substitution feature. Each candidate retains a distinct dataset
+identity and uses the controlled source relationship from
+[DATA_GOVERNANCE.md](DATA_GOVERNANCE.md). Moving down the sequence requires
+explicit evidence and user selection.
+
 The INETER provider uses KML because the target layers were not exposed as WFS
 FeatureTypes during prior verification. Query parameters are `layers`,
 `mode=download`, `kmattr=true`, and `kmplacemark=true`, encoded only with

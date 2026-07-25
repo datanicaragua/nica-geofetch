@@ -2,11 +2,14 @@
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/datanicaragua/nica-geofetch/blob/main/notebooks/NicaGeoFetch_Colab.ipynb)
 
-**Acceso reproducible a geodatos institucionales de Nicaragua.**
+**Una capa reproducible de adquisición, validación, procedencia y preparación
+de datos institucionales para el ecosistema DataNicaTools.**
 
-Descubre, descarga, valida y prepara datos geoespaciales confiables de
-Nicaragua. El MVP-1 implementa únicamente las unidades hidrográficas nacionales
-ajustadas a Pfafstetter de INETER (2025), niveles 4, 5, 6 y 7.
+Nica-GeoFetch entrega datos fundamentales confiables a cuadernos, análisis,
+modelos y aplicaciones posteriores. No es una aplicación final de riesgo,
+clima, salud, agricultura, hidrología u otro dominio temático. El MVP-1
+implementa únicamente las unidades hidrográficas nacionales ajustadas a
+Pfafstetter de INETER (2025), niveles 4, 5, 6 y 7.
 
 ## Instalación
 
@@ -48,3 +51,6 @@ afirma que los datos de INETER sean datos abiertos. Consulte
 redistribuir copias completas.
 
 La documentación central está enlazada desde [docs/index.md](docs/index.md).
+El [caso de estudio de INETER Pfafstetter](docs/CASE_STUDY_INETER_PFAFSTETTER.md)
+explica la ruta de acceso institucional, la procedencia y por qué un producto
+global comparable no debe sustituir silenciosamente la referencia nacional.

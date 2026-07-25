@@ -13,6 +13,10 @@ Durable documentation starts at `docs/index.md`. Milestone truth lives in
 `docs/PROJECT_STATUS.md`; resume from `docs/HANDOFF.md`; record decisions and
 completed work in `docs/DECISION_LOG.md` and `docs/PHASE_LOG.md`.
 
+Before adding a component, apply the component value gate in
+`docs/ARCHITECTURE.md`. Components without a demonstrated user need, acceptance
+test, and justified maintenance burden remain deferred.
+
 Institutional datasets are third-party data, not Apache-2.0 software. Never
 commit or publish real KML or converted institutional data. Do not call INETER
 data open unless an explicit license is found. Never push, publish, or upload

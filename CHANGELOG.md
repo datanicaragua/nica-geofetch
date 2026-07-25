@@ -13,6 +13,8 @@ All notable changes are documented here.
   ZIP fallback.
 - Repository-local developer notebook with editable installation.
 - Publication checklist and tracked-file/institutional-data/secret audit.
+- INETER Pfafstetter case study, controlled source relationships, metadata-origin
+  groups, component value gate, and registry lineage status.
 
 ### Changed
 
@@ -22,3 +24,7 @@ All notable changes are documented here.
   content type, byte size, SHA-256, validation status, and feature counts.
 - Public repository metadata now targets
   `https://github.com/datanicaragua/nica-geofetch`.
+- Source manifest schema version 3 retains version 2 fields while adding source
+  institution/relationship, metadata basis, format/CRS/geometry facts,
+  transformation steps, software/configuration versions, warnings, and
+  source-versus-generated artifact SHA-256 values.

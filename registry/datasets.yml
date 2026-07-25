@@ -1,5 +1,5 @@
 schema:
-  version: 1
+  version: 2
   description: >-
     MVP registry for institutional dataset discovery and implementation state.
     A planned entry is not an availability, quality, license, or redistribution claim.
@@ -9,9 +9,11 @@ schema:
     - institution
     - thematic_domain
     - geographic_scope
+    - source_relationship
     - official_source_url
     - access_protocol
     - source_formats
+    - supported_output_formats
     - supported_levels
     - expected_geometry
     - attribution
@@ -19,8 +21,13 @@ schema:
     - redistribution_status
     - provider_status
     - implementation_status
+    - provenance_status
     - quality_status
+    - quality_warnings
+    - metadata_completeness_status
+    - comparable_datasets_note
     - last_checked_utc
+    - last_live_verification_date
     - update_frequency
     - contact
     - notes
@@ -31,9 +38,11 @@ datasets:
     institution: Instituto Nicaragüense de Estudios Territoriales (INETER)
     thematic_domain: hydrology
     geographic_scope: Nicaragua
+    source_relationship: authoritative
     official_source_url: https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml
     access_protocol: WMS KML reflector
     source_formats: [KML]
+    supported_output_formats: [KML, GeoPackage, GeoJSON, Shapefile ZIP]
     supported_levels: [4, 5, 6, 7]
     expected_geometry: Polygon or MultiPolygon
     attribution: "Source: INETER, national hydrographic units adjusted to Pfafstetter, 2025."
@@ -41,15 +50,36 @@ datasets:
     redistribution_status: Institutional clarification required before public redistribution
     provider_status: configured
     implementation_status: implemented
+    provenance_status: manifest_schema_v3_implemented
     quality_status: >-
       Implemented and offline validated; level 4 converts without repair;
       levels 5-7 contain source geometry issues requiring explicit repair
+    quality_warnings:
+      - Levels 5, 6, and 7 contain 2, 1, and 2 invalid source geometries respectively.
+      - Level 6 produced duplicate-code warnings during the seed audit.
+      - Level 7 produced code-length and duplicate-code warnings during the seed audit.
+    metadata_completeness_status: incomplete_institutional_metadata
+    comparable_datasets_note: >-
+      Global standardized basin products may support cross-country analysis but
+      are not assumed geometrically, hierarchically, or institutionally equivalent
+      to the national INETER adjustment.
     last_checked_utc: "2026-07-24T00:00:00Z"
+    last_live_verification_date: "2026-07-24"
     update_frequency: unknown
     contact: Consult official INETER channels
     notes:
       - WFS is not used because the configured layers were not exposed as FeatureTypes.
       - GeoPackage is the recommended analytical output.
+
+planned_comparable_datasets:
+  - dataset_id: hydrobasins
+    title: HydroBASINS
+    status: planned
+    relationship: comparable_not_equivalent
+    notes:
+      - No provider is implemented in MVP-1.
+      - It must use a distinct dataset identifier and require explicit user selection.
+      - No source URL or unsupported metadata is registered at this stage.
 
 planned_examples:
   - rivers and water bodies

@@ -65,3 +65,24 @@ validation passes, then move atomically to the final raw path.
 
 **Rationale:** HTTP success does not prove usable vector KML; servers can return
 OGC XML errors, HTML, raster overlays, or malformed content.
+
+## D009 - Compact metadata-origin groups
+
+**Decision:** Extend the existing validation report and source manifest with a
+compact `metadata_basis` grouping instead of adding a provenance framework or
+field-level ontology.
+
+**Rationale:** MVP-1 must distinguish institutional statements from detected,
+inferred, derived, user-supplied, and unknown metadata. Controlled groups meet
+that need while keeping the manifest readable and backward-compatible with its
+version 2 source fields.
+
+## D010 - Explicit source relationship and component value gates
+
+**Decision:** Record source relationships from a small controlled vocabulary,
+prohibit silent substitution, and defer proposed components that cannot answer
+the six questions in the architecture component value gate.
+
+**Rationale:** Comparable data can be useful without being equivalent. Explicit
+identity and value evidence prevent source ambiguity and speculative
+architecture.

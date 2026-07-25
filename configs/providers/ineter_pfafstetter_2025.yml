@@ -1,4 +1,5 @@
 provider_id: ineter-pfafstetter
+configuration_version: "1"
 title: INETER Pfafstetter-adjusted national hydrographic units, 2025
 endpoint: https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml
 allowed_hosts:

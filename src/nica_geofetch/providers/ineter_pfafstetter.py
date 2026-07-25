@@ -20,6 +20,10 @@ from nica_geofetch.models import (
 from nica_geofetch.providers.base import Provider
 from nica_geofetch.validation import validate_kml
 
+DATASET_ID = "ineter-pfafstetter-2025"
+SOURCE_INSTITUTION = "Instituto Nicaragüense de Estudios Territoriales (INETER)"
+SOURCE_RELATIONSHIP = "authoritative"
+
 
 class IneterPfafstetterProvider(Provider):
     """The only implemented MVP-1 provider."""
@@ -42,9 +46,11 @@ class IneterPfafstetterProvider(Provider):
 
         return [
             {
-                "dataset_id": "ineter-pfafstetter-2025",
+                "dataset_id": DATASET_ID,
                 "title": self.config.title,
                 "provider": self.provider_id,
+                "source_institution": SOURCE_INSTITUTION,
+                "source_relationship": SOURCE_RELATIONSHIP,
                 "levels": sorted(self.config.layers),
                 "source_format": "KML",
                 "recommended_format": "GeoPackage",
@@ -100,6 +106,10 @@ class IneterPfafstetterProvider(Provider):
             code_aliases=self.config.code_aliases[level],
             plausible_bounds=self.config.plausible_bounds,
             provider_id=self.provider_id,
+            provider_configuration_version=self.config.configuration_version,
+            dataset_id=DATASET_ID,
+            source_institution=SOURCE_INSTITUTION,
+            source_relationship=SOURCE_RELATIONSHIP,
             source_url=source_url,
             source_layer=self.config.layers[level],
             retrieval_mode=retrieval_mode,

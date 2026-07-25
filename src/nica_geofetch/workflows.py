@@ -52,7 +52,7 @@ def _finalize(
         convert_report(report, formats, output_directory) for report in reports if report.valid
     ]
     audit_json, audit_markdown = write_audit_reports(output_directory, reports, conversions)
-    write_source_manifest(output_directory, reports)
+    write_source_manifest(output_directory, reports, conversions)
     write_provenance_summary(output_directory, reports, conversions)
     write_checksums(output_directory)
     archive = create_final_archive(output_directory)

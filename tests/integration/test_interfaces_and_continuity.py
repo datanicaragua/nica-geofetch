@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -10,6 +11,7 @@ from typing import Any
 
 import nbformat
 import pytest
+import yaml
 from nbformat.validator import validate
 
 from nica_geofetch.cli import main
@@ -139,6 +141,30 @@ def test_resume_document_consistency() -> None:
     assert "Current milestone" in status
     assert "PROJECT_STATUS.md" in index and "HANDOFF.md" in index
     assert "git status" in agents
+
+
+def test_documentation_index_local_links_resolve() -> None:
+    index_path = REPOSITORY_ROOT / "docs/index.md"
+    links = re.findall(r"\[[^\]]+\]\(([^)]+)\)", index_path.read_text(encoding="utf-8"))
+    local_links = [link.split("#", 1)[0] for link in links if not link.startswith(("http", "#"))]
+    assert local_links
+    assert all((index_path.parent / link).resolve().exists() for link in local_links)
+
+
+def test_registry_source_relationships_are_explicit_and_non_substituting() -> None:
+    registry = yaml.safe_load(
+        (REPOSITORY_ROOT / "registry/datasets.yml").read_text(encoding="utf-8")
+    )
+    implemented = registry["datasets"][0]
+    comparable = registry["planned_comparable_datasets"][0]
+    assert implemented["dataset_id"] == "ineter-pfafstetter-2025"
+    assert implemented["source_relationship"] == "authoritative"
+    assert implemented["implementation_status"] == "implemented"
+    assert comparable["dataset_id"] != implemented["dataset_id"]
+    assert comparable["status"] == "planned"
+    assert comparable["relationship"] == "comparable_not_equivalent"
+    assert "provider_id" not in comparable
+    assert "official_source_url" not in comparable
 
 
 def test_no_real_institutional_data_is_tracked() -> None:

@@ -211,6 +211,56 @@ def _content_error_report(
     return report
 
 
+def _metadata_basis(
+    retrieval_mode: RetrievalMode,
+    *,
+    source_url: str | None,
+    response_content_type: str | None,
+) -> dict[str, list[str]]:
+    """Describe how compact manifest metadata was obtained."""
+
+    source_declared = ["source_institution", "source_layer"]
+    if response_content_type:
+        source_declared.append("response_content_type")
+    user_supplied = ["selected_level"]
+    if retrieval_mode in {RetrievalMode.MANUAL_IMPORT, RetrievalMode.SEED_INPUT}:
+        user_supplied.append("source_file")
+    derived = [
+        "provider_id",
+        "dataset_id",
+        "source_relationship",
+        "source_byte_size",
+        "original_sha256",
+        "feature_count",
+        "geometry_count",
+        "validation_status",
+        "warnings",
+        "crs.normalized",
+        "generated_artifacts",
+        "transformation_steps",
+    ]
+    if source_url:
+        derived.append("source_url")
+    return {
+        "source_declared": source_declared,
+        "detected": [
+            "original_source_format",
+            "geometry_types",
+            "software_version",
+            "provider_configuration_version",
+        ],
+        "inferred": ["dataset_year", "crs.source"],
+        "derived": derived,
+        "user_supplied": user_supplied,
+        "unknown": [],
+        "uncertainties": [
+            "license_status",
+            "redistribution_status",
+            "institutional_metadata_completeness",
+        ],
+    }
+
+
 def validate_kml(
     path: Path,
     *,
@@ -218,6 +268,10 @@ def validate_kml(
     code_aliases: tuple[str, ...],
     plausible_bounds: tuple[float, float, float, float],
     provider_id: str = "ineter-pfafstetter",
+    provider_configuration_version: str = "1",
+    dataset_id: str = "ineter-pfafstetter-2025",
+    source_institution: str = "Instituto Nicaragüense de Estudios Territoriales (INETER)",
+    source_relationship: str = "authoritative",
     source_url: str | None = None,
     source_layer: str = "",
     retrieval_mode: RetrievalMode = RetrievalMode.MANUAL_IMPORT,
@@ -242,6 +296,16 @@ def validate_kml(
         retrieved_at_utc=retrieved_at_utc or checked_utc,
         response_content_type=response_content_type,
         byte_size=byte_size if byte_size is not None else path.stat().st_size,
+        source_institution=source_institution,
+        provider_id=provider_id,
+        dataset_id=dataset_id,
+        source_relationship=source_relationship,
+        provider_configuration_version=provider_configuration_version,
+        metadata_basis=_metadata_basis(
+            retrieval_mode,
+            source_url=source_url,
+            response_content_type=response_content_type,
+        ),
     )
     if path.stat().st_size == 0:
         return _content_error_report(report, code="empty_kml", message="The KML file is empty.")
@@ -394,6 +458,8 @@ def validate_kml(
                             "pfaf_level": str(level),
                             "pfaf_code_source": code_source or "",
                             "source_provider": provider_id,
+                            "source_dataset": dataset_id,
+                            "source_relationship": source_relationship,
                             "source_url": source_url or "",
                             "source_layer": source_layer,
                             "retrieval_mode": retrieval_mode.value,
@@ -401,6 +467,7 @@ def validate_kml(
                             "retrieved_at_utc": report.retrieved_at_utc,
                             "response_content_type": response_content_type or "",
                             "source_byte_size": str(report.byte_size),
+                            "provider_configuration_version": provider_configuration_version,
                         }
                     )
                     report.features.append(

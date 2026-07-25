@@ -12,6 +12,7 @@ from nica_geofetch.models import DownloadSettings, ProviderConfig
 
 DEFAULT_PROVIDER_DATA: dict[str, Any] = {
     "provider_id": "ineter-pfafstetter",
+    "configuration_version": "1",
     "title": "INETER Pfafstetter-adjusted national hydrographic units, 2025",
     "endpoint": "https://geoserveridefn.ineter.gob.ni/geoserver/wms/kml",
     "allowed_hosts": ["geoserveridefn.ineter.gob.ni"],
@@ -90,6 +91,7 @@ def load_provider_config(path: Path | None = None) -> ProviderConfig:
         allowed_hosts = tuple(str(host).strip().lower() for host in data["allowed_hosts"])
         config = ProviderConfig(
             provider_id=str(data["provider_id"]),
+            configuration_version=str(data.get("configuration_version", "1")),
             title=str(data["title"]),
             endpoint=str(data["endpoint"]),
             allowed_hosts=allowed_hosts,

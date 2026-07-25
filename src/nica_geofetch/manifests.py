@@ -4,10 +4,16 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterable
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
-from nica_geofetch.models import ConversionResult, ValidationReport
+from nica_geofetch.models import (
+    METADATA_ORIGIN_VALUES,
+    SOURCE_RELATIONSHIP_VALUES,
+    ConversionResult,
+    ValidationReport,
+)
 from nica_geofetch.validation import sha256_file
 
 
@@ -17,6 +23,61 @@ def _write_json(path: Path, value: Any) -> Path:
         encoding="utf-8",
     )
     return path
+
+
+def _software_version() -> str:
+    try:
+        return version("nica-geofetch")
+    except PackageNotFoundError:
+        return "0+unknown"
+
+
+def _transformation_steps(
+    report: ValidationReport,
+    conversion: ConversionResult,
+) -> list[str]:
+    steps = [
+        "validate_xml_vector_kml",
+        "extract_provider_attributes",
+        "normalize_polygon_features_to_epsg_4326",
+    ]
+    if report.repaired_geometry_count:
+        steps.append("repair_invalid_geometries_with_explicit_user_opt_in")
+    if any(path.resolve() != report.source_path.resolve() for path in conversion.outputs.values()):
+        steps.extend(["convert_requested_formats", "reopen_and_verify_generated_outputs"])
+    return steps
+
+
+def _generated_artifacts(
+    output_directory: Path,
+    report: ValidationReport,
+    conversion: ConversionResult,
+) -> list[dict[str, Any]]:
+    artifacts: list[dict[str, Any]] = []
+    for output_format, path in sorted(conversion.outputs.items()):
+        preserved_source = path.resolve() == report.source_path.resolve()
+        steps = (
+            ["preserve_original_source_bytes"]
+            if preserved_source
+            else [
+                "validate_source_kml",
+                "normalize_polygon_features_to_epsg_4326",
+                f"convert_to_{output_format}",
+                "reopen_and_verify_output",
+            ]
+        )
+        if report.repaired_geometry_count and not preserved_source:
+            steps.insert(2, "repair_invalid_geometries_with_explicit_user_opt_in")
+        artifacts.append(
+            {
+                "format": output_format,
+                "path": path.relative_to(output_directory).as_posix(),
+                "artifact_role": "preserved_source" if preserved_source else "derived_output",
+                "sha256": sha256_file(path),
+                "transformation_steps": steps,
+            }
+        )
+    return artifacts
 
 
 def write_audit_reports(
@@ -73,25 +134,54 @@ def write_audit_reports(
 def write_source_manifest(
     output_directory: Path,
     reports: list[ValidationReport],
+    conversions: list[ConversionResult],
 ) -> Path:
     """Record reproducible source identities without granting data rights."""
 
+    conversions_by_level = {item.level: item for item in conversions}
     sources = [
         {
-            "provider": "ineter-pfafstetter",
-            "dataset_id": "ineter-pfafstetter-2025",
+            "source_institution": report.source_institution,
+            "provider": report.provider_id,
+            "provider_id": report.provider_id,
+            "dataset_id": report.dataset_id,
+            "source_relationship": report.source_relationship,
             "level": report.level,
+            "selected_level": report.level,
             "source_url": report.source_url,
             "source_layer": report.source_layer,
             "retrieval_mode": report.retrieval_mode.value,
             "retrieved_at_utc": report.retrieved_at_utc,
+            "original_source_format": report.original_source_format,
             "response_content_type": report.response_content_type,
             "byte_size": report.byte_size,
+            "source_byte_size": report.byte_size,
             "local_raw_file": report.source_path.relative_to(output_directory).as_posix(),
             "sha256": report.sha256,
+            "original_sha256": report.sha256,
             "validation_status": "valid" if report.valid else "invalid",
             "placemark_count": report.placemark_count,
+            "feature_count": len(report.features),
             "geometry_count": report.polygon_feature_count,
+            "geometry_types": sorted({feature.geometry.geom_type for feature in report.features}),
+            "crs": {
+                "source": report.crs,
+                "normalized": "EPSG:4326",
+            },
+            "warnings": [issue.to_dict() for issue in report.issues if issue.severity == "warning"],
+            "software_version": _software_version(),
+            "provider_configuration_version": report.provider_configuration_version,
+            "transformation_steps": _transformation_steps(
+                report,
+                conversions_by_level[report.level],
+            ),
+            "generated_artifacts": _generated_artifacts(
+                output_directory,
+                report,
+                conversions_by_level[report.level],
+            ),
+            "metadata_basis": report.metadata_basis,
+            "dataset_year": 2025,
             "validated_at_utc": report.checked_utc,
             "attribution": (
                 "Source: INETER, national hydrographic units adjusted to Pfafstetter, 2025."
@@ -106,9 +196,11 @@ def write_source_manifest(
     return _write_json(
         output_directory / "source_manifest.json",
         {
-            "schema_version": 2,
+            "schema_version": 3,
             "software_license": "Apache-2.0",
             "software_license_scope": "Nica-GeoFetch software and synthetic fixtures only",
+            "metadata_origin_vocabulary": sorted(METADATA_ORIGIN_VALUES),
+            "source_relationship_vocabulary": sorted(SOURCE_RELATIONSHIP_VALUES),
             "sources": sources,
         },
     )
@@ -131,6 +223,8 @@ def write_provenance_summary(
         "The source institution is INETER. Converted files are not represented as "
         "official INETER products. No explicit open-data license was identified; "
         "obtain institutional clarification before redistributing complete copies.",
+        "The configured source relationship is `authoritative`; technical metadata "
+        "origins and generated-artifact checksums are recorded in source_manifest.json.",
         "",
         "## Levels and outputs",
         "",

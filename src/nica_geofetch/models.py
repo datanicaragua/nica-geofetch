@@ -9,6 +9,28 @@ from typing import Any
 
 from shapely.geometry.base import BaseGeometry
 
+METADATA_ORIGIN_VALUES = frozenset(
+    {
+        "source_declared",
+        "detected",
+        "inferred",
+        "derived",
+        "user_supplied",
+        "unknown",
+    }
+)
+SOURCE_RELATIONSHIP_VALUES = frozenset(
+    {
+        "authoritative",
+        "official_mirror",
+        "institutional_copy",
+        "derived_from_authoritative",
+        "comparable_not_equivalent",
+        "fallback_non_equivalent",
+        "unverified",
+    }
+)
+
 
 class RetrievalMode(StrEnum):
     """How the exact source bytes entered a validation workflow."""
@@ -38,6 +60,7 @@ class ProviderConfig:
     layers: dict[int, str]
     code_aliases: dict[int, tuple[str, ...]]
     plausible_bounds: tuple[float, float, float, float]
+    configuration_version: str = "1"
     timeout_connect_seconds: float = 10.0
     timeout_read_seconds: float = 90.0
     max_response_bytes: int = 100_000_000
@@ -130,6 +153,14 @@ class ValidationReport:
     retrieved_at_utc: str
     response_content_type: str | None
     byte_size: int
+    source_institution: str = "Instituto Nicaragüense de Estudios Territoriales (INETER)"
+    provider_id: str = "ineter-pfafstetter"
+    dataset_id: str = "ineter-pfafstetter-2025"
+    source_relationship: str = "authoritative"
+    original_source_format: str = "KML"
+    crs: str = "EPSG:4326"
+    provider_configuration_version: str = "1"
+    metadata_basis: dict[str, list[str]] = field(default_factory=dict)
     features: list[KMLFeature] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
     placemark_count: int = 0
@@ -137,6 +168,19 @@ class ValidationReport:
     ground_overlay_count: int = 0
     network_link_count: int = 0
     repaired_geometry_count: int = 0
+
+    def __post_init__(self) -> None:
+        """Reject provenance values outside the intentionally small vocabularies."""
+
+        if self.source_relationship not in SOURCE_RELATIONSHIP_VALUES:
+            raise ValueError(f"Unsupported source relationship: {self.source_relationship}")
+        unsupported_origins = set(self.metadata_basis) - (
+            METADATA_ORIGIN_VALUES | {"uncertainties"}
+        )
+        if unsupported_origins:
+            raise ValueError(
+                f"Unsupported metadata origin categories: {sorted(unsupported_origins)}"
+            )
 
     @property
     def valid(self) -> bool:
@@ -149,20 +193,29 @@ class ValidationReport:
 
         result: dict[str, Any] = {
             "source_path": str(self.source_path),
+            "source_institution": self.source_institution,
+            "provider_id": self.provider_id,
+            "dataset_id": self.dataset_id,
+            "source_relationship": self.source_relationship,
             "source_url": self.source_url,
             "source_layer": self.source_layer,
             "retrieval_mode": self.retrieval_mode.value,
             "level": self.level,
+            "original_source_format": self.original_source_format,
+            "crs": self.crs,
             "sha256": self.sha256,
             "checked_utc": self.checked_utc,
             "retrieved_at_utc": self.retrieved_at_utc,
             "response_content_type": self.response_content_type,
             "byte_size": self.byte_size,
+            "provider_configuration_version": self.provider_configuration_version,
+            "metadata_basis": self.metadata_basis,
             "valid": self.valid,
             "validation_status": "valid" if self.valid else "invalid",
             "placemark_count": self.placemark_count,
             "polygon_feature_count": self.polygon_feature_count,
             "geometry_count": self.polygon_feature_count,
+            "geometry_types": sorted({feature.geometry.geom_type for feature in self.features}),
             "ground_overlay_count": self.ground_overlay_count,
             "network_link_count": self.network_link_count,
             "repaired_geometry_count": self.repaired_geometry_count,

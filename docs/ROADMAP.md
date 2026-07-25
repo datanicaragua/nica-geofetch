@@ -14,10 +14,11 @@ workflow pass as recorded in `PROJECT_STATUS.md`.
 
 ## Public-release hardening gate
 
-The local code/notebook hardening is complete, but publication is gated by
-`PUBLICATION_CHECKLIST.md`. GitHub CI, real fresh-Colab execution from the
-public badge, visibility authorization, and stable-tag verification must pass
-before v0.1.0. These gates do not expand provider or platform scope.
+The local code/notebook hardening and context/lineage closeout are complete,
+but publication is gated by `PUBLICATION_CHECKLIST.md`. GitHub CI, real
+fresh-Colab execution from the public badge, visibility authorization, and
+stable-tag verification must pass before v0.1.0. These gates do not expand
+provider or platform scope.
 
 ## Next milestone - MVP-2 hardening and source clarification
 
@@ -34,6 +35,8 @@ before v0.1.0. These gates do not expand provider or platform scope.
 
 - Mature the dataset registry with availability and quality review workflows.
 - Add a second provider only after a source/governance readiness review.
+- Evaluate HydroBASINS only as a separately identified planned comparison; it
+  is not implemented and is not presumed equivalent to the INETER adjustment.
 - Define standardized national base-layer conventions and cross-dataset metadata.
 - Add richer provenance exchange and catalog export.
 

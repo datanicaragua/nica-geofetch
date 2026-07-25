@@ -2,12 +2,14 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/datanicaragua/nica-geofetch/blob/main/notebooks/NicaGeoFetch_Colab.ipynb)
 
-**Reproducible access to trusted institutional geodata for Nicaragua.**
+**A reproducible acquisition, validation, provenance, and preparation layer for
+institutional datasets used across the DataNicaTools ecosystem.**
 
-Nica-GeoFetch is a focused Python package and technical CLI for discovering,
-downloading, validating, converting, and packaging institutional geospatial
-datasets with reproducible provenance. MVP-1 implements one dataset family:
-INETER's 2025 Pfafstetter-adjusted national hydrographic units, levels 4-7.
+Nica-GeoFetch supplies trusted foundational datasets to downstream notebooks,
+analyses, models, and applications. It is not itself an end-user risk, climate,
+health, agriculture, hydrology, or other thematic application. MVP-1 implements
+one reference family: INETER's 2025 Pfafstetter-adjusted national hydrographic
+units, levels 4-7.
 
 > The software is Apache-2.0 licensed. Institutional datasets are third-party
 > material and are **not** covered by that license. See [DATA_TERMS.md](DATA_TERMS.md)
@@ -70,7 +72,9 @@ requires the repository root and installs in editable mode.
 
 Start at [docs/index.md](docs/index.md). The current implementation state is in
 [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md), and the operational resume
-point is [docs/HANDOFF.md](docs/HANDOFF.md).
+point is [docs/HANDOFF.md](docs/HANDOFF.md). The first provider's access and
+non-equivalence lessons are documented in the
+[INETER Pfafstetter case study](docs/CASE_STUDY_INETER_PFAFSTETTER.md).
 
 ## Scope
 
