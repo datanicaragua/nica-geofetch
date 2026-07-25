@@ -1,12 +1,14 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-25T15:54:12Z`
+- **last_updated_utc:** `2026-07-25T17:30:07Z`
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicationAndColabFix_v0.1` is complete.
-The implementation is checkpointed at `c6d5829`, and the existing GitHub
-repository is public.
+Prompt
+`NicaGeoFetch_CodexDesktop_MVP1_ColabSourceRetentionDeliveryUX_v1.0` is
+implemented at `0be8580`. Local gates and the single-level N4 live test pass.
+The implementation is pushed, GitHub Actions run `30167669342` passed on
+Python 3.11 and 3.12, and the existing GitHub repository remains public.
 
 ## Complete
 
@@ -37,7 +39,7 @@ repository is public.
   fallback and package API use are preserved.
 - README authorship, AI-assisted-development disclosure, and UTC/date policy
   are documented.
-- Local installation, ruff, mypy, 49 tests, notebook validation, CLI help, and
+- Local installation, ruff, mypy, 58 tests, notebook validation, CLI help, and
   publication audit pass.
 - Commit `c6d5829` was pushed normally to the existing `origin/main`.
 - GitHub Actions run `30164223783` passed on Python 3.11 and 3.12.
@@ -46,17 +48,36 @@ repository is public.
 - Anonymous repository, raw-notebook, and Colab-badge requests returned HTTP
   200. A clean temporary environment installed the public Git requirement,
   resolved `c6d5829`, imported `nica_geofetch`, and printed `0.1.0`.
+- Acquisition-valid KML is now retained independently of topology validity.
+  N5-N7 warning levels keep the original source and skip only analytical
+  derivatives when repair is off.
+- Explicit repair affects only the analytical working copy and records original
+  and repaired checksums, repair method, affected identifiers, and generated
+  formats.
+- The public notebook now supports N4-default/all-level selection, per-level
+  progress, warning-aware summaries, unique repeated runs, immediate ZIP
+  delivery, and optional click-triggered manual import. The developer notebook
+  is unchanged.
+- The offline suite has 58 passing tests; editable installation, Ruff, mypy,
+  both notebooks, CLI help, publication audit, and all six pre-commit hooks
+  pass.
+- A new polite N4 live test passed at `2026-07-25T17:18:29Z` with 12
+  Placemarks/geometries and automatic cleanup. Levels 5-7 were not downloaded
+  for automated testing.
+- Implementation commit `0be8580` was pushed normally to `origin/main`; CI run
+  `30167669342` passed every required job on Python 3.11 and 3.12.
 
 ## Incomplete
 
-The real badge-launched fresh-Colab run and v0.1.0 release approval remain
-human gates. No tag, GitHub release, PyPI package, data release, or
-institutional-data archive was created.
+The badge-launched human Colab retest remains. The human must exercise N4+N5
+without repair, all levels, explicit repair, the primary ZIP button, repeated
+execution, and optional manual import. No tag, GitHub release, PyPI package,
+data release, or institutional-data archive was created.
 
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Human public-Colab validation from a fresh anonymous runtime.
+Human public-Colab retesting from a fresh anonymous runtime.
 
 ## Verify environment
 
@@ -86,7 +107,8 @@ pre-commit run --all-files
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
 - The automated public Git installation passes, but interactive Colab behavior
-  still requires the human top-to-bottom test.
+  still requires the human top-to-bottom retest of the corrected warning and
+  delivery flows.
 - HydroBASINS or another comparable source must never be substituted under the
   INETER dataset identifier.
 
@@ -97,6 +119,9 @@ pre-commit run --all-files
 - `docs/ARCHITECTURE.md`
 - `docs/CASE_STUDY_INETER_PFAFSTETTER.md`
 - `docs/PUBLICATION_CHECKLIST.md`
+- `notebooks/NicaGeoFetch_Colab.ipynb`
+- `src/nica_geofetch/models.py`
+- `src/nica_geofetch/workflows.py`
 - `configs/providers/ineter_pfafstetter_2025.yml`
 - `registry/datasets.yml`
 - `scripts/audit_seed_inputs.py`
@@ -104,6 +129,7 @@ pre-commit run --all-files
 
 ## Dirty working tree
 
-Expected after the publication/Colab closeout commit: clean tracked working tree.
+Expected after the source-retention/Colab closeout commit: clean tracked working
+tree synchronized with `origin/main`.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

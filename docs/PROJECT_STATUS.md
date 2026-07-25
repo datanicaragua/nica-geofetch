@@ -1,10 +1,10 @@
 # Project status
 
-- **Current milestone:** MVP-1 public repository activation and Colab bootstrap
-  correction (complete; human public-Colab validation pending)
+- **Current milestone:** MVP-1 Colab source-retention, delivery, and beginner UX
+  correction (implementation complete; human public-Colab retest pending)
 - **Current branch:** `main`
-- **Latest stable commit:** `c6d5829` - `fix: harden public Colab bootstrap and publication metadata`
-- **last_updated_utc:** `2026-07-25T15:54:12Z`
+- **Latest stable commit:** `0be8580` - `fix: retain source KML through topology warnings`
+- **last_updated_utc:** `2026-07-25T17:30:07Z`
 
 ## Implemented capabilities
 
@@ -36,6 +36,13 @@
   bootstrap is skipped or fails.
 - Professional authorship and proportionate human-led, AI-assisted development
   disclosure are documented.
+- Acquisition validity, original geometry validity, and analytical readiness
+  are explicit without introducing a new validation framework.
+- Acquisition-valid original KML is preserved byte for byte through topology
+  warnings; analytical derivatives remain strict and repair remains opt-in.
+- Public Colab provides N4-default/all-level controls, sequential per-level
+  status, explicit repair, a beginner summary, immediate click-to-download ZIP,
+  and optional button-triggered manual import.
 
 ## Test status
 
@@ -45,44 +52,54 @@
 - PDF rights statement: text-extracted and visually verified.
 - `ruff check .`: passed.
 - `mypy src`: passed (17 source files).
-- `pytest -q`: passed (49 offline tests).
+- `pytest -q`: passed (58 offline tests).
 - `python -m nica_geofetch.cli --help`: passed.
 - Both notebooks: valid nbformat v4 and smoke assertions passed.
 - Fresh-Colab bootstrap simulation: passed without `pyproject.toml`.
 - Four configured INETER URLs: semantically equivalent to manually verified URLs.
-- Opt-in live level 4 test: passed with 12 polygon features; temporary data removed.
+- Opt-in live level 4 test: passed again on 2026-07-25 with 12 Placemarks,
+  12 polygon geometries, `validation_status=valid`, and temporary data removed.
 - Publication audit: passed with no forbidden institutional data or supported
   secret signature.
 - Registry/source-relationship, metadata-origin, checksum-lineage, legacy
   manifest-field, documentation-link, and unchanged-notebook assertions passed.
 - GitHub/private-access, authentication, missing-Git, pip-failure, post-install
   import, ZIP fallback, and public-notebook cell-order simulations passed.
+- Synthetic N5-like topology evidence confirms two invalid geometries are
+  retained without repair, derivatives are skipped, explicit repair enables
+  conversion, source/working-copy checksums remain separate, and later selected
+  levels continue.
 - `pre-commit run --all-files`: passed all six hooks.
 
 ## Current limitations
 
-Levels 5-7 contain 2, 1, and 2 invalid source geometries respectively and
-require the user's explicit `--repair` decision for conversion. Python 3.12
-was verified locally; Python 3.11 is configured in CI but was not available in
-this desktop environment.
+Levels 5-7 contain 2, 1, and 2 known invalid source geometries respectively.
+Their original KML is now retained without repair, but their analytical
+derivatives are skipped unless explicit repair succeeds. Python 3.12 was
+verified locally; Python 3.11 is configured in CI but was not available in this
+desktop environment.
 
 The expected `origin` is configured. GitHub reports
 `datanicaragua/nica-geofetch` as public and the authenticated owner as `ADMIN`.
-CI run `30164223783` passed on `c6d5829` for Python 3.11 and 3.12. Anonymous
+CI run `30167669342` passed on implementation commit `0be8580` for Python 3.11
+and 3.12, including every required project gate. Anonymous
 HTTP access to the repository, raw notebook, and Colab badge returned 200.
 A clean temporary Python environment installed the Colab Git requirement from
 public `main`, resolved `c6d5829`, imported the package, and printed `0.1.0`.
 
 ## Blocked items
 
-- A real fresh-Colab run from the public badge is pending.
+- Human public-Colab retesting of the new N4+N5 warning flow, all-level
+  selection, explicit repair, immediate ZIP button, repeated execution, and
+  optional manual import remains pending.
 - Institutional redistribution terms remain unclarified; no source data may be
   attached to a software release.
 - `v0.1.0` remains blocked until the human Colab workflow is accepted.
 
 ## Next recommended action
 
-Open the public README badge in a fresh anonymous Colab runtime and run the
-notebook from top to bottom. Record bootstrap, N4 diagnosis/download, final ZIP,
-fallback, and beginner-experience results in `docs/PUBLICATION_CHECKLIST.md`.
-Do not tag or release `v0.1.0` until that human gate passes.
+Open the public README badge in a fresh anonymous Colab runtime. Test N4+N5
+without repair, all levels, explicit repair, the immediate ZIP button, a second
+clean run, and the optional manual-import button. Record results in
+`docs/PUBLICATION_CHECKLIST.md`. Do not tag or release `v0.1.0` until that human
+gate passes.

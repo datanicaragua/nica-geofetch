@@ -148,3 +148,37 @@
 - Left the interactive public-Colab run and v0.1.0 release as human gates. No
   tag, release, PyPI upload, data release, or institutional-data archive was
   created.
+
+## 2026-07-25 - Colab source retention and delivery UX
+
+- Used the reported public-Colab N4 success and N4+N5 topology failure to
+  identify that `ValidationReport.valid` incorrectly controlled both atomic
+  source retention and analytical conversion.
+- Added small explicit `acquisition_valid`, `geometry_valid`, and
+  `analytical_ready` semantics. Acquisition-invalid HTML, OGC errors, malformed
+  or empty/non-vector KML, and implausible content remain rejected.
+- Changed the workflow so an acquisition-valid original KML is always retained
+  and included in the final ZIP. Without repair, warning levels omit analytical
+  derivatives and later selected levels continue; with explicit repair, only
+  the analytical working copy changes.
+- Extended existing reports and schema-v3 manifests with topology counts and
+  identifiers, repair requested/applied/method, generated analytical formats,
+  and separate original-source and repaired-working-copy SHA-256 values.
+- Rebuilt only the public notebook UX: N4 default, one-click all-level
+  selection, two-column guidance, explicit repair, sequential status messages,
+  warning-aware Spanish summary, unique run directories, immediate ZIP button,
+  and optional manual import that opens the picker only after a click. The
+  developer notebook remained unchanged.
+- Added one visibly synthetic N5-like fixture with two invalid polygons and nine
+  focused assertions across validation, retention, repair, multi-level
+  continuation, HTML rejection, and notebook behavior. The offline suite now
+  has 58 passing tests.
+- Editable installation, Ruff, mypy, pytest, both notebook validations, CLI
+  help, publication audit, and all six pre-commit hooks passed.
+- Ran one polite live N4 test at `2026-07-25T17:18:29Z`: 12 Placemarks,
+  12 polygon geometries, valid source, and automatic temporary cleanup. No
+  automated N5-N7 download was performed.
+- Created implementation commit `0be8580`. Human public-Colab retesting remains
+  the release gate; no tag, release, or institutional dataset was created.
+- Pushed `0be8580` normally to the existing `origin/main`. GitHub Actions run
+  `30167669342` passed every required job on Python 3.11 and 3.12.
