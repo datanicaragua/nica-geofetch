@@ -2,8 +2,8 @@
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_PublicReleaseHardening_v0.1` is complete.
-The local hardening implementation is checkpointed at `a52e32d`.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_ContextLineageCloseout_v0.1` is complete.
+The context and data-lineage implementation is checkpointed at `d4cd9d4`.
 
 ## Complete
 
@@ -21,20 +21,28 @@ The local hardening implementation is checkpointed at `a52e32d`.
 - Reports and manifests distinguish all retrieval modes and contain complete
   remote HTTP/source provenance.
 - Live level 4 test passed with 12 features and automatic temporary cleanup.
-- Local publication audit and 38 offline tests pass.
+- Local publication audit and 40 offline tests pass.
+- Strategic positioning, component value gate, source-resolution method,
+  metadata-origin groups, and controlled source relationships are documented.
+- Manifest schema version 3 distinguishes original and generated artifact
+  checksums while retaining version 2 source fields.
+- The registry and indexed case study distinguish authoritative INETER from
+  planned, non-equivalent HydroBASINS comparison; no new provider was added.
 
 ## Incomplete
 
-Nothing remains inside the authorized local hardening task. GitHub CI, a real
-badge-launched fresh-Colab run, visibility approval, and v0.1.0 release
-approval are intentionally external human gates.
+Nothing remains inside the authorized local closeout. GitHub CI, a real
+badge-launched fresh-Colab run, repository/visibility approval, and v0.1.0
+release approval are intentionally external human gates.
 
 ## NEXT_ACTION
 
-A human owner must review `docs/PUBLICATION_CHECKLIST.md` and explicitly
-authorize any remote, push, visibility change, or release. After visibility,
-run GitHub CI and the real fresh-Colab gate before considering v0.1.0. No such
-action is authorized by this handoff.
+A human owner must review `docs/PUBLICATION_CHECKLIST.md`, then explicitly
+authorize creation/visibility of `datanicaragua/nica-geofetch` and the initial
+software-only push. After that push, run GitHub CI and the badge-launched
+fresh-Colab gate. Pin the notebook to a stable tag and consider v0.1.0 only
+after those results and the legal review are recorded. No remote action is
+authorized by this handoff.
 
 ## Verify environment
 
@@ -65,12 +73,15 @@ pre-commit run --all-files
 - Shapefile field-name constraints require deterministic mappings.
 - The public Colab GitHub bootstrap cannot complete until the target repository
   exists and is visible.
+- HydroBASINS or another comparable source must never be substituted under the
+  INETER dataset identifier.
 
 ## Relevant files
 
 - `AGENTS.md`
 - `docs/PROJECT_STATUS.md`
 - `docs/ARCHITECTURE.md`
+- `docs/CASE_STUDY_INETER_PFAFSTETTER.md`
 - `docs/PUBLICATION_CHECKLIST.md`
 - `configs/providers/ineter_pfafstetter_2025.yml`
 - `registry/datasets.yml`
@@ -79,6 +90,6 @@ pre-commit run --all-files
 
 ## Dirty working tree
 
-Expected after the hardening closeout commit: clean tracked working tree.
+Expected after the context/lineage closeout commit: clean tracked working tree.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

@@ -92,3 +92,27 @@
   pre-commit hooks passed.
 - Created stable hardening commit `a52e32d`; no remote or publication action
   was performed.
+
+## 2026-07-25 - MVP-1 context and data-lineage closeout
+
+- Reframed Nica-GeoFetch consistently as the reproducible acquisition,
+  validation, provenance, and preparation layer for foundational DataNicaTools
+  datasets, not a downstream thematic application.
+- Added the six-question component value gate and human-guided source-resolution
+  sequence without adding a provider, discovery service, or new abstraction.
+- Extended existing reports/manifests to schema version 3 while retaining all
+  version 2 source fields. Added compact metadata-origin groups, controlled
+  source relationships, original-versus-generated SHA-256 values,
+  transformation steps, geometry/CRS facts, and software/configuration versions.
+- Updated the registry with verified INETER lineage and quality status.
+  HydroBASINS remains only a separately identified planned
+  `comparable_not_equivalent` dataset.
+- Added and indexed the evidence-aware INETER Pfafstetter case study.
+- Added two targeted tests for registry/link semantics and expanded manifest
+  assertions; the offline suite now has 40 passing tests.
+- Final evidence: editable installation, ruff, mypy, 40 tests, both notebook
+  validations, unchanged public-notebook smoke behavior, publication audit,
+  CLI help, and all six pre-commit hooks passed.
+- Preserved the successful 2026-07-24 N4 live-test evidence because download
+  behavior did not change. Created implementation commit `d4cd9d4`; no remote,
+  push, visibility change, publication, or release was performed.

@@ -1,9 +1,10 @@
 # Project status
 
-- **Current milestone:** MVP-1 public-release hardening (locally complete; publication gated)
+- **Current milestone:** MVP-1 context, provenance, and public-release closeout
+  (locally complete; publication gated)
 - **Current branch:** `main`
-- **Latest stable commit:** `a52e32d` - `feat: harden MVP-1 for public release audit`
-- **Last update:** 2026-07-24T23:00:10Z
+- **Latest stable commit:** `d4cd9d4` - `feat: close MVP-1 context and data lineage`
+- **Last update:** 2026-07-25T14:09:20Z
 
 ## Implemented capabilities
 
@@ -21,6 +22,15 @@
 - Retrieval modes (`remote_download`, `manual_import`, `seed_input`) and
   complete remote HTTP/source provenance in reports and manifests.
 - Publication audit and human-controlled publication/release checklist.
+- Consistent positioning as the acquisition, validation, provenance, and
+  preparation layer for foundational DataNicaTools datasets.
+- Manifest schema version 3 with source relationships, compact metadata-origin
+  groups, source-versus-derived hashes, transformation steps, geometry/CRS
+  facts, and software/provider-configuration versions.
+- Component value gate, human-guided source-resolution policy, updated registry,
+  and indexed INETER Pfafstetter case study.
+- HydroBASINS recorded only as a planned `comparable_not_equivalent` dataset,
+  with no provider or substitution behavior.
 
 ## Test status
 
@@ -30,7 +40,7 @@
 - PDF rights statement: text-extracted and visually verified.
 - `ruff check .`: passed.
 - `mypy src`: passed (17 source files).
-- `pytest -q`: passed (38 offline tests).
+- `pytest -q`: passed (40 offline tests).
 - `python -m nica_geofetch.cli --help`: passed.
 - Both notebooks: valid nbformat v4 and smoke assertions passed.
 - Fresh-Colab bootstrap simulation: passed without `pyproject.toml`.
@@ -38,7 +48,9 @@
 - Opt-in live level 4 test: passed with 12 polygon features; temporary data removed.
 - Publication audit: passed with no forbidden institutional data or supported
   secret signature.
-- `pre-commit run --all-files`: passed all six hooks on the staged hardening tree.
+- Registry/source-relationship, metadata-origin, checksum-lineage, legacy
+  manifest-field, documentation-link, and unchanged-notebook assertions passed.
+- `pre-commit run --all-files`: passed all six hooks.
 
 ## Current limitations
 
@@ -62,7 +74,8 @@ but its default GitHub installation depends on future repository visibility.
 
 ## Next recommended action
 
-Complete the human gates in `docs/PUBLICATION_CHECKLIST.md`: review the staged
-files, authorize visibility separately, run GitHub CI, execute the public
-notebook in a truly fresh Colab runtime, then pin and verify `v0.1.0`. Do not
-push, change visibility, or publish a release without that explicit authority.
+The next action is GitHub publication under explicit human control: review
+`docs/PUBLICATION_CHECKLIST.md`, authorize repository creation/visibility and
+the initial push separately, publish only the software tree to
+`datanicaragua/nica-geofetch`, then run GitHub CI and the real fresh-Colab gate.
+Do not tag or release `v0.1.0` until those gates and the legal review pass.
