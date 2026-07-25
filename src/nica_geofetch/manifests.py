@@ -37,12 +37,17 @@ def _transformation_steps(
     conversion: ConversionResult,
 ) -> list[str]:
     steps = [
-        "validate_xml_vector_kml",
+        "preserve_original_source_bytes",
+        "validate_acquisition_as_xml_vector_kml",
         "extract_provider_attributes",
-        "normalize_polygon_features_to_epsg_4326",
+        "inspect_polygon_topology",
     ]
-    if report.repaired_geometry_count:
-        steps.append("repair_invalid_geometries_with_explicit_user_opt_in")
+    if not report.analytical_ready:
+        steps.append("skip_analytical_formats_pending_explicit_repair_or_source_correction")
+        return steps
+    steps.append("normalize_polygon_features_to_epsg_4326")
+    if report.repair_applied:
+        steps.append("repair_analytical_working_copy_with_explicit_user_opt_in")
     if any(path.resolve() != report.source_path.resolve() for path in conversion.outputs.values()):
         steps.extend(["convert_requested_formats", "reopen_and_verify_generated_outputs"])
     return steps
@@ -66,8 +71,8 @@ def _generated_artifacts(
                 "reopen_and_verify_output",
             ]
         )
-        if report.repaired_geometry_count and not preserved_source:
-            steps.insert(2, "repair_invalid_geometries_with_explicit_user_opt_in")
+        if report.repair_applied and not preserved_source:
+            steps.insert(2, "repair_analytical_working_copy_with_explicit_user_opt_in")
         artifacts.append(
             {
                 "format": output_format,
@@ -105,16 +110,18 @@ def write_audit_reports(
         "Institutional source data is third-party material and is not covered by "
         "the Apache-2.0 software license.",
         "",
-        "| Level | Retrieval mode | Valid | Placemarks | Polygon features | Errors | Warnings | SHA-256 |",
-        "|---:|---|:---:|---:|---:|---:|---:|---|",
+        "| Level | Retrieval mode | Acquisition | Geometry | Analytical | Placemarks | Invalid geometries | Errors | Warnings | SHA-256 |",
+        "|---:|---|:---:|:---:|:---:|---:|---:|---:|---:|---|",
     ]
     for report in reports:
         errors = sum(issue.severity == "error" for issue in report.issues)
         warnings = sum(issue.severity == "warning" for issue in report.issues)
         lines.append(
             f"| {report.level} | {report.retrieval_mode.value} | "
-            f"{'yes' if report.valid else 'no'} | "
-            f"{report.placemark_count} | {report.polygon_feature_count} | "
+            f"{'valid' if report.acquisition_valid else 'invalid'} | "
+            f"{'valid' if report.geometry_valid else 'warnings'} | "
+            f"{'ready' if report.analytical_ready else 'skipped'} | "
+            f"{report.placemark_count} | {report.invalid_geometry_count} | "
             f"{errors} | {warnings} | `{report.sha256}` |"
         )
     lines.extend(["", "## Findings", ""])
@@ -159,7 +166,25 @@ def write_source_manifest(
             "local_raw_file": report.source_path.relative_to(output_directory).as_posix(),
             "sha256": report.sha256,
             "original_sha256": report.sha256,
-            "validation_status": "valid" if report.valid else "invalid",
+            "repaired_working_copy_sha256": report.repaired_working_copy_sha256,
+            "validation_status": report.validation_status,
+            "acquisition_valid": report.acquisition_valid,
+            "acquisition_status": "valid" if report.acquisition_valid else "invalid",
+            "geometry_valid": report.geometry_valid,
+            "geometry_validation_status": (
+                "valid"
+                if report.geometry_valid
+                else "repaired"
+                if report.repair_applied and report.post_repair_geometry_valid
+                else "warnings"
+            ),
+            "post_repair_geometry_valid": report.post_repair_geometry_valid,
+            "analytical_ready": report.analytical_ready,
+            "invalid_geometry_count": report.invalid_geometry_count,
+            "invalid_geometry_feature_ids": report.invalid_geometry_feature_ids,
+            "repair_requested": report.repair_requested,
+            "repair_applied": report.repair_applied,
+            "repair_method": report.repair_method,
             "placemark_count": report.placemark_count,
             "feature_count": len(report.features),
             "geometry_count": report.polygon_feature_count,
@@ -168,7 +193,16 @@ def write_source_manifest(
                 "source": report.crs,
                 "normalized": "EPSG:4326",
             },
-            "warnings": [issue.to_dict() for issue in report.issues if issue.severity == "warning"],
+            "warnings": [
+                issue.to_dict()
+                for issue in report.issues
+                if issue.severity == "warning" or issue.code == "invalid_geometry"
+            ],
+            "generated_analytical_formats": sorted(
+                output_format
+                for output_format in conversions_by_level[report.level].outputs
+                if output_format != "kml"
+            ),
             "software_version": _software_version(),
             "provider_configuration_version": report.provider_configuration_version,
             "transformation_steps": _transformation_steps(
@@ -232,10 +266,15 @@ def write_provenance_summary(
     by_level = {item.level: item for item in conversions}
     for report in reports:
         outputs = ", ".join(sorted(by_level[report.level].outputs))
+        analytical_note = (
+            "analytical conversion ready"
+            if report.analytical_ready
+            else "analytical formats skipped; original KML retained"
+        )
         lines.append(
             f"- Level {report.level} ({report.retrieval_mode.value}): "
             f"{report.polygon_feature_count} polygon features; "
-            f"source SHA-256 `{report.sha256}`; outputs: {outputs}."
+            f"source SHA-256 `{report.sha256}`; {analytical_note}; outputs: {outputs}."
         )
     path = output_directory / "provenance_summary.md"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")

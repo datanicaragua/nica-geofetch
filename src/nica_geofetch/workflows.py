@@ -15,13 +15,17 @@ from nica_geofetch.manifests import (
     write_source_manifest,
 )
 from nica_geofetch.models import (
+    ConversionResult,
     OutputFormat,
     RetrievalMode,
     ValidationReport,
     WorkflowResult,
 )
 from nica_geofetch.packaging import create_final_archive
-from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
+from nica_geofetch.providers.ineter_pfafstetter import (
+    IneterPfafstetterProvider,
+    ProgressCallback,
+)
 
 
 def normalize_formats(formats: Iterable[str | OutputFormat]) -> list[OutputFormat]:
@@ -47,15 +51,34 @@ def _finalize(
     output_directory: Path,
     reports: list[ValidationReport],
     formats: list[OutputFormat],
+    progress_callback: ProgressCallback | None = None,
 ) -> WorkflowResult:
-    conversions = [
-        convert_report(report, formats, output_directory) for report in reports if report.valid
-    ]
+    requested_formats = list(dict.fromkeys([OutputFormat.KML, *formats]))
+    conversions: list[ConversionResult] = []
+    for report in reports:
+        if report.analytical_ready:
+            conversion = convert_report(report, requested_formats, output_directory)
+            if progress_callback:
+                progress_callback("analytical_conversion_completed", report.level, report)
+        else:
+            conversion = ConversionResult(
+                level=report.level,
+                outputs={OutputFormat.KML.value: report.source_path},
+            )
+            if progress_callback:
+                progress_callback("analytical_skipped", report.level, report)
+        conversions.append(conversion)
+    if progress_callback:
+        progress_callback("generating_metadata", None, None)
     audit_json, audit_markdown = write_audit_reports(output_directory, reports, conversions)
     write_source_manifest(output_directory, reports, conversions)
     write_provenance_summary(output_directory, reports, conversions)
     write_checksums(output_directory)
+    if progress_callback:
+        progress_callback("creating_archive", None, None)
     archive = create_final_archive(output_directory)
+    if progress_callback:
+        progress_callback("completed", None, None)
     return WorkflowResult(
         output_directory=output_directory,
         reports=reports,
@@ -75,6 +98,7 @@ def import_local_workflow(
     repair: bool = False,
     retrieval_mode: RetrievalMode = RetrievalMode.MANUAL_IMPORT,
     provider: IneterPfafstetterProvider | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> WorkflowResult:
     """Copy, validate, convert, audit, and package one manually supplied KML."""
 
@@ -86,15 +110,19 @@ def import_local_workflow(
         repair=repair,
         retrieval_mode=retrieval_mode,
     )
+    if not report.acquisition_valid:
+        write_audit_reports(output, [report], [])
+        raise ValidationError(
+            f"Local KML failed acquisition validation; see {output / 'audit_report.json'}"
+        )
     raw_path = output / "raw" / f"ineter_pfafstetter_2025_level{level}.kml"
     if input_path.resolve() != raw_path.resolve():
         shutil.copy2(input_path, raw_path)
     report.source_path = raw_path
     selected_formats = normalize_formats(formats)
-    if not report.valid:
-        write_audit_reports(output, [report], [])
-        raise ValidationError(f"Local KML failed validation; see {output / 'audit_report.json'}")
-    return _finalize(output, [report], selected_formats)
+    if progress_callback:
+        progress_callback("source_preserved", level, report)
+    return _finalize(output, [report], selected_formats, progress_callback)
 
 
 def download_workflow(
@@ -105,6 +133,7 @@ def download_workflow(
     repair: bool = False,
     ca_bundle: Path | None = None,
     provider: IneterPfafstetterProvider | None = None,
+    progress_callback: ProgressCallback | None = None,
 ) -> WorkflowResult:
     """Download sequentially, validate, convert, audit, and package selected levels."""
 
@@ -115,5 +144,11 @@ def download_workflow(
         output / "raw",
         repair=repair,
         ca_bundle=ca_bundle,
+        progress_callback=progress_callback,
     )
-    return _finalize(output, reports, normalize_formats(formats))
+    return _finalize(
+        output,
+        reports,
+        normalize_formats(formats),
+        progress_callback,
+    )

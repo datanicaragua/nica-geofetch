@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import builtins
 import os
 import re
@@ -82,9 +83,13 @@ def test_public_notebook_structure_and_safety() -> None:
     source = "\n".join("".join(cell.source) for cell in notebook.cells)
     for expected in (
         "Proveedor",
-        "for level in (4, 5, 6, 7)",
+        "Seleccionar todos los niveles",
+        "Seleccionar solo nivel 4",
         "Diagnosticar acceso",
-        "Descargar y validar",
+        "Descargar y preparar",
+        "Reparar geometrías inválidas para generar formatos analíticos",
+        "Descargar ZIP a mi computadora",
+        "Alternativa opcional: importar un KML descargado manualmente",
         "Google Drive",
         "files.upload",
         "download_workflow",
@@ -104,6 +109,71 @@ def test_public_notebook_structure_and_safety() -> None:
         assert expected in source
     assert "verify=False" not in source
     assert "pyproject.toml" not in source
+
+
+def test_public_notebook_defaults_and_all_level_selection() -> None:
+    controls = next(cell for cell in public_notebook().cells if cell.get("id") == "controles")
+    source = controls.source
+    assert re.search(r"4:\s*widgets\.Checkbox\(\s*value=True", source)
+    for level in (5, 6, 7):
+        assert re.search(rf"{level}:\s*widgets\.Checkbox\(\s*value=False", source)
+    assert "def select_all_levels" in source
+    assert "control.value = True" in source
+    assert "def select_only_level4" in source
+    assert "control.value = level == 4" in source
+    assert re.search(r"repair_checkbox\s*=\s*widgets\.Checkbox\(\s*value=False", source)
+    assert re.search(r'layout=widgets\.Layout\(\s*display="none"', source)
+    assert "disabled=True" in source
+
+
+def test_manual_file_picker_runs_only_after_button_click() -> None:
+    manual = next(
+        cell for cell in public_notebook().cells if cell.get("id") == "configuracion-simple"
+    )
+    tree = ast.parse(manual.source)
+    top_level_calls = [
+        node
+        for statement in tree.body
+        for node in ast.walk(statement)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "upload"
+        and not isinstance(statement, ast.FunctionDef)
+    ]
+    assert top_level_calls == []
+    upload_function = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "upload_manual_kml"
+    )
+    assert any(
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "upload"
+        for node in ast.walk(upload_function)
+    )
+    assert "manual_upload_button.on_click(upload_manual_kml)" in manual.source
+
+
+def test_public_notebook_has_temporary_storage_and_warning_guidance() -> None:
+    source = "\n".join("".join(cell.source) for cell in public_notebook().cells)
+    for expected in (
+        "/content",
+        "almacenamiento temporal",
+        "desaparece",
+        "Correcto con advertencias",
+        "El KML original se conservará",
+        "No se generará",
+        "Continuando con el siguiente nivel",
+        "files.download(str(LATEST_ARCHIVE))",
+        "zip_download_button.layout.display = (",
+        '"inline-flex" if LATEST_ARCHIVE.exists() else "none"',
+    ):
+        assert expected in source
+    controls = next(cell for cell in public_notebook().cells if cell.get("id") == "controles")
+    assert controls.source.index("except (NicaGeoFetchError") < controls.source.index(
+        "except Exception"
+    )
 
 
 def test_developer_notebook_is_repo_local_and_editable() -> None:

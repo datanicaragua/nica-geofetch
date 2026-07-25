@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
 from nica_geofetch.config import download_settings, load_provider_config
 from nica_geofetch.download import SecureDownloader
-from nica_geofetch.exceptions import ValidationError
+from nica_geofetch.exceptions import NicaGeoFetchError, ValidationError
 from nica_geofetch.models import (
     DiagnosticReport,
     DownloadMetadata,
@@ -23,6 +24,7 @@ from nica_geofetch.validation import validate_kml
 DATASET_ID = "ineter-pfafstetter-2025"
 SOURCE_INSTITUTION = "Instituto Nicaragüense de Estudios Territoriales (INETER)"
 SOURCE_RELATIONSHIP = "authoritative"
+ProgressCallback = Callable[[str, int | None, ValidationReport | None], None]
 
 
 class IneterPfafstetterProvider(Provider):
@@ -127,8 +129,9 @@ class IneterPfafstetterProvider(Provider):
         repair: bool = False,
         ca_bundle: Path | None = None,
         downloader: SecureDownloader | None = None,
+        progress_callback: ProgressCallback | None = None,
     ) -> ValidationReport:
-        """Download one level and atomically retain it only after validation."""
+        """Download one level and retain it after acquisition validation."""
 
         self._require_level(level)
         url = self.build_url(level)
@@ -136,6 +139,8 @@ class IneterPfafstetterProvider(Provider):
         client = downloader or self._downloader(ca_bundle)
 
         def validator(part_path: Path, metadata: DownloadMetadata) -> ValidationReport:
+            if progress_callback:
+                progress_callback("validating", level, None)
             report = self.import_local(
                 part_path,
                 level,
@@ -146,15 +151,17 @@ class IneterPfafstetterProvider(Provider):
                 response_content_type=metadata.response_content_type,
                 byte_size=metadata.byte_size,
             )
-            if not report.valid:
+            if not report.acquisition_valid:
                 errors = "; ".join(
                     issue.code for issue in report.issues if issue.severity == "error"
                 )
-                raise ValidationError(f"Downloaded KML failed validation: {errors}")
+                raise ValidationError(f"Downloaded KML failed acquisition validation: {errors}")
             return report
 
         report = client.download(url, destination, validator)
         report.source_path = destination
+        if progress_callback:
+            progress_callback("source_preserved", level, report)
         return report
 
     def download_levels(
@@ -164,6 +171,7 @@ class IneterPfafstetterProvider(Provider):
         *,
         repair: bool = False,
         ca_bundle: Path | None = None,
+        progress_callback: ProgressCallback | None = None,
     ) -> list[ValidationReport]:
         """Download levels sequentially with a polite delay between requests."""
 
@@ -175,12 +183,20 @@ class IneterPfafstetterProvider(Provider):
         for index, level in enumerate(unique_levels):
             if index and self.config.polite_delay_seconds > 0:
                 time.sleep(self.config.polite_delay_seconds)
-            reports.append(
-                self.download_level(
-                    level,
-                    raw_directory,
-                    repair=repair,
-                    downloader=downloader,
+            if progress_callback:
+                progress_callback("downloading", level, None)
+            try:
+                reports.append(
+                    self.download_level(
+                        level,
+                        raw_directory,
+                        repair=repair,
+                        downloader=downloader,
+                        progress_callback=progress_callback,
+                    )
                 )
-            )
+            except (NicaGeoFetchError, OSError):
+                if progress_callback:
+                    progress_callback("failed", level, None)
+                raise
         return reports

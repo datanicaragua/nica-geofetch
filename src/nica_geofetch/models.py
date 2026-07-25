@@ -167,7 +167,12 @@ class ValidationReport:
     polygon_feature_count: int = 0
     ground_overlay_count: int = 0
     network_link_count: int = 0
+    invalid_geometry_count: int = 0
+    invalid_geometry_feature_ids: list[str] = field(default_factory=list)
+    repair_requested: bool = False
     repaired_geometry_count: int = 0
+    repair_method: str | None = None
+    repaired_working_copy_sha256: str | None = None
 
     def __post_init__(self) -> None:
         """Reject provenance values outside the intentionally small vocabularies."""
@@ -183,10 +188,69 @@ class ValidationReport:
             )
 
     @property
-    def valid(self) -> bool:
-        """Whether no error-level finding was recorded."""
+    def acquisition_valid(self) -> bool:
+        """Whether the original bytes are a usable institutional vector KML."""
+
+        acquisition_error_codes = {
+            "empty_kml",
+            "implausible_bounds",
+            "malformed_kml",
+            "network_link_only_kml",
+            "ogc_error",
+            "raster_only_kml",
+            "unexpected_html",
+        }
+        return not any(
+            issue.severity == "error" and issue.code in acquisition_error_codes
+            for issue in self.issues
+        )
+
+    @property
+    def geometry_valid(self) -> bool:
+        """Whether every original polygon passed topology validation."""
+
+        return self.invalid_geometry_count == 0
+
+    @property
+    def post_repair_geometry_valid(self) -> bool:
+        """Whether the analytical working geometries are topologically valid."""
+
+        return not any(
+            issue.severity == "error" and issue.code in {"empty_geometry", "invalid_geometry"}
+            for issue in self.issues
+        )
+
+    @property
+    def analytical_ready(self) -> bool:
+        """Whether analytical derivatives may be generated from the working copy."""
 
         return not any(issue.severity == "error" for issue in self.issues)
+
+    @property
+    def valid(self) -> bool:
+        """Backward-compatible alias for analytical readiness."""
+
+        return self.analytical_ready
+
+    @property
+    def repair_applied(self) -> bool:
+        """Whether explicit repair changed at least one analytical geometry."""
+
+        return self.repaired_geometry_count > 0
+
+    @property
+    def validation_status(self) -> str:
+        """Return a status that does not mislabel a retained source as failed."""
+
+        if not self.acquisition_valid:
+            return "acquisition_invalid"
+        if self.analytical_ready and self.geometry_valid:
+            return "valid"
+        if self.analytical_ready:
+            return "valid_after_repair"
+        if not self.geometry_valid:
+            return "acquisition_valid_with_topology_warnings"
+        return "acquisition_valid_not_analytical_ready"
 
     def to_dict(self, *, include_features: bool = False) -> dict[str, Any]:
         """Return a JSON-serializable audit summary."""
@@ -211,14 +275,33 @@ class ValidationReport:
             "provider_configuration_version": self.provider_configuration_version,
             "metadata_basis": self.metadata_basis,
             "valid": self.valid,
-            "validation_status": "valid" if self.valid else "invalid",
+            "acquisition_valid": self.acquisition_valid,
+            "acquisition_status": "valid" if self.acquisition_valid else "invalid",
+            "geometry_valid": self.geometry_valid,
+            "geometry_validation_status": (
+                "valid"
+                if self.geometry_valid
+                else "repaired"
+                if self.repair_applied and self.post_repair_geometry_valid
+                else "warnings"
+            ),
+            "post_repair_geometry_valid": self.post_repair_geometry_valid,
+            "analytical_ready": self.analytical_ready,
+            "validation_status": self.validation_status,
             "placemark_count": self.placemark_count,
             "polygon_feature_count": self.polygon_feature_count,
             "geometry_count": self.polygon_feature_count,
             "geometry_types": sorted({feature.geometry.geom_type for feature in self.features}),
             "ground_overlay_count": self.ground_overlay_count,
             "network_link_count": self.network_link_count,
+            "invalid_geometry_count": self.invalid_geometry_count,
+            "invalid_geometry_feature_ids": self.invalid_geometry_feature_ids,
+            "repair_requested": self.repair_requested,
+            "repair_applied": self.repair_applied,
             "repaired_geometry_count": self.repaired_geometry_count,
+            "repair_method": self.repair_method,
+            "original_sha256": self.sha256,
+            "repaired_working_copy_sha256": self.repaired_working_copy_sha256,
             "issue_counts": {
                 severity: sum(1 for item in self.issues if item.severity == severity)
                 for severity in ("error", "warning", "info")
@@ -270,9 +353,15 @@ class WorkflowResult:
 
     @property
     def valid(self) -> bool:
-        """Whether all source files passed validation."""
+        """Whether every retained source is ready for analytical conversion."""
 
         return all(report.valid for report in self.reports)
+
+    @property
+    def acquisition_valid(self) -> bool:
+        """Whether every source in the completed workflow was retained safely."""
+
+        return all(report.acquisition_valid for report in self.reports)
 
     def summary_rows(self) -> list[dict[str, Any]]:
         """Return compact rows for terminal or notebook display."""
@@ -282,10 +371,43 @@ class WorkflowResult:
             {
                 "level": report.level,
                 "retrieval_mode": report.retrieval_mode.value,
+                "acquisition_valid": report.acquisition_valid,
+                "acquisition_status": ("correct" if report.acquisition_valid else "failed"),
+                "geometry_valid": report.geometry_valid,
+                "geometry_status": (
+                    "correct"
+                    if report.geometry_valid
+                    else "repaired"
+                    if report.repair_applied and report.post_repair_geometry_valid
+                    else "warnings"
+                ),
+                "invalid_geometry_count": report.invalid_geometry_count,
+                "repair_requested": report.repair_requested,
+                "repair_applied": report.repair_applied,
+                "analytical_ready": report.analytical_ready,
                 "valid": report.valid,
                 "features": report.polygon_feature_count,
                 "sha256": report.sha256,
                 "outputs": sorted(conversions_by_level[report.level].outputs),
+                "analytical_outputs": sorted(
+                    output
+                    for output in conversions_by_level[report.level].outputs
+                    if output != OutputFormat.KML.value
+                ),
+                "warnings": [
+                    issue.message
+                    for issue in report.issues
+                    if issue.severity == "warning" or issue.code == "invalid_geometry"
+                ],
+                "result": (
+                    "correct"
+                    if report.analytical_ready and report.geometry_valid
+                    else "repaired"
+                    if report.analytical_ready and report.repair_applied
+                    else "correct_with_warnings"
+                    if report.acquisition_valid
+                    else "failed"
+                ),
             }
             for report in self.reports
         ]

@@ -73,6 +73,27 @@ def test_http_200_ogc_error_is_classified() -> None:
 
 
 @responses.activate
+def test_http_200_html_is_rejected_without_retaining_a_file(tmp_path: Path) -> None:
+    responses.add(
+        responses.GET,
+        OFFICIAL_URL,
+        status=200,
+        body=b"<!doctype html><html><body>login</body></html>",
+        content_type="text/html",
+    )
+    destination = tmp_path / "source.kml"
+    with pytest.raises(DownloadError) as raised:
+        downloader().download(
+            OFFICIAL_URL,
+            destination,
+            lambda path, _metadata: path,
+        )
+    assert raised.value.category == "unexpected_html"
+    assert not destination.exists()
+    assert not (tmp_path / "source.kml.part").exists()
+
+
+@responses.activate
 def test_response_size_limit_removes_part_file(tmp_path: Path) -> None:
     responses.add(
         responses.GET,

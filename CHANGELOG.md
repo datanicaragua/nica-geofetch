@@ -19,6 +19,11 @@ All notable changes are documented here.
   verification, and guards that stop downstream imports after a failed install.
 - Professional project authorship and proportionate AI-assisted-development
   disclosure.
+- Public Colab controls for selecting all levels, explicit analytical repair,
+  per-level progress, immediate ZIP delivery, and button-triggered manual KML
+  import.
+- Separate acquisition, original-geometry, and analytical-readiness statuses
+  with retained-source and repair-checksum evidence.
 
 ### Changed
 
@@ -36,3 +41,10 @@ All notable changes are documented here.
   manually maintained dates to the README files.
 - The existing GitHub repository was activated publicly after local audit and
   Python 3.11/3.12 CI passed; no release or institutional data was published.
+- Acquisition-valid source KML is now retained when topology warnings are
+  present. Without repair, only analytical derivatives for the affected level
+  are skipped; with explicit repair, the unchanged source and repaired
+  analytical working-copy checksums are recorded separately.
+- Every completed workflow includes retained original KML in the final ZIP,
+  even when the selected analytical format cannot be generated for a warning
+  level.

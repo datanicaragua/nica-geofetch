@@ -38,6 +38,19 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _analytical_working_copy_sha256(report: ValidationReport) -> str:
+    """Hash repaired normalized geometries without changing the source KML bytes."""
+
+    digest = hashlib.sha256()
+    for feature in report.features:
+        digest.update(feature.name.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update((feature.pfaf_code or "").encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(feature.geometry.wkb)
+    return digest.hexdigest()
+
+
 def _local_name(tag: Any) -> str:
     if not isinstance(tag, str):
         return ""
@@ -233,6 +246,12 @@ def _metadata_basis(
         "original_sha256",
         "feature_count",
         "geometry_count",
+        "acquisition_status",
+        "geometry_validation_status",
+        "invalid_geometry_count",
+        "analytical_ready",
+        "repair_requested",
+        "repair_applied",
         "validation_status",
         "warnings",
         "crs.normalized",
@@ -301,6 +320,7 @@ def validate_kml(
         dataset_id=dataset_id,
         source_relationship=source_relationship,
         provider_configuration_version=provider_configuration_version,
+        repair_requested=repair,
         metadata_basis=_metadata_basis(
             retrieval_mode,
             source_url=source_url,
@@ -369,6 +389,10 @@ def validate_kml(
                     )
                 else:
                     if not geometry.is_valid:
+                        report.invalid_geometry_count += 1
+                        report.invalid_geometry_feature_ids.append(
+                            name or f"placemark-{report.placemark_count}"
+                        )
                         if repair:
                             repaired = _polygonal_only(make_valid(geometry))
                             if repaired.is_empty or not repaired.is_valid:
@@ -383,6 +407,7 @@ def validate_kml(
                             else:
                                 geometry = repaired
                                 report.repaired_geometry_count += 1
+                                report.repair_method = "shapely.make_valid"
                                 report.issues.append(
                                     ValidationIssue(
                                         "warning",
@@ -522,4 +547,6 @@ def validate_kml(
                 f"Pfafstetter code {duplicate} occurs more than once.",
             )
         )
+    if report.repair_applied and report.post_repair_geometry_valid:
+        report.repaired_working_copy_sha256 = _analytical_working_copy_sha256(report)
     return report

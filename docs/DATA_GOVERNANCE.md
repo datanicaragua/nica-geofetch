@@ -24,6 +24,22 @@
    level, validation findings, and any requested geometry repair.
 7. Do not publish or upload outputs automatically.
 
+## Source retention and analytical readiness
+
+An institutional KML that passes acquisition validation is retained byte for
+byte even when a small number of polygon geometries fail topology checks.
+Acquisition validity covers the HTTP/content response, parseable XML, local
+polygonal Placemarks, non-empty content, and plausible geographic context.
+Malformed XML, OGC errors, HTML, empty/raster-only/network-link-only KML, and
+clearly implausible responses remain rejected.
+
+Geometry validity is recorded separately. Without explicit repair, topology
+warnings prevent analytical conversion for that level but do not delete or
+mislabel the original KML; other selected levels continue. With explicit
+repair, only the normalized analytical working copy is changed. The original
+source SHA-256, working-copy SHA-256, repair method, affected identifiers, and
+generated formats are recorded separately. Repair remains off by default.
+
 ## Metadata origin
 
 Nica-GeoFetch may detect, infer, or derive technical metadata, but does not

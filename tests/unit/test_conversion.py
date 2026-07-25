@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import zipfile
+from dataclasses import replace
 from pathlib import Path
 
 import geopandas as gpd
@@ -166,3 +167,108 @@ def test_remote_download_manifest_contains_complete_http_provenance(
     assert "source_file" not in source["metadata_basis"]["user_supplied"]
     assert "source_url" in source["metadata_basis"]["derived"]
     assert "source_url" not in source["metadata_basis"]["source_declared"]
+
+
+def test_topology_warning_source_is_retained_and_derivatives_are_skipped(
+    fixtures_directory: Path,
+    tmp_path: Path,
+) -> None:
+    source_path = fixtures_directory / "vector_level5_two_invalid.kml"
+    output = tmp_path / "warning-workflow"
+    result = import_local_workflow(
+        input_path=source_path,
+        level=5,
+        formats=[OutputFormat.GPKG, OutputFormat.GEOJSON],
+        output_directory=output,
+    )
+    report = result.reports[0]
+    conversion = result.conversions[0]
+    retained = output / "raw/ineter_pfafstetter_2025_level5.kml"
+    assert report.acquisition_valid
+    assert not report.analytical_ready
+    assert report.invalid_geometry_count == 2
+    assert retained.read_bytes() == source_path.read_bytes()
+    assert conversion.outputs == {"kml": retained}
+    assert not list((output / "processed").iterdir())
+    with zipfile.ZipFile(result.archive_path) as bundle:
+        assert "raw/ineter_pfafstetter_2025_level5.kml" in bundle.namelist()
+    manifest = json.loads((output / "source_manifest.json").read_text(encoding="utf-8"))
+    manifest_source = manifest["sources"][0]
+    assert manifest_source["acquisition_status"] == "valid"
+    assert manifest_source["geometry_validation_status"] == "warnings"
+    assert manifest_source["invalid_geometry_count"] == 2
+    assert manifest_source["generated_analytical_formats"] == []
+    assert not manifest_source["repair_requested"]
+    assert not manifest_source["repair_applied"]
+
+
+def test_explicit_repair_generates_derivatives_and_separate_checksums(
+    fixtures_directory: Path,
+    tmp_path: Path,
+) -> None:
+    source_path = fixtures_directory / "vector_level5_two_invalid.kml"
+    output = tmp_path / "repair-workflow"
+    result = import_local_workflow(
+        input_path=source_path,
+        level=5,
+        formats=[OutputFormat.GPKG],
+        output_directory=output,
+        repair=True,
+    )
+    report = result.reports[0]
+    assert report.analytical_ready
+    assert report.repair_applied
+    assert set(result.conversions[0].outputs) == {"kml", "gpkg"}
+    assert (output / "raw/ineter_pfafstetter_2025_level5.kml").read_bytes() == (
+        source_path.read_bytes()
+    )
+    manifest = json.loads((output / "source_manifest.json").read_text(encoding="utf-8"))
+    manifest_source = manifest["sources"][0]
+    assert manifest_source["original_sha256"] == report.sha256
+    assert manifest_source["repaired_working_copy_sha256"]
+    assert manifest_source["repaired_working_copy_sha256"] != report.sha256
+    assert manifest_source["repair_method"] == "shapely.make_valid"
+    assert manifest_source["generated_analytical_formats"] == ["gpkg"]
+
+
+@responses.activate
+def test_one_topology_warning_level_does_not_stop_later_selected_levels(
+    fixtures_directory: Path,
+    tmp_path: Path,
+) -> None:
+    base_provider = IneterPfafstetterProvider()
+    provider = IneterPfafstetterProvider(replace(base_provider.config, polite_delay_seconds=0))
+    responses.add(
+        responses.GET,
+        provider.build_url(5),
+        status=200,
+        body=(fixtures_directory / "vector_level5_two_invalid.kml").read_bytes(),
+        content_type="application/vnd.google-earth.kml+xml",
+    )
+    responses.add(
+        responses.GET,
+        provider.build_url(4),
+        status=200,
+        body=(fixtures_directory / "vector_level4.kml").read_bytes(),
+        content_type="application/vnd.google-earth.kml+xml",
+    )
+    output = tmp_path / "multi-level-workflow"
+    result = download_workflow(
+        levels=[5, 4],
+        formats=[OutputFormat.GPKG],
+        output_directory=output,
+        provider=provider,
+    )
+    assert [report.level for report in result.reports] == [5, 4]
+    assert result.reports[0].acquisition_valid
+    assert result.reports[0].invalid_geometry_count == 2
+    assert result.reports[1].analytical_ready
+    retained_level5 = output / "raw/ineter_pfafstetter_2025_level5.kml"
+    assert (
+        retained_level5.read_bytes()
+        == (fixtures_directory / "vector_level5_two_invalid.kml").read_bytes()
+    )
+    by_level = {conversion.level: conversion for conversion in result.conversions}
+    assert set(by_level[5].outputs) == {"kml"}
+    assert set(by_level[4].outputs) == {"kml", "gpkg"}
+    assert result.archive_path.exists()
