@@ -182,3 +182,41 @@
   the release gate; no tag, release, or institutional dataset was created.
 - Pushed `0be8580` normally to the existing `origin/main`. GitHub Actions run
   `30167669342` passed every required job on Python 3.11 and 3.12.
+
+## 2026-07-26 - Colab output-clarity release candidate
+
+- Started from clean synchronized public `main` at `5da9e4e` and created
+  `fix/mvp1-colab-output-clarity-v0.3`; no work occurred directly on `main`.
+- Converted the public notebook to a static five-step beginner flow with one
+  automatic ZIP control, subordinate click-triggered manual fallback, exact
+  temporary-storage guidance, compact Spanish results, localized expected
+  warnings, dynamic preflight expectations, per-level generated/skipped
+  explanations, and collapsed implementation cells.
+- Preserved the public bootstrap cell source and the complete developer
+  notebook byte for byte.
+- Clarified that `raw/` retains unchanged institutional KML, `processed/`
+  contains analytical derivatives, all-level selection means one execution and
+  one ZIP, and each GeoPackage contains only its named level.
+- Added descriptive level/format/UTC archive names and concise UTF-8
+  `LEEME_RESULTADOS.md` content to every final ZIP.
+- Documented the durable task-branch and pull-request workflow in
+  `CONTRIBUTING.md` with a concise reference from `AGENTS.md`.
+- Archived the complete 1,117-line v0.3 prompt with text identical to the
+  supplied attachment after newline normalization.
+- Editable installation, Ruff, mypy, 66 tests, CLI help, both notebook
+  validations, publication audit, and all six pre-commit hooks passed locally.
+- Publication audit inspected 77 candidates and found no institutional data,
+  sensitive filename, or supported secret signature.
+- The existing 2026-07-25 polite N4 live evidence was retained because source
+  download, validation, and remote behavior did not change; no N4-N7 live run
+  was performed.
+- Created implementation commit `304b8a5`, pushed only the authorized task
+  branch, and opened draft PR
+  [#1](https://github.com/datanicaragua/nica-geofetch/pull/1).
+- GitHub Actions run
+  [`30217903826`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30217903826)
+  passed every gate on Python 3.11 and 3.12 for `304b8a5`. The documentation
+  closeout commit and its final CI result are recorded in PR evidence.
+- ChatGPT Project audit, human public-Colab validation, merge, and release
+  decisions remain pending. No merge, tag, release, protection change, or
+  institutional-data publication was performed.

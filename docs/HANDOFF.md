@@ -1,14 +1,18 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-25T17:30:07Z`
+- **last_updated_utc:** `2026-07-26T19:57:07Z`
 
 ## What was being done
 
 Prompt
-`NicaGeoFetch_CodexDesktop_MVP1_ColabSourceRetentionDeliveryUX_v1.0` is
-implemented at `0be8580`. Local gates and the single-level N4 live test pass.
-The implementation is pushed, GitHub Actions run `30167669342` passed on
-Python 3.11 and 3.12, and the existing GitHub repository remains public.
+`NicaGeoFetch_CodexDesktop_MVP1_ColabOutputClarityReleaseCandidate_v0.3` is
+implemented on `fix/mvp1-colab-output-clarity-v0.3`. Implementation commit
+`304b8a5` is pushed, public PR
+[#1](https://github.com/datanicaragua/nica-geofetch/pull/1) is open against
+`main`, and GitHub Actions run
+[`30217903826`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30217903826)
+passed on Python 3.11 and 3.12. The documentation closeout is the following
+commit; its exact SHA and final CI are recorded in PR evidence.
 
 ## Complete
 
@@ -66,18 +70,63 @@ Python 3.11 and 3.12, and the existing GitHub repository remains public.
   for automated testing.
 - Implementation commit `0be8580` was pushed normally to `origin/main`; CI run
   `30167669342` passed every required job on Python 3.11 and 3.12.
+- The public notebook now has five static steps, one authoritative automatic
+  ZIP button, a collapsed subordinate manual fallback, dynamic preflight and
+  per-level explanations, compact Spanish results, localized warnings, and
+  collapsed implementation cells.
+- `raw/`, `processed/`, one-ZIP execution, and separate per-level GeoPackages
+  are explained before and after execution.
+- Every final ZIP uses a descriptive level/format/UTC filename and contains
+  `LEEME_RESULTADOS.md` with retained, generated, skipped, audit, provenance,
+  opening, and licensing guidance.
+- The public bootstrap cell source and developer notebook remain unchanged.
+- The complete v0.3 prompt is archived; the task-branch/PR workflow is durable
+  in `CONTRIBUTING.md` and concisely referenced from `AGENTS.md`.
+- Editable installation, Ruff, mypy, 66 tests, both notebooks, CLI help,
+  publication audit, and all six pre-commit hooks pass locally.
+- Only `fix/mvp1-colab-output-clarity-v0.3` was pushed. Draft PR #1 was created
+  against `main`, and its first CI run passed every gate for Python 3.11 and
+  3.12.
 
 ## Incomplete
 
-The badge-launched human Colab retest remains. The human must exercise N4+N5
-without repair, all levels, explicit repair, the primary ZIP button, repeated
-execution, and optional manual import. No tag, GitHub release, PyPI package,
-data release, or institutional-data archive was created.
+ChatGPT Project has not yet audited open PR #1. Human public-Colab validation,
+merge approval, and release approval remain pending. No merge, auto-merge,
+direct `main` push, force push, branch deletion, tag, GitHub release, PyPI
+package, data release, protection change, or institutional-data archive was
+performed.
 
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Human public-Colab retesting from a fresh anonymous runtime.
+ChatGPT Project audit of the open pull request, followed by human public-Colab
+validation.
+
+## Open pull request
+
+- **PR:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
+- **Branch:** `fix/mvp1-colab-output-clarity-v0.3`
+- **Base:** `main`
+- **Commits:** `304b8a5` (implementation); documentation closeout is the
+  following commit recorded in the PR evidence comment
+- **First green CI:** [run
+  `30217903826`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30217903826)
+  on Python 3.11 and 3.12
+- **Merge authorized:** no
+- **Release authorized:** no
+
+## Required human public-Colab tests
+
+1. **Run all** does not open the manual upload picker.
+2. Exactly one automatic **Descargar ZIP a mi computadora** button exists.
+3. N4-N7, GeoPackage, repair disabled retains four KML files in `raw/`,
+   generates only `processed/pfaf_level4.gpkg`, and clearly explains every
+   skipped analytical output.
+4. `LEEME_RESULTADOS.md` exists and accurately lists the result paths.
+5. The archive filename describes levels, format, and UTC execution time.
+6. Manual fallback is visually subordinate and unnecessary after success.
+7. A second automatic execution exposes only its latest archive.
+8. Public implementation cells are less intrusive but remain inspectable.
 
 ## Verify environment
 
@@ -106,9 +155,13 @@ pre-commit run --all-files
 - Real level 7 input is large (about 35 MB and 2,337 placemarks), so parsing
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
-- The automated public Git installation passes, but interactive Colab behavior
-  still requires the human top-to-bottom retest of the corrected warning and
-  delivery flows.
+- Automated notebook/package tests pass, but interactive Colab rendering,
+  browser download behavior, Google Drive paths, and latest-only second-run
+  state still require human validation.
+- GitHub reports `main` as unprotected and no repository rulesets were found.
+  The new workflow is documented but not technically enforced. A future
+  human-approved governance task should consider required PR/status checks and
+  force-push/branch-deletion restrictions.
 - HydroBASINS or another comparable source must never be substituted under the
   INETER dataset identifier.
 
@@ -127,9 +180,10 @@ pre-commit run --all-files
 - `scripts/audit_seed_inputs.py`
 - `pyproject.toml`
 
-## Dirty working tree
+## Working tree
 
-Expected after the source-retention/Colab closeout commit: clean tracked working
-tree synchronized with `origin/main`.
+Expected after the output-clarity documentation closeout: clean tracked working
+tree on `fix/mvp1-colab-output-clarity-v0.3`, synchronized with the remote task
+branch.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.
