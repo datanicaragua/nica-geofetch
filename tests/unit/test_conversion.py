@@ -11,13 +11,14 @@ import geopandas as gpd
 import responses
 
 from nica_geofetch.conversion import shapefile_field_mapping
+from nica_geofetch.manifests import write_checksums, write_results_guide
 from nica_geofetch.models import (
     METADATA_ORIGIN_VALUES,
     SOURCE_RELATIONSHIP_VALUES,
     OutputFormat,
     RetrievalMode,
 )
-from nica_geofetch.packaging import build_archive_name
+from nica_geofetch.packaging import build_archive_name, create_final_archive
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 from nica_geofetch.validation import sha256_file
 from nica_geofetch.workflows import download_workflow, import_local_workflow
@@ -245,6 +246,43 @@ def test_topology_warning_source_is_retained_and_derivatives_are_skipped(
     assert summary["analytical_paths"] == []
     assert summary["skipped_analytical_outputs"] == ["gpkg", "geojson"]
     assert summary["skip_reason_code"] == "topology_warnings_repair_disabled"
+
+
+def test_results_guide_uses_singular_topology_grammar_inside_archive(
+    fixtures_directory: Path,
+    tmp_path: Path,
+) -> None:
+    output = tmp_path / "singular-guide-workflow"
+    result = import_local_workflow(
+        input_path=fixtures_directory / "vector_level5_two_invalid.kml",
+        level=5,
+        formats=[OutputFormat.GPKG],
+        output_directory=output,
+    )
+    result.reports[0].invalid_geometry_count = 1
+    write_results_guide(
+        output,
+        result.reports,
+        result.conversions,
+        [OutputFormat.GPKG],
+        generated_at_utc="2026-07-26T21:20:25Z",
+    )
+    write_checksums(output)
+    archive = create_final_archive(output, archive_name="synthetic_singular_guide.zip")
+    with zipfile.ZipFile(archive) as bundle:
+        guide = bundle.read("LEEME_RESULTADOS.md").decode("utf-8")
+        names = set(bundle.namelist())
+    assert "1 advertencia topológica; reparación desactivada" in guide
+    assert "1 advertencias topológicas" not in guide
+    assert {
+        "LEEME_RESULTADOS.md",
+        "audit_report.json",
+        "audit_report.md",
+        "source_manifest.json",
+        "provenance_summary.md",
+        "checksums_sha256.json",
+        "raw/ineter_pfafstetter_2025_level5.kml",
+    } <= names
 
 
 def test_explicit_repair_generates_derivatives_and_separate_checksums(

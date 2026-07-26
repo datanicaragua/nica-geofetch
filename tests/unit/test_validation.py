@@ -68,6 +68,14 @@ def test_topology_warnings_are_distinct_from_acquisition_validity(
         "synthetic-invalid-2",
     ]
     assert report.validation_status == "acquisition_valid_with_topology_warnings"
+    invalid_issues = [issue for issue in report.issues if issue.code == "invalid_geometry"]
+    assert len(invalid_issues) == 2
+    assert {(issue.severity, issue.message) for issue in invalid_issues} == {
+        (
+            "error",
+            "Polygon geometry is invalid; use repair only after review.",
+        )
+    }
 
 
 def test_explicit_repair_changes_only_the_analytical_working_copy(
@@ -113,3 +121,21 @@ def test_level_code_length_validation(
     issues = {issue.code: issue.severity for issue in report.issues}
     assert issues["pfaf_code_length_mismatch"] == "warning"
     assert issues["missing_pfaf_code"] == "error"
+    mismatch = next(issue for issue in report.issues if issue.code == "pfaf_code_length_mismatch")
+    assert (
+        mismatch.message == "Pfafstetter code has 3 digits; the configured level is 4. "
+        "The raw value was preserved."
+    )
+
+
+def test_duplicate_code_issue_keeps_technical_code_and_message(
+    fixtures_directory: Path,
+    tmp_path: Path,
+) -> None:
+    source = (fixtures_directory / "vector_level4.kml").read_text(encoding="utf-8")
+    path = tmp_path / "duplicate-code.kml"
+    path.write_text(source.replace("<name>5678</name>", "<name>1234</name>"), encoding="utf-8")
+    report = IneterPfafstetterProvider().import_local(path, 4)
+    duplicate = next(issue for issue in report.issues if issue.code == "duplicate_pfaf_code")
+    assert duplicate.severity == "warning"
+    assert duplicate.message == "Pfafstetter code 1234 occurs more than once."

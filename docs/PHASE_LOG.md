@@ -220,3 +220,36 @@
 - ChatGPT Project audit, human public-Colab validation, merge, and release
   decisions remain pending. No merge, tag, release, protection change, or
   institutional-data publication was performed.
+
+## 2026-07-26 - Human-validation UX closeout
+
+- Recorded a fresh public-Colab N4-N7/GeoPackage/repair-off run against
+  `80c8015`. All four original KML files were retained; only
+  `processed/pfaf_level4.gpkg` was generated; levels 5-7 were omitted with
+  2, 1, and 2 topology findings.
+- Confirmed the compact summary, dynamic generated/skipped explanation,
+  traceback-free completion, one enabled automatic ZIP button, and downloaded
+  archive
+  `nica_geofetch_ineter_pfaf_n4-n7_gpkg_20260726T212025Z.zip`.
+- Confirmed the archive contained `raw/`, `processed/`,
+  `LEEME_RESULTADOS.md`, both audit reports, source manifest, provenance
+  summary, and checksum map.
+- Corrected Spanish number agreement for 0, 1, and multiple topology findings
+  in public messages and the results guide.
+- Replaced beginner-visible internal format identifiers with KML, GeoPackage,
+  GeoJSON, and Shapefile ZIP labels.
+- Suppressed package INFO noise only in the public notebook while retaining
+  notebook progress, warnings, error handling, CLI logging, and the unchanged
+  developer notebook.
+- Changed the workflow callback's completed message to a non-final ZIP state
+  and deferred `Proceso terminado.` until summary, explanation, archive
+  assignment/location/existence, and button enablement all succeed.
+- Separated topology findings from attribute observations and explained that
+  attribute observations do not by themselves mean invalid geometry.
+- Preserved all technical issue codes/messages, validation/repair behavior,
+  output policy, manifests, provenance, archive structure, bootstrap source,
+  and developer notebook.
+- Expanded the focused offline suite from 66 to 71 tests. Final local gates,
+  closeout commit SHA, push, and final CI are recorded in PR #1 evidence.
+- No live download was repeated. Merge, auto-merge, tags, releases, protection
+  changes, and institutional-data publication remain unauthorized.

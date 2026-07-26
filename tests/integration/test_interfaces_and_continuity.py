@@ -20,6 +20,7 @@ import yaml
 from nbformat.validator import validate
 
 from nica_geofetch.cli import main
+from nica_geofetch.models import OutputFormat
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 
@@ -192,8 +193,12 @@ def test_compact_summary_and_warning_localization_are_beginner_facing() -> None:
     namespace = controls_namespace(
         "FORMAT_LABELS",
         "WARNING_LABELS",
+        "TOPOLOGY_FINDING_CODES",
+        "ATTRIBUTE_OBSERVATION_CODES",
+        "topology_warning_count",
+        "topology_warning_sentence",
         "spanish_summary",
-        "localized_warnings",
+        "categorized_findings",
         extra={"pd": pd},
     )
     fake_result = types.SimpleNamespace(
@@ -219,17 +224,31 @@ def test_compact_summary_and_warning_localization_are_beginner_facing() -> None:
         "Resultado",
     ]
     report = types.SimpleNamespace(
+        invalid_geometry_count=1,
         issues=[
             types.SimpleNamespace(code="invalid_geometry"),
             types.SimpleNamespace(code="pfaf_code_length_mismatch"),
             types.SimpleNamespace(code="duplicate_pfaf_code"),
-        ]
+        ],
     )
-    assert namespace["localized_warnings"](report) == [
-        "Se detectaron geometrías con advertencias topológicas.",
+    topology, attributes = namespace["categorized_findings"](report)
+    assert topology == ["Se detectó 1 advertencia topológica."]
+    assert attributes == [
         "El código Pfafstetter no coincide con la longitud esperada para este nivel.",
         "Se detectaron códigos repetidos en la fuente.",
     ]
+
+
+def test_topology_warning_count_uses_correct_spanish_number_agreement() -> None:
+    namespace = controls_namespace(
+        "topology_warning_count",
+        "topology_warning_sentence",
+    )
+    assert namespace["topology_warning_count"](0) == "0 advertencias topológicas"
+    assert namespace["topology_warning_count"](1) == "1 advertencia topológica"
+    assert namespace["topology_warning_count"](2) == "2 advertencias topológicas"
+    assert namespace["topology_warning_sentence"](1) == "Se detectó 1 advertencia topológica."
+    assert namespace["topology_warning_sentence"](2) == "Se detectaron 2 advertencias topológicas."
 
 
 def test_dynamic_result_explanation_lists_generated_and_skipped_outputs(
@@ -238,17 +257,23 @@ def test_dynamic_result_explanation_lists_generated_and_skipped_outputs(
     namespace = controls_namespace(
         "FORMAT_LABELS",
         "WARNING_LABELS",
-        "localized_warnings",
+        "TOPOLOGY_FINDING_CODES",
+        "ATTRIBUTE_OBSERVATION_CODES",
+        "topology_warning_count",
+        "topology_warning_sentence",
+        "categorized_findings",
         "explain_result",
     )
     report4 = types.SimpleNamespace(
         level=4,
         retrieval_mode=types.SimpleNamespace(value="remote_download"),
-        issues=[],
+        invalid_geometry_count=0,
+        issues=[types.SimpleNamespace(code="pfaf_code_length_mismatch")],
     )
     report5 = types.SimpleNamespace(
         level=5,
         retrieval_mode=types.SimpleNamespace(value="remote_download"),
+        invalid_geometry_count=2,
         issues=[types.SimpleNamespace(code="invalid_geometry")],
     )
     rows = [
@@ -275,7 +300,78 @@ def test_dynamic_result_explanation_lists_generated_and_skipped_outputs(
     assert "niveles 4, 5" in output
     assert "processed/pfaf_level4.gpkg" in output
     assert "Nivel 5: GeoPackage; 2 advertencias topológicas" in output
-    assert "Se detectaron geometrías con advertencias topológicas." in output
+    assert "Advertencias topológicas del nivel 5:" in output
+    assert "Se detectaron 2 advertencias topológicas." in output
+    assert "Observaciones sobre los atributos del nivel 4:" in output
+    assert "no significan que la geometría sea inválida" in output
+    assert "Advertencias topológicas del nivel 4:" not in output
+
+
+def test_progress_uses_friendly_formats_and_nonfinal_completed_callback(
+    capsys: Any,
+) -> None:
+    progress = types.SimpleNamespace(value=0)
+    status_label = types.SimpleNamespace(value="")
+    namespace = controls_namespace(
+        "FORMAT_LABELS",
+        "friendly_format_labels",
+        "topology_warning_count",
+        "topology_warning_sentence",
+        "show_progress",
+        extra={
+            "LEVEL_STATUS": {},
+            "OutputFormat": OutputFormat,
+            "progress": progress,
+            "status_label": status_label,
+            "selected_formats": lambda: [OutputFormat.GPKG],
+        },
+    )
+    report = types.SimpleNamespace(level=6, invalid_geometry_count=1)
+    namespace["show_progress"]("source_preserved", 6, report)
+    namespace["show_progress"]("analytical_skipped", 6, report)
+    namespace["show_progress"]("completed", None, None)
+    output = capsys.readouterr().out
+    assert "Se detectó 1 advertencia topológica." in output
+    assert "No se generarán estos formatos para el nivel 6: GeoPackage." in output
+    assert "No se generará gpkg" not in output
+    assert "ZIP creado. Preparando el resumen…" in output
+    assert "Proceso terminado." not in output
+    assert "ZIP creado. Preparando el resumen…" in status_label.value
+
+
+def test_public_notebook_suppresses_info_logs_and_orders_final_success_last() -> None:
+    controls = public_cell("controles").source
+    assert "logging.getLogger().setLevel(logging.WARNING)" in controls
+    assert "INFO | Created" not in controls
+    assert 'print(f"{format_heading}: {friendly_format_labels(formats)}.")' in controls
+    assert '", ".join(item.value for item in formats)' not in controls
+    assert "No se generará {requested}" not in controls
+    assert '"completed": "ZIP creado. Preparando el resumen…"' in controls
+    assert '"completed": "Proceso terminado."' not in controls
+
+    workflow = controls.index("LAST_RESULT = download_workflow(")
+    summary = controls.index("display(spanish_summary(LAST_RESULT))", workflow)
+    explanation = controls.index("explain_result(LAST_RESULT)", summary)
+    archive = controls.index("LATEST_ARCHIVE = LAST_RESULT.archive_path", explanation)
+    location = controls.index('print("ZIP final:", LATEST_ARCHIVE)', archive)
+    verification = controls.index("if not LATEST_ARCHIVE.is_file():", location)
+    button = controls.index("zip_download_button.disabled = False", verification)
+    final_message = controls.index('"\\nProceso terminado.\\n\\n"', button)
+    final_status = controls.index(
+        'status_label.value = "<b>Estado:</b> Proceso terminado."',
+        final_message,
+    )
+    assert (
+        workflow
+        < summary
+        < explanation
+        < archive
+        < location
+        < verification
+        < button
+        < final_message
+        < final_status
+    )
 
 
 def test_public_notebook_defaults_and_all_level_selection() -> None:
@@ -338,8 +434,8 @@ def test_public_notebook_has_temporary_storage_and_warning_guidance() -> None:
         "No se generará",
         "Continuando con el siguiente nivel",
         "files.download(str(LATEST_ARCHIVE))",
-        "zip_download_button.layout.display = (",
-        '"inline-flex" if LATEST_ARCHIVE.exists() else "none"',
+        "zip_download_button.disabled = False",
+        'zip_download_button.layout.display = "inline-flex"',
     ):
         assert expected in source
     controls = next(cell for cell in public_notebook().cells if cell.get("id") == "controles")

@@ -33,6 +33,13 @@ def _software_version() -> str:
         return "0+unknown"
 
 
+def _topology_warning_count_es(count: int) -> str:
+    """Return a Spanish topology-warning count with correct number agreement."""
+
+    noun = "advertencia topológica" if count == 1 else "advertencias topológicas"
+    return f"{count} {noun}"
+
+
 def _transformation_steps(
     report: ValidationReport,
     conversion: ConversionResult,
@@ -384,7 +391,7 @@ def write_results_guide(
         if skipped:
             if report.invalid_geometry_count and not report.repair_requested:
                 reason = (
-                    f"{report.invalid_geometry_count} advertencias topológicas; "
+                    f"{_topology_warning_count_es(report.invalid_geometry_count)}; "
                     "reparación desactivada"
                 )
             elif report.repair_requested and not report.analytical_ready:

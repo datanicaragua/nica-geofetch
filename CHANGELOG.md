@@ -62,3 +62,18 @@ All notable changes are documented here.
   and one ZIP, not one consolidated GeoPackage.
 - Nontrivial repository changes now use the documented task-branch, draft-PR,
   CI, independent-review, and human-approval workflow.
+
+### Fixed
+
+- Public Colab now uses correct singular/plural Spanish for topology-warning
+  counts in progress, result explanations, and `LEEME_RESULTADOS.md`.
+- Beginner progress consistently displays KML, GeoPackage, GeoJSON, and
+  Shapefile ZIP labels instead of internal format identifiers.
+- Package INFO logging is suppressed only in the public beginner notebook;
+  notebook progress, expected warnings, errors, CLI logging, and the developer
+  notebook remain available as before.
+- The definitive `Proceso terminado.` state now appears only after the summary,
+  per-level explanation, archive location, existence check, and enabled
+  automatic download button.
+- Beginner output now separates topology findings that affect analytical
+  generation from attribute observations retained for review.

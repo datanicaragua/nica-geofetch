@@ -1,16 +1,16 @@
 # Project status
 
-- **Current milestone:** MVP-1 Colab output-clarity release candidate
-  (Codex implementation complete; independent and human review pending)
+- **Current milestone:** MVP-1 human-validation UX closeout for open PR #1
+  (recorded micro-fixes implemented; final human confirmation pending)
 - **Current branch:** `fix/mvp1-colab-output-clarity-v0.3`
 - **Open pull request:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
   against `main`; created as draft and eligible for ready-for-review only after
   final branch CI is green
-- **Implementation HEAD:** `304b8a5` -
-  `fix: clarify Colab outputs and ZIP delivery`
-- **Current HEAD:** the documentation closeout commit that follows `304b8a5`;
-  its exact SHA is recorded in PR #1 evidence and the execution report
-- **last_updated_utc:** `2026-07-26T19:57:07Z`
+- **Human-validated HEAD:** `80c8015`
+- **Current task HEAD:** the
+  `NicaGeoFetch_CodexDesktop_MVP1_HumanValidationUXCloseout_v0.1` commit that
+  follows `80c8015`; its exact SHA and final CI are recorded in PR #1 evidence
+- **last_updated_utc:** `2026-07-26T21:59:11Z`
 
 ## Implemented capabilities
 
@@ -57,6 +57,10 @@
   `LEEME_RESULTADOS.md` with exact retained, generated, and skipped outputs.
 - Nontrivial changes use the documented task-branch, draft-PR, CI,
   independent-review, and human-approval workflow.
+- Human-tested beginner output now uses number-correct topology phrases,
+  friendly format labels, notebook-scoped INFO suppression, final-success
+  ordering after complete UI delivery, and separate topology/attribute
+  sections without changing validation or repair semantics.
 
 ## Test status
 
@@ -66,7 +70,7 @@
 - PDF rights statement: text-extracted and visually verified.
 - `ruff check .`: passed.
 - `mypy src`: passed (17 source files).
-- `pytest -q`: passed (66 offline tests).
+- `pytest -q`: passed (71 offline tests).
 - `python -m nica_geofetch.cli --help`: passed.
 - Both notebooks: valid nbformat v4 and smoke assertions passed.
 - Fresh-Colab bootstrap simulation: passed without `pyproject.toml`.
@@ -90,9 +94,25 @@
   developer notebook, and durable PR governance.
 - `pre-commit run --all-files`: passed all six hooks.
 - GitHub Actions PR run
-  [`30217903826`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30217903826)
-  passed every required gate on Python 3.11 and 3.12 for implementation commit
-  `304b8a5`. A final run is required after the documentation closeout commit.
+  [`30218205280`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30218205280)
+  passed every required gate on Python 3.11 and 3.12 for human-tested commit
+  `80c8015`. The HumanValidationUXCloseout final run is recorded in PR evidence.
+
+## Human Colab evidence
+
+A fresh public-Colab run executed PR code at `80c8015` for levels 4-7,
+GeoPackage, repair disabled, and temporary storage. It retained all four source
+KML files, generated only `processed/pfaf_level4.gpkg`, and omitted N5, N6, and
+N7 with 2, 1, and 2 topology findings respectively. The summary and dynamic
+explanation rendered without traceback; one automatic ZIP button downloaded
+`nica_geofetch_ineter_pfaf_n4-n7_gpkg_20260726T212025Z.zip`.
+The archive contained `raw/`, `processed/`, `LEEME_RESULTADOS.md`, both audit
+reports, source manifest, provenance summary, and checksums.
+
+The same run identified five presentation-only defects: singular grammar,
+internal format tokens, INFO log noise, premature final status, and combined
+topology/attribute headings. All five have focused local corrections and
+synthetic tests; final human confirmation remains pending.
 
 ## Current limitations
 
@@ -113,11 +133,9 @@ public `main`, resolved `c6d5829`, imported the package, and printed `0.1.0`.
 
 ## Blocked items
 
-- ChatGPT Project audit of open PR #1 remains pending.
-- Human public-Colab validation remains pending: Run all without opening manual
-  upload; one automatic ZIP button; N4-N7/GeoPackage/repair-off output
-  inspection; accurate `LEEME_RESULTADOS.md`; descriptive ZIP name; subordinate
-  fallback; latest-only second-run state; and collapsed code presentation.
+- Final human Colab confirmation remains pending for the five presentation
+  corrections and second-run latest-only archive behavior.
+- ChatGPT Project merge recommendation remains pending after that confirmation.
 - Institutional redistribution terms remain unclarified; no source data may be
   attached to a software release.
 - Merge and `v0.1.0` remain unauthorized and blocked until independent review,
@@ -125,6 +143,7 @@ public `main`, resolved `c6d5829`, imported the package, and printed `0.1.0`.
 
 ## Next recommended action
 
-Submit open PR #1 and its evidence to ChatGPT Project for independent audit,
-then perform the documented fresh public-Colab validation. Do not merge, tag,
-or release until the applicable human gates are explicitly approved.
+Confirm the five micro-fixes in a fresh PR-backed Colab run, including the N6
+singular phrase and latest-only second execution. Then request a ChatGPT Project
+merge recommendation. Do not merge, tag, or release without the applicable
+human authorization.
