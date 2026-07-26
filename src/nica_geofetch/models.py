@@ -350,6 +350,9 @@ class WorkflowResult:
     archive_path: Path
     audit_json_path: Path
     audit_markdown_path: Path
+    results_guide_path: Path
+    requested_formats: list[OutputFormat]
+    generated_at_utc: str
 
     @property
     def valid(self) -> bool:
@@ -367,6 +370,9 @@ class WorkflowResult:
         """Return compact rows for terminal or notebook display."""
 
         conversions_by_level = {item.level: item for item in self.conversions}
+        requested_analytical = [
+            item.value for item in self.requested_formats if item != OutputFormat.KML
+        ]
         return [
             {
                 "level": report.level,
@@ -389,10 +395,28 @@ class WorkflowResult:
                 "features": report.polygon_feature_count,
                 "sha256": report.sha256,
                 "outputs": sorted(conversions_by_level[report.level].outputs),
+                "source_path": report.source_path.relative_to(self.output_directory).as_posix(),
                 "analytical_outputs": sorted(
                     output
                     for output in conversions_by_level[report.level].outputs
                     if output != OutputFormat.KML.value
+                ),
+                "analytical_paths": sorted(
+                    path.relative_to(self.output_directory).as_posix()
+                    for output, path in conversions_by_level[report.level].outputs.items()
+                    if output != OutputFormat.KML.value
+                ),
+                "skipped_analytical_outputs": [
+                    output
+                    for output in requested_analytical
+                    if output not in conversions_by_level[report.level].outputs
+                ],
+                "skip_reason_code": (
+                    "topology_warnings_repair_disabled"
+                    if report.invalid_geometry_count and not report.repair_requested
+                    else "post_repair_not_ready"
+                    if report.repair_requested and not report.analytical_ready
+                    else "analytical_not_generated"
                 ),
                 "warnings": [
                     issue.message

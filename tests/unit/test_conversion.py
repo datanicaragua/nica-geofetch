@@ -17,6 +17,7 @@ from nica_geofetch.models import (
     OutputFormat,
     RetrievalMode,
 )
+from nica_geofetch.packaging import build_archive_name
 from nica_geofetch.providers.ineter_pfafstetter import IneterPfafstetterProvider
 from nica_geofetch.validation import sha256_file
 from nica_geofetch.workflows import download_workflow, import_local_workflow
@@ -58,6 +59,7 @@ def test_local_import_all_conversions_reopen_and_package(
         assert "field_name_mapping.csv" in bundle.namelist()
     with zipfile.ZipFile(result.archive_path) as bundle:
         names = set(bundle.namelist())
+        assert "LEEME_RESULTADOS.md" in names
         assert "audit_report.json" in names
         assert "source_manifest.json" in names
         assert "checksums_sha256.json" in names
@@ -66,6 +68,7 @@ def test_local_import_all_conversions_reopen_and_package(
         assert any(name.startswith("field_mappings/") for name in names)
     checksums = json.loads((output / "checksums_sha256.json").read_text(encoding="utf-8"))
     assert checksums["files"]["raw/ineter_pfafstetter_2025_level4.kml"]
+    assert checksums["files"]["LEEME_RESULTADOS.md"]
     manifest = json.loads((output / "source_manifest.json").read_text(encoding="utf-8"))
     assert manifest["schema_version"] == 3
     assert set(manifest["metadata_origin_vocabulary"]) == METADATA_ORIGIN_VALUES
@@ -111,7 +114,41 @@ def test_local_import_all_conversions_reopen_and_package(
         "derived_output"
     }
     assert "convert_requested_formats" in source["transformation_steps"]
+    guide = result.results_guide_path.read_text(encoding="utf-8")
+    for expected in (
+        "Ejecución UTC",
+        "INETER Pfafstetter 2025",
+        "Niveles seleccionados",
+        "Formatos solicitados",
+        "Reparación solicitada",
+        "`raw/`",
+        "`processed/`",
+        "raw/ineter_pfafstetter_2025_level4.kml",
+        "processed/pfaf_level4.gpkg",
+        "audit_report.json",
+        "source_manifest.json",
+        "provenance_summary.md",
+        "KML",
+        "GeoPackage",
+        "GeoJSON",
+        "Shapefile ZIP",
+        "Apache-2.0",
+        "material de terceros",
+    ):
+        assert expected in guide
+    assert result.archive_path.name.startswith(
+        "nica_geofetch_ineter_pfaf_n4_kml-gpkg-geojson-shapefile_"
+    )
     assert result.archive_path.exists()
+
+
+def test_archive_name_includes_level_format_and_utc_context() -> None:
+    name = build_archive_name(
+        levels=[7, 4, 5, 6],
+        formats=[OutputFormat.GPKG],
+        generated_at_utc="2026-07-26T11:24:00Z",
+    )
+    assert name == "nica_geofetch_ineter_pfaf_n4-n7_gpkg_20260726T112400Z.zip"
 
 
 @responses.activate
@@ -200,6 +237,14 @@ def test_topology_warning_source_is_retained_and_derivatives_are_skipped(
     assert manifest_source["generated_analytical_formats"] == []
     assert not manifest_source["repair_requested"]
     assert not manifest_source["repair_applied"]
+    guide = result.results_guide_path.read_text(encoding="utf-8")
+    assert "Nivel 5: GeoPackage, GeoJSON" in guide
+    assert "2 advertencias topológicas; reparación desactivada" in guide
+    summary = result.summary_rows()[0]
+    assert summary["source_path"] == "raw/ineter_pfafstetter_2025_level5.kml"
+    assert summary["analytical_paths"] == []
+    assert summary["skipped_analytical_outputs"] == ["gpkg", "geojson"]
+    assert summary["skip_reason_code"] == "topology_warnings_repair_disabled"
 
 
 def test_explicit_repair_generates_derivatives_and_separate_checksums(
@@ -271,4 +316,10 @@ def test_one_topology_warning_level_does_not_stop_later_selected_levels(
     by_level = {conversion.level: conversion for conversion in result.conversions}
     assert set(by_level[5].outputs) == {"kml"}
     assert set(by_level[4].outputs) == {"kml", "gpkg"}
+    guide = result.results_guide_path.read_text(encoding="utf-8")
+    assert "processed/pfaf_level4.gpkg" in guide
+    assert "Nivel 5: GeoPackage" in guide
+    assert "2 advertencias topológicas; reparación desactivada" in guide
+    with zipfile.ZipFile(result.archive_path) as bundle:
+        assert "LEEME_RESULTADOS.md" in bundle.namelist()
     assert result.archive_path.exists()

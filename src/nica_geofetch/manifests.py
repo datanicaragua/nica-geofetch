@@ -12,6 +12,7 @@ from nica_geofetch.models import (
     METADATA_ORIGIN_VALUES,
     SOURCE_RELATIONSHIP_VALUES,
     ConversionResult,
+    OutputFormat,
     ValidationReport,
 )
 from nica_geofetch.validation import sha256_file
@@ -281,6 +282,163 @@ def write_provenance_summary(
     return path
 
 
+def write_results_guide(
+    output_directory: Path,
+    reports: list[ValidationReport],
+    conversions: list[ConversionResult],
+    requested_formats: list[OutputFormat],
+    *,
+    generated_at_utc: str,
+) -> Path:
+    """Write a concise Spanish guide to the exact contents of one result archive."""
+
+    conversions_by_level = {item.level: item for item in conversions}
+    requested_analytical = [item.value for item in requested_formats if item != OutputFormat.KML]
+    format_labels = {
+        "kml": "KML",
+        "gpkg": "GeoPackage",
+        "geojson": "GeoJSON",
+        "shapefile": "Shapefile ZIP",
+    }
+    source_files = [
+        report.source_path.relative_to(output_directory).as_posix() for report in reports
+    ]
+    analytical_files = sorted(
+        path.relative_to(output_directory).as_posix()
+        for conversion in conversions
+        for output_format, path in conversion.outputs.items()
+        if output_format != OutputFormat.KML.value
+    )
+
+    lines = [
+        "# LEEME - Resultados de Nica-GeoFetch",
+        "",
+        f"- **Ejecución UTC:** `{generated_at_utc}`",
+        "- **Proveedor:** INETER Pfafstetter 2025 (`ineter-pfafstetter`)",
+        f"- **Niveles seleccionados:** {', '.join(str(report.level) for report in reports)}",
+        "- **Formatos solicitados:** "
+        + ", ".join(format_labels[item.value] for item in requested_formats),
+        "- **Reparación solicitada:** "
+        + ("sí" if any(report.repair_requested for report in reports) else "no"),
+        "",
+        "## Carpetas",
+        "",
+        "`raw/` contiene los KML institucionales originales conservados sin "
+        "reparación geométrica ni modificación analítica.",
+        "",
+        "`processed/` contiene únicamente formatos analíticos generados desde "
+        "geometrías válidas o desde una copia analítica reparada explícitamente.",
+        "",
+        "Seleccionar varios niveles produce una ejecución y un ZIP final. Los "
+        "formatos analíticos permanecen separados por nivel; no se crea un "
+        "GeoPackage consolidado.",
+        "",
+        "## Resumen por nivel",
+        "",
+        "| Nivel | KML fuente conservado | Estado geométrico | Reparación | Formatos generados | Resultado |",
+        "|---:|:---:|---|---|---|---|",
+    ]
+    skipped_lines: list[str] = []
+    for report in reports:
+        conversion = conversions_by_level[report.level]
+        generated = sorted(
+            output_format
+            for output_format in conversion.outputs
+            if output_format != OutputFormat.KML.value
+        )
+        skipped = [
+            output_format
+            for output_format in requested_analytical
+            if output_format not in conversion.outputs
+        ]
+        geometry_status = (
+            "Correcto"
+            if report.geometry_valid
+            else "Reparado"
+            if report.repair_applied
+            else "Con advertencias"
+        )
+        repair_status = (
+            "Aplicada"
+            if report.repair_applied
+            else "Solicitada, no aplicada"
+            if report.repair_requested
+            else "No solicitada"
+        )
+        result_status = (
+            "Correcto"
+            if report.analytical_ready and report.geometry_valid
+            else "Reparado"
+            if report.analytical_ready and report.repair_applied
+            else "Correcto con advertencias"
+            if report.acquisition_valid
+            else "Falló"
+        )
+        generated_text = (
+            ", ".join(format_labels[item] for item in generated) if generated else "Ninguno"
+        )
+        lines.append(
+            f"| {report.level} | {'Sí' if report.acquisition_valid else 'No'} | "
+            f"{geometry_status} | {repair_status} | {generated_text} | {result_status} |"
+        )
+        if skipped:
+            if report.invalid_geometry_count and not report.repair_requested:
+                reason = (
+                    f"{report.invalid_geometry_count} advertencias topológicas; "
+                    "reparación desactivada"
+                )
+            elif report.repair_requested and not report.analytical_ready:
+                reason = "la copia reparada no quedó lista para análisis"
+            else:
+                reason = "revise la auditoría para conocer la causa"
+            skipped_lines.append(
+                f"- Nivel {report.level}: "
+                f"{', '.join(format_labels[item] for item in skipped)} — {reason}."
+            )
+
+    lines.extend(["", "## Archivos fuente conservados", ""])
+    lines.extend(f"- `{path}`" for path in source_files)
+    lines.extend(["", "## Archivos analíticos generados", ""])
+    lines.extend(
+        [*(f"- `{path}`" for path in analytical_files)] if analytical_files else ["- Ninguno."]
+    )
+    lines.extend(["", "## Formatos omitidos", ""])
+    lines.extend(skipped_lines or ["- Ninguno."])
+    lines.extend(
+        [
+            "",
+            "Las advertencias topológicas indican que una geometría necesita "
+            "revisión para producir formatos analíticos. No significan que el "
+            "KML fuente retenido en `raw/` sea inutilizable.",
+            "",
+            "## Auditoría y procedencia",
+            "",
+            "- `audit_report.json` y `audit_report.md`: hallazgos de validación.",
+            "- `source_manifest.json`: fuentes, checksums, reparaciones y artefactos.",
+            "- `provenance_summary.md`: resumen de procedencia y transformaciones.",
+            "- `checksums_sha256.json`: checksums de los archivos entregados.",
+            "",
+            "## Cómo abrir los formatos",
+            "",
+            "- **KML:** Google Earth o un SIG compatible.",
+            "- **GeoPackage (`.gpkg`):** QGIS u otro SIG; cada archivo contiene un solo nivel.",
+            "- **GeoJSON:** QGIS, herramientas web compatibles o bibliotecas geoespaciales.",
+            "- **Shapefile ZIP:** descomprima o abra el ZIP desde un SIG compatible; "
+            "consulte el mapeo de campos incluido.",
+            "",
+            "## Licencias",
+            "",
+            "La licencia Apache-2.0 cubre el software Nica-GeoFetch y sus fixtures "
+            "sintéticos. Los datos institucionales de INETER son material de "
+            "terceros; no se ha identificado una licencia explícita de datos "
+            "abiertos y debe consultarse a INETER antes de redistribuirlos.",
+        ]
+    )
+    path = output_directory / "LEEME_RESULTADOS.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
 def write_checksums(
     output_directory: Path,
     paths: Iterable[Path] | None = None,
@@ -294,7 +452,11 @@ def write_checksums(
             for path in output_directory.rglob("*")
             if path.is_file()
             and path != checksum_path
-            and path.name != "nica_geofetch_results.zip"
+            and not (
+                path.parent == output_directory
+                and path.name.startswith("nica_geofetch_")
+                and path.suffix.lower() == ".zip"
+            )
             and ".part" not in path.name
         ]
     else:
