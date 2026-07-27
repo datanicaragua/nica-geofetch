@@ -1,29 +1,38 @@
 # Project status
 
-- **Current milestone:** v0.1.0 software-only release preparation; release
-  readiness is not yet declared
-- **Verified starting branch:** `main`
-- **Verified starting and `origin/main` SHA:**
-  `483ecb4836126109f90de1796d4bd6c5c5ec01ba`
-- **Release-preparation branch:** `release/v0.1.0`
-- **Release-preparation implementation commit:**
-  `52da0d7f9c36687f73b154b270072d8ecc2d696c`
-- **Release-preparation pull request:** draft
-  [#3](https://github.com/datanicaragua/nica-geofetch/pull/3), open and
-  unmerged
-- **Recorded release-branch CI:** run
-  [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847)
-  passed on Python 3.11 and 3.12 for branch HEAD
-  `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`
-- **PR #2:** merged
-- **PR #2 source HEAD:**
-  `7d08a244f16bdae704c620ee35fae19b02392390`
-- **PR #2 merge commit:**
-  `483ecb4836126109f90de1796d4bd6c5c5ec01ba`
-- **Verified post-merge CI:** run
-  [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085)
-  passed for the PR #2 merge commit
-- **last_updated_utc:** `2026-07-27T19:29:54Z`
+- **Current milestone:** MVP-1 and the software-only v0.1.0 release are
+  complete; the project is in post-release observation.
+- **Released `main` commit:**
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- **Release closeout branch:** `chore/v0.1.0-post-release-closeout`.
+- **last_updated_utc:** `2026-07-27T22:01:23Z`.
+
+## v0.1.0 release record
+
+- Release-preparation PR
+  [#3](https://github.com/datanicaragua/nica-geofetch/pull/3) merged with a
+  merge commit at
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- The annotated tag `v0.1.0` has tag object
+  `37ccc3b6f37cc5a49d23af1ff5f467303c49b034` and peels to
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- The public
+  [GitHub Release](https://github.com/datanicaragua/nica-geofetch/releases/tag/v0.1.0)
+  was published at `2026-07-27T20:59:24Z`.
+- The Release is public, non-draft, and not a prerelease. It has zero manually
+  uploaded assets; only GitHub-generated source archives are available.
+- Fresh tag-pinned Colab validation passed with installed version `0.1.0`,
+  levels N4-N7, GeoPackage, and repair disabled. All original KML files were
+  retained; the N4 analytical GeoPackage was generated; N5-N7 analytical
+  outputs were omitted with the expected 2, 1, and 2 topology findings.
+- The repository description, eight approved topics, and public-Colab website
+  are configured. GitHub Private Vulnerability Reporting is enabled.
+- No PyPI package or institutional dataset was published.
+
+The `v0.1.0` tag and its Release are immutable by project policy. They must not
+be moved, replaced, or republished. A corrective software release requires a
+new version, such as `v0.1.1`. This policy does not claim that a GitHub release
+immutability feature retroactively protects v0.1.0.
 
 ## Implemented MVP-1 capabilities
 
@@ -37,117 +46,47 @@
 - Explicit separation between Apache-2.0 software and third-party
   institutional data.
 
-## v0.1.0 release-preparation scope
-
-- The public beginner notebook commits `GIT_REF = "v0.1.0"` as the stable
-  default, prints the selected Git reference, retains anonymous installation
-  and package-ZIP fallback, and contains no credential mechanism.
-- English and Spanish landing pages lead with the software/data distinction,
-  Colab beginner flow, three numbered actions, stable-tag installation, CLI
-  quickstart, bounded downstream examples, limitations, support, and separate
-  software/source-data citation guidance.
-- `CITATION.cff` and package authorship identify Gustavo Ernesto Martínez
-  Cárdenas with DataNicaTools affiliation and no invented contact, ORCID, DOI,
-  or release date.
-- `CHANGELOG.md` retains an empty `[Unreleased]` section and records the
-  completed MVP under `[0.1.0]` without a release date or publication claim.
-- Security reporting is actionable while GitHub Private Vulnerability
-  Reporting remains disabled; enabling it is a human-owner recommendation.
-- The v0.1.0 asset policy allows software materials and GitHub-generated source
-  archives, prohibits institutional or runtime data artifacts, and recommends
-  no manually uploaded GitHub Release assets.
-- The governing 855-line prompt is archived with identical normalized text.
-
-No provider logic, download behavior, validation semantics, repair semantics,
-manifest schema, archive structure, output format, developer notebook, or CLI
-behavior is changed by release preparation.
-
-## Version and citation consistency
-
-- Package version in `pyproject.toml`: `0.1.0`.
-- Runtime version in `src/nica_geofetch/__init__.py`: `0.1.0`.
-- Citation version in `CITATION.cff`: `0.1.0`.
-- Stable installation and public notebook tag: `v0.1.0`.
-- `CITATION.cff` has no premature `date-released`.
-- Software and INETER source data require separate citations; generated
-  derivatives are not represented as official INETER products.
-
 ## Verification status
 
-The clean-baseline smoke test passed Ruff, mypy, 71 offline tests, CLI help,
-and all six pre-commit hooks before changes. Release-branch verification then
-passed:
+- Post-merge GitHub Actions run
+  [`30301899149`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30301899149)
+  passed every required job on Python 3.11 and 3.12.
+- Ruff passed.
+- Mypy passed for 17 source files.
+- The offline suite passed with 72 tests.
+- CLI help passed.
+- All six pre-commit hooks passed.
+- The final publication audit inspected 80 candidates and found no prohibited
+  institutional data, sensitive filename, or supported secret signature.
+- The post-release closeout audit inspected 81 candidates, including the new
+  Dependabot configuration, with the same clean result.
 
-- editable `.[dev]` installation;
-- `ruff check .`;
-- `mypy src` with 17 source files;
-- `pytest -q` with 72 passing offline tests;
-- both notebooks validated as nbformat v4 through the test suite;
-- `python -m nica_geofetch.cli --help`;
-- `python scripts/publication_audit.py` after implementation and after build
-  cleanup, with 80 candidates and no institutional data, sensitive filename,
-  or supported secret signature;
-- `pre-commit run --all-files`, all six hooks;
-- wheel and sdist build plus Twine checks;
-- wheel inspection showing only the package, metadata, `LICENSE`, and `NOTICE`;
-- sdist inspection showing the clean software tree, documentation, tests, and
-  clearly synthetic fixtures, with no institutional or runtime data;
-- clean temporary wheel installation, imported version `0.1.0`, and CLI help;
-- removal of the temporary environment and `dist/` before commit.
+## Post-release branch hygiene
 
-The preflight independently confirmed:
+The historical branches `release/v0.1.0`,
+`docs/mvp1-pr1-merge-continuity`, and
+`fix/mvp1-colab-output-clarity-v0.3` were verified locally and remotely at
+their expected heads. Each was an ancestor of `main`, had zero commits ahead,
+and was associated only with a merged PR. Their local and remote branch refs
+were then deleted normally. PR history, merge commits, the tag, and the Release
+remain available.
 
-- clean synchronized `main`;
-- expected repository and remote;
-- exact required baseline SHA;
-- PR #2 merged;
-- no `v0.1.0` tag;
-- no `v0.1.0` GitHub Release;
-- post-merge CI run `30292686085` successful;
-- repository description, website, and topics empty;
-- GitHub Private Vulnerability Reporting disabled.
-
-## Known limitations
+## Known limitations and deferred work
 
 - Levels 5, 6, and 7 contain 2, 1, and 2 known invalid source geometries.
-- Original KML is retained. Without repair, analytical derivatives for the
+- Original KML is retained. Without repair, analytical derivatives for an
   affected level are omitted; repair is explicit, affects only an analytical
   copy, and is audited.
 - No explicit open-data license has been identified for the 2025 institutional
-  layers. No institutional data is included in the software release.
-- No PyPI package is published for v0.1.0.
-- The final fresh-Colab stable-tag validation cannot occur until a separately
-  authorized `v0.1.0` tag exists.
-
-## Governance state
-
-Release readiness is not yet declared. Draft release-preparation PR #3 is
-open, mergeable, and unmerged. Release-branch CI is green; the PR checks and
-final evidence comment remain the source of truth for the current HEAD.
-Independent ChatGPT Project audit remains pending. Human merge authorization,
-separate tag authorization, post-tag fresh-Colab check, and further GitHub
-Release authorization remain pending. No data publication is authorized.
-
-This task does not authorize a merge, tag, GitHub Release, PyPI publication,
-institutional-data publication, repository-setting change, force push, or
-branch deletion.
-
-## Repository metadata recommendations
-
-The repository description, website, and topics were empty at preflight.
-Recommended human-owner settings:
-
-- Description: Reproducible acquisition, validation, provenance, and
-  preparation of INETER Pfafstetter hydrographic units for Nicaragua.
-- Topics: `nicaragua`, `geospatial`, `hydrology`, `pfafstetter`, `ineter`,
-  `data-provenance`, `data-engineering`, `python`.
-- Website: the public NicaGeoFetch Colab notebook.
-
-These settings are recommendations only and were not applied.
+  layers. License and redistribution clarification with INETER remains a
+  priority.
+- MVP-2 source clarification, drift checks, diagnostics, and schema hardening
+  remain deferred.
+- New providers and larger platform components remain subject to the component
+  value gate.
 
 ## Next recommended action
 
-Use draft PR #3's current checks and final evidence comment as the source of
-truth, then submit the open PR and evidence to ChatGPT Project for independent
-audit. Do not merge, tag, publish, or change repository settings under the
-current authorization.
+Review the draft post-release closeout PR from
+`chore/v0.1.0-post-release-closeout` and its CI. Do not merge it
+automatically.

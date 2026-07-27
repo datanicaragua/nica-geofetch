@@ -351,3 +351,46 @@
 - Release readiness is not declared; merge, tag, GitHub Release, PyPI
   publication, institutional-data publication, repository-setting changes,
   force push, and branch deletion remain unperformed and unauthorized.
+
+## 2026-07-27 - v0.1.0 governed publication and post-release hygiene
+
+- Independently audited and merged release-preparation
+  [PR #3](https://github.com/datanicaragua/nica-geofetch/pull/3) from exact
+  head `c75024f2db57856e4b60208584e919054e7ae015` using a merge commit.
+- Verified merge commit
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc` and post-merge CI run
+  [`30301899149`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30301899149)
+  on Python 3.11 and 3.12.
+- Applied the approved repository description, topics, and public-Colab
+  website, and enabled GitHub Private Vulnerability Reporting without changing
+  visibility, the default branch, rulesets, or permissions.
+- Created annotated tag `v0.1.0` with object
+  `37ccc3b6f37cc5a49d23af1ff5f467303c49b034`, peeled to the verified merge
+  commit. The tag is immutable by project policy and must not be moved or
+  replaced.
+- Completed fresh tag-pinned Colab validation with a PASS result. Version
+  `0.1.0`, N4-N7, GeoPackage, repair-off retention/omission behavior, archive
+  structure, single automatic download, and latest-only second execution were
+  confirmed.
+- Published the public
+  [v0.1.0 GitHub Release](https://github.com/datanicaragua/nica-geofetch/releases/tag/v0.1.0)
+  at `2026-07-27T20:59:24Z`, with zero manually uploaded assets and only
+  GitHub-generated source archives.
+- Confirmed no PyPI package or institutional dataset was published. The final
+  publication audit inspected 80 candidates and found no prohibited data,
+  sensitive filename, or supported secret signature.
+- Audited the historical branches `release/v0.1.0`,
+  `docs/mvp1-pr1-merge-continuity`, and
+  `fix/mvp1-colab-output-clarity-v0.3`. Their expected local and remote heads
+  were ancestors of `main`, each had zero commits ahead, and PRs #3, #2, and
+  #1 were merged with no open PR reference.
+- Deleted those three verified merged branches locally and remotely using
+  normal non-force operations. PR and commit history, `v0.1.0`, and the Release
+  remain intact.
+- Created `chore/v0.1.0-post-release-closeout` from synchronized `main` to
+  update continuity records and add bounded weekly Dependabot version-update
+  proposals for pip and GitHub Actions. No software behavior changed.
+- Dependabot YAML validation, Ruff, mypy, 72 offline tests, CLI help, and all
+  six pre-commit hooks passed. The closeout publication audit inspected 81
+  candidates and found no prohibited institutional data, sensitive filename,
+  or supported secret signature.

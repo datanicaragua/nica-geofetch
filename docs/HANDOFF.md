@@ -1,116 +1,97 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-27T19:29:54Z`
+- **last_updated_utc:** `2026-07-27T22:01:23Z`
 
 ## What is being done
 
-Prepare the software-only Nica-GeoFetch v0.1.0 release candidate on
-`release/v0.1.0`. Implementation commit
-`52da0d7f9c36687f73b154b270072d8ecc2d696c` was pushed normally and draft
-PR [#3](https://github.com/datanicaragua/nica-geofetch/pull/3) is open and
-unmerged for independent audit. The governing prompt is
-`NicaGeoFetch_CodexDesktop_v0.1.0_ReleasePreparation_v0.1`.
+Close out the completed software-only v0.1.0 release on
+`chore/v0.1.0-post-release-closeout`. This branch records the final release
+state and adds conservative weekly Dependabot version-update proposals for pip
+and GitHub Actions. It does not change software, provider, validation, repair,
+CLI, or notebook behavior.
 
-## Verified starting state
+The branch must remain unmerged until its draft PR and CI receive human review.
+
+## Verified released state
 
 - Repository: `datanicaragua/nica-geofetch`.
-- Starting branch: clean synchronized `main`.
-- Starting and `origin/main` SHA:
-  `483ecb4836126109f90de1796d4bd6c5c5ec01ba`.
-- PR #2: merged.
-- PR #2 source HEAD:
-  `7d08a244f16bdae704c620ee35fae19b02392390`.
-- PR #2 merge commit:
-  `483ecb4836126109f90de1796d4bd6c5c5ec01ba`.
-- Independently verified post-merge CI:
-  [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085).
-- No local or fetched `v0.1.0` tag and no GitHub Release existed.
-- Repository description, website, and topics were empty.
-- GitHub Private Vulnerability Reporting was disabled.
+- Local and remote `main`:
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- PR [#3](https://github.com/datanicaragua/nica-geofetch/pull/3):
+  merged.
+- PR #3 merge commit:
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- Annotated tag: `v0.1.0`.
+- Tag object:
+  `37ccc3b6f37cc5a49d23af1ff5f467303c49b034`.
+- Peeled tag commit:
+  `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
+- Public
+  [GitHub Release](https://github.com/datanicaragua/nica-geofetch/releases/tag/v0.1.0):
+  published at `2026-07-27T20:59:24Z`.
+- Release assets: zero manual uploads; GitHub-generated source archives only.
+- Fresh tag-pinned Colab validation: PASS.
+- Repository metadata: approved description, topics, and public-Colab website
+  applied.
+- GitHub Private Vulnerability Reporting: enabled.
+- PyPI publication: none.
+- Institutional-data publication: none.
+- Final release publication audit: 80 candidates, with no prohibited data,
+  sensitive filename, or supported secret signature.
 
-## Completed on the release branch
+## Historical branch hygiene
 
-- Created `release/v0.1.0` only from the verified baseline.
-- Pinned the public notebook default to `GIT_REF = "v0.1.0"` with stable-tag,
-  advanced-user, anonymous-installation, and no-credential guidance.
-- Added focused notebook release-pin assertions while preserving nbformat v4,
-  selected-ref installation, and visible ref output.
-- Reordered both READMEs for beginner adoption and stable-tag installation.
-- Added bounded downstream examples while explicitly retaining the
-  foundational-data-only scope.
-- Aligned citation and package author metadata without inventing contact data.
-- Added changelog, security-reporting, PR-template, and software-only asset
-  policy updates.
-- Archived the exact 855-line governing prompt with identical normalized text.
-- Preserved provider, validation, repair, manifest, archive, format, CLI, and
-  developer-notebook behavior.
-- Created implementation commit
-  `52da0d7f9c36687f73b154b270072d8ecc2d696c`, pushed the release branch
-  normally, and opened unmerged draft PR #3.
-- Release-branch CI run
-  [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847)
-  passed on Python 3.11 and 3.12 for branch HEAD
-  `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`.
+The following local and remote branch heads were checked before deletion:
 
-## Local verification completed
+| Branch | Verified head | Ahead of `main` | Associated PR |
+|---|---|---:|---|
+| `release/v0.1.0` | `c75024f2db57856e4b60208584e919054e7ae015` | 0 | [#3](https://github.com/datanicaragua/nica-geofetch/pull/3), merged |
+| `docs/mvp1-pr1-merge-continuity` | `7d08a244f16bdae704c620ee35fae19b02392390` | 0 | [#2](https://github.com/datanicaragua/nica-geofetch/pull/2), merged |
+| `fix/mvp1-colab-output-clarity-v0.3` | `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1` | 0 | [#1](https://github.com/datanicaragua/nica-geofetch/pull/1), merged |
 
-- Editable installation passed.
+Every local and remote head was an ancestor of `main`, and no open PR
+referenced any of them. All six branch refs were deleted normally. The merged
+PRs and their commits remain in repository history.
+
+## Closeout branch scope
+
+- Update `PROJECT_STATUS.md`, `HANDOFF.md`, `PHASE_LOG.md`,
+  `DECISION_LOG.md`, and `PUBLICATION_CHECKLIST.md`.
+- Add `.github/dependabot.yml` using version 2 syntax.
+- Configure weekly pip and GitHub Actions version-update checks from `/`.
+- Limit each ecosystem to five open Dependabot PRs.
+- Do not configure auto-merge, reviewers, assignees, or invented labels.
+
+## Closeout validation
+
+- Dependabot YAML syntax passed the pre-commit YAML hook.
 - Ruff passed.
 - Mypy passed for 17 source files.
-- Pytest passed with 72 offline tests, including both nbformat-v4 notebook
-  validations and focused stable-pin assertions.
+- All 72 offline tests passed.
 - CLI help passed.
-- Publication audit passed before and after build cleanup with 80 candidates
-  and no forbidden institutional data, sensitive filename, or supported secret
-  signature.
+- The publication audit passed with 81 candidates and no prohibited
+  institutional data, sensitive filename, or supported secret signature.
 - All six pre-commit hooks passed.
-- Wheel and sdist built successfully and passed Twine checks.
-- The wheel contained only package modules, package metadata, `LICENSE`, and
-  `NOTICE`.
-- The sdist contained the software tree, documentation, tests, and clearly
-  synthetic fixtures; it contained no institutional data, runtime output,
-  cache, credential, private path, or Colab-generated archive.
-- A clean temporary environment installed the wheel, imported version `0.1.0`,
-  and passed CLI help.
-- The temporary environment and `dist/` were removed, then the publication
-  audit passed again.
 
-## Verification still to complete
+## Release immutability policy
 
-- Independent ChatGPT Project audit.
-
-The PR's current checks and final evidence comment are the operational source
-of truth for the latest branch HEAD and CI URLs.
-
-The committed stable pin must not be weakened for pre-tag validation. Local
-execution may use a temporary untracked override or the built wheel. Final
-fresh-Colab validation of `v0.1.0` can occur only after a separately authorized
-tag is created.
-
-## Release governance
-
-Release readiness is not yet declared. Draft PR #3 is open and unmerged.
-ChatGPT Project audit remains pending. Merge remains pending human
-authorization. The tag remains pending separate human authorization. A GitHub
-Release remains pending further separate human authorization. No data
-publication is authorized.
-
-No merge, tag, GitHub Release, PyPI publication, institutional-data
-publication, repository-setting change, force push, or branch deletion is
-authorized by this task.
+Do not modify, move, delete, or replace `v0.1.0` or its GitHub Release. Future
+corrections require a new version such as `v0.1.1`. This is a project
+governance policy and does not claim retroactive protection from a GitHub
+release immutability feature.
 
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Use draft PR #3's current checks and final evidence comment as the source of
-truth, then submit the open PR and evidence to ChatGPT Project for independent
-audit. Do not merge, tag, or publish.
+Review the draft PR for `chore/v0.1.0-post-release-closeout`, confirm its CI,
+and decide whether to merge it. Do not merge automatically.
 
 ## Resume commands
 
 ```powershell
 $env:PATH = "$PWD\.venv\Scripts;$env:PATH"
 git status --short --branch
+git fetch --prune origin
 ruff check .
 mypy src
 pytest -q
@@ -119,22 +100,17 @@ python scripts\publication_audit.py
 pre-commit run --all-files
 ```
 
-## Known risks and deferred items
+## Deferred work
 
-- INETER endpoint availability, source schema, and institutional terms may
-  change.
-- No explicit open-data license has been identified.
-- Levels 5-7 have 2, 1, and 2 known invalid source geometries.
-- Enabling GitHub Private Vulnerability Reporting is a human-owner settings
-  recommendation.
-- Repository description, topics, and public-Colab website remain
-  human-owner settings recommendations.
-- Fresh-Colab validation from `v0.1.0` is deferred until the tag exists.
-- Providers, services, APIs, web apps, mirrors, new formats, generalized
-  plugin architecture, broad refactors, and other non-blocking improvements
-  remain out of v0.1.0 scope.
+- Obtain authoritative INETER licensing, redistribution, attribution, and
+  update-cadence clarification.
+- Continue MVP-2 hardening and source-drift observation.
+- Use a new version for any corrective release.
+- Keep providers, services, web applications, mirrors, new formats, and
+  generalized architecture outside scope until they pass the component value
+  gate.
 
 ## Working tree expectation
 
-After the focused PR-evidence continuity commit and final push, the working
-tree must be clean on `release/v0.1.0`.
+The task branch must be clean and synchronized with its remote after the
+closeout commit is pushed. The draft PR must remain open and unmerged.
