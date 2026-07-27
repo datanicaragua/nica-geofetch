@@ -1,15 +1,16 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-26T21:59:11Z`
+- **last_updated_utc:** `2026-07-27T17:32:44Z`
 
 ## What was being done
 
-Prompt `NicaGeoFetch_CodexDesktop_MVP1_HumanValidationUXCloseout_v0.1`
-continues on `fix/mvp1-colab-output-clarity-v0.3` and public PR
-[#1](https://github.com/datanicaragua/nica-geofetch/pull/1). A fresh human
-Colab run validated `80c8015` and exposed five presentation-only defects. Their
-focused correction is the commit following `80c8015`; its exact SHA and final
-CI are recorded in the PR evidence comment.
+Public PR [#1](https://github.com/datanicaragua/nica-geofetch/pull/1) was merged
+into `main` using the authorized merge-commit method. Its exact source HEAD was
+`8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`; the resulting merge commit is
+`141915416606abd47831775e677d89c6877643fb`, which remains the active project
+baseline on `main`. Human Colab validation and the ChatGPT Project audit/merge
+recommendation are complete and approved. This separate task branch publishes
+the corrected release handoff without committing directly to `main`.
 
 ## Complete
 
@@ -100,37 +101,54 @@ CI are recorded in the PR evidence comment.
   unchanged.
 - The complete 468-line HumanValidationUXCloseout prompt is archived with
   identical normalized text.
+- PR #1 preflight confirmed the exact authorized HEAD, three expected source
+  commits, 19 expected files, clean mergeability, and green final CI.
+- PR #1 was merged with merge commit `1419154`; local `main` was synchronized by
+  fast-forward only and retained all three source commits.
+- Post-merge Ruff, mypy, 71 tests, CLI help, and publication audit passed.
+- Post-merge `main` CI run
+  [`30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659)
+  passed on Python 3.11 and 3.12.
+- Final human Colab validation of the corrected messages and latest-only
+  second-run behavior completed and was approved.
+- ChatGPT Project audit and merge recommendation completed and were approved.
+- The previous task branch `fix/mvp1-colab-output-clarity-v0.3` remains
+  available but is no longer the active project branch.
 
 ## Incomplete
 
-Final human Colab confirmation of the five micro-fixes and second-run
-latest-only state remains pending, followed by ChatGPT Project merge
-recommendation. Merge approval and release approval remain pending. No merge,
-auto-merge, direct `main` push, force push, branch deletion, tag, GitHub
-release, PyPI package, data release, protection change, or institutional-data
-archive was performed.
+Release readiness is not yet declared. The remaining `v0.1.0` gates are the
+stable notebook pin decision, software-only legal/distribution review, release
+audit, and explicit human tag/release authorization. No direct `main` commit,
+auto-merge, force push, branch deletion, tag, GitHub release, PyPI package, data
+release, protection/visibility change, or institutional-data archive was
+performed.
 
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Final human Colab confirmation of the micro-fixes and second-run latest-only
-behavior, followed by ChatGPT Project merge recommendation.
+Complete the stable notebook pin decision, software-only legal/distribution
+review, and release audit. Then request separate explicit human authorization
+for any `v0.1.0` tag and release.
 
-## Open pull request
+## Merged pull request
 
 - **PR:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
 - **Branch:** `fix/mvp1-colab-output-clarity-v0.3`
 - **Base:** `main`
-- **Commits before this closeout:** `304b8a5`, `80c8015`
-- **Human-validation UX closeout:** the following commit; exact SHA and final CI
-  are recorded in PR #1 evidence
-- **Green CI for human-tested HEAD:** [run
-  `30218205280`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30218205280)
-  on Python 3.11 and 3.12
-- **Merge authorized:** no
+- **Source commits:** `304b8a5`, `80c8015`, `8a9b9a2`
+- **Authorized HEAD:** `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`
+- **Merge commit:** `141915416606abd47831775e677d89c6877643fb`
+- **Post-merge CI:** [run
+  `30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659)
+  passed on Python 3.11 and 3.12
+- **Merge authorized and completed:** yes, merge-commit method
 - **Release authorized:** no
 
-## Required human public-Colab tests
+## Completed human public-Colab validation
+
+The final human validation completed and approved the following acceptance
+points:
 
 1. N6 progress and `LEEME_RESULTADOS.md` say `1 advertencia topológica`, while
    N5/N7 use the plural.
@@ -169,9 +187,8 @@ pre-commit run --all-files
 - Real level 7 input is large (about 35 MB and 2,337 placemarks), so parsing
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
-- Automated notebook/package tests pass, but interactive rendering of the five
-  corrected messages and latest-only second-run state still require human
-  confirmation.
+- Automated notebook/package tests and final human validation cover the five
+  corrected messages and latest-only second-run state.
 - GitHub reports `main` as unprotected and no repository rulesets were found.
   The new workflow is documented but not technically enforced. A future
   human-approved governance task should consider required PR/status checks and
@@ -196,7 +213,9 @@ pre-commit run --all-files
 
 ## Working tree
 
-Expected after the human-validation UX closeout: clean tracked working tree on
-`fix/mvp1-colab-output-clarity-v0.3`, synchronized with the remote task branch.
+Expected after this closeout: clean tracked working tree on task branch
+`docs/mvp1-pr1-merge-continuity`, based on merge commit `1419154`. Local and
+remote `main` remain at `1419154`; the merged source branch remains retained but
+is no longer the active project branch.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

@@ -1,8 +1,8 @@
 # Publication checklist
 
-This checklist is the human-controlled gate between a locally hardened MVP and
-any public GitHub action. It does not authorize remote creation, push,
-visibility changes, or a release.
+This checklist is the human-controlled gate for remaining public release
+actions. It records completed GitHub publication steps but does not authorize a
+push, tag, release, visibility/protection change, or data publication.
 
 ## Current gate status
 
@@ -13,18 +13,43 @@ visibility changes, or a release.
 | Secret scan | Passed locally | The publication audit found no supported private-key, GitHub, AWS, Google, or Slack token signature and no sensitive filename. A host-side scanner may be added before visibility changes. |
 | Remote identity | Passed | Existing `origin` is exactly `https://github.com/datanicaragua/nica-geofetch.git`; it was not replaced. |
 | GitHub authorization | Passed | Authenticated account `gustavoemc` has `ADMIN` permission; the prompt authorized the completed conditional visibility change. |
-| CI status | Passed for human-tested HEAD / UX-closeout run recorded in PR | PR run [`30218205280`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30218205280) passed on human-tested `80c8015` for Python 3.11 and 3.12. The exact HumanValidationUXCloseout HEAD and final run are recorded in PR #1 evidence after push. |
+| CI status | Passed on merged `main` | Post-merge run [`30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659) passed all gates on Python 3.11 and 3.12 for merge commit `141915416606abd47831775e677d89c6877643fb`. |
 | Live download evidence | Passed locally | On 2026-07-25 at `17:18:29Z`, the opt-in script downloaded only level 4, validated 12 Placemarks and 12 polygon geometries, recorded `validation_status=valid`, and removed its temporary output. |
-| Fresh Colab execution | **Core flow passed / micro-fix confirmation pending** | Human N4-N7/GeoPackage/repair-off execution at `80c8015` retained four KML files, generated only N4 GeoPackage, rendered compact/dynamic output without traceback, and downloaded the descriptive ZIP. Five presentation defects were recorded and corrected; the exact confirmation below remains. |
-| Source retention and delivery UX | **Human core pass / focused corrections automated** | Human evidence confirmed source retention, per-level analytical omission, one automatic ZIP, archive structure, and `LEEME_RESULTADOS.md`. Seventy-one offline tests cover number agreement, friendly labels, INFO suppression, final ordering, category separation, unchanged audit semantics, bootstrap, developer notebook, and archive structure. |
-| Pull request review | **Open / blocker** | Public PR [#1](https://github.com/datanicaragua/nica-geofetch/pull/1) targets `main` from `fix/mvp1-colab-output-clarity-v0.3`. ChatGPT Project audit and human approval remain pending; merge and auto-merge are not authorized. |
+| Fresh Colab execution | Passed / human approved | Human validation completed and approved the N4-N7 source-retention flow, corrected beginner messages, final-status ordering, separate warning categories, and latest-only second-run behavior. |
+| Source retention and delivery UX | Passed / human approved | Human evidence confirmed source retention, per-level analytical omission, one automatic ZIP, archive structure, `LEEME_RESULTADOS.md`, and the five focused presentation corrections. Seventy-one offline tests retain automated coverage. |
+| Pull request review | Passed / merged | Public PR [#1](https://github.com/datanicaragua/nica-geofetch/pull/1) was merged by the authorized merge-commit method from exact HEAD `8a9b9a2` into merge commit `1419154`; ChatGPT Project audit and merge recommendation were completed and approved, and all preflight/post-merge CI checks passed. |
 | README review | Passed locally | Both READMEs contain the Colab badge, public/developer distinction, legal warning, professional authorship, and discreet AI-development link. |
 | Public notebook credential review | Passed locally | No token, credential prompt, or private-access mechanism is present; private testing uses package ZIP/wheel upload. |
 | Context and lineage review | Passed locally | Strategic role, component value gate, metadata origins, source relationships, registry status, and the indexed INETER case study are documented; manifest schema v3 is covered by offline tests. |
 | Legal notice review | Passed locally with limitation | Apache-2.0/software and third-party data terms are separated. No explicit open-data license was identified; institutional clarification remains recommended before redistributing data. |
 | Public URL verification | Passed | Repository, raw public notebook, and Colab badge each returned HTTP 200 anonymously. |
 | Public visibility gate | Passed | Existing `datanicaragua/nica-geofetch` changed from private to public after every automated gate passed. |
-| v0.1.0 release gate | **Pending / blocker** | Requires independent PR audit, human fresh-Colab acceptance, human merge decision, stable-tag pin review, and separate explicit release authorization. |
+| v0.1.0 release gate | **Pending — readiness not declared** | Human Colab validation and merge review are complete. Remaining gates: stable notebook pin decision, software-only legal/distribution review, release audit, and explicit human tag/release authorization. |
+
+## PR #1 merge evidence
+
+- Authorized PR HEAD:
+  `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`.
+- Merge commit: `141915416606abd47831775e677d89c6877643fb`.
+- Merge method: merge commit; source commits `304b8a5`, `80c8015`, and
+  `8a9b9a2` remain retained ancestors.
+- Post-merge CI:
+  [`30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659),
+  passed on Python 3.11 and 3.12.
+- Human Colab validation completed and was approved.
+- ChatGPT Project audit and merge recommendation completed and were approved.
+- The source branch was retained. No tag, release, data publication, or
+  repository protection/visibility change accompanied the merge.
+
+## Remaining release gates
+
+Human Colab validation is complete and no longer blocks `v0.1.0`. Release
+readiness is not yet declared. Before any tag or release:
+
+1. Decide the stable notebook pin.
+2. Complete a software-only legal and distribution review.
+3. Complete the release audit.
+4. Obtain explicit human authorization for the tag and release.
 
 ## Reproduce the local publication audit
 
@@ -98,8 +123,9 @@ After changing repository visibility:
 11. Before v0.1.0, change the release-facing notebook ref from `main` to the
    stable tag and repeat the run.
 
-Record the date, Git ref, Python version, result, and any warning here before
-marking the fresh-Colab or v0.1.0 gates complete.
+The human fresh-Colab gate is complete. Record the stable notebook pin decision
+and repeat the applicable bootstrap check before marking the separate
+`v0.1.0` release gate complete.
 
 ## Human evidence at `80c8015`
 
@@ -113,17 +139,17 @@ marking the fresh-Colab or v0.1.0 gates complete.
   `checksums_sha256.json` confirmed.
 - Presentation defects found: singular grammar, internal format tokens, INFO
   noise, premature final status, and combined warning categories.
-- Correction status: all five corrected locally with focused tests; final human
-  confirmation remains pending.
+- Correction status: all five were corrected with focused tests and final human
+  confirmation completed and was approved.
 
-## Final micro-fix confirmation
+## Completed final micro-fix confirmation
 
-1. Confirm N6 uses singular and N5/N7 use plural in progress and the results
-   guide.
-2. Confirm beginner progress says GeoPackage rather than `gpkg`.
-3. Confirm internal INFO record-count lines are absent.
-4. Confirm final success appears only after complete summary/archive delivery
-   and the automatic ZIP button is enabled.
-5. Confirm N4 attribute observations are separated from topology findings.
-6. Run a second automatic workflow and confirm only its latest archive is
-   downloadable.
+Human validation completed and approved all six points:
+
+1. N6 uses singular and N5/N7 use plural in progress and the results guide.
+2. Beginner progress says GeoPackage rather than `gpkg`.
+3. Internal INFO record-count lines are absent.
+4. Final success appears only after complete summary/archive delivery and the
+   automatic ZIP button is enabled.
+5. N4 attribute observations are separated from topology findings.
+6. A second automatic workflow exposes only its latest downloadable archive.

@@ -1,16 +1,18 @@
 # Project status
 
-- **Current milestone:** MVP-1 human-validation UX closeout for open PR #1
-  (recorded micro-fixes implemented; final human confirmation pending)
-- **Current branch:** `fix/mvp1-colab-output-clarity-v0.3`
-- **Open pull request:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
-  against `main`; created as draft and eligible for ready-for-review only after
-  final branch CI is green
-- **Human-validated HEAD:** `80c8015`
-- **Current task HEAD:** the
-  `NicaGeoFetch_CodexDesktop_MVP1_HumanValidationUXCloseout_v0.1` commit that
-  follows `80c8015`; its exact SHA and final CI are recorded in PR #1 evidence
-- **last_updated_utc:** `2026-07-26T21:59:11Z`
+- **Current milestone:** MVP-1 post-merge release handoff; release readiness is
+  not yet declared
+- **Active project baseline:** `main` at
+  `141915416606abd47831775e677d89c6877643fb`
+- **Continuity task branch:** `docs/mvp1-pr1-merge-continuity`
+- **Merged pull request:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
+  into `main` with merge commit `141915416606abd47831775e677d89c6877643fb`
+- **Merged task HEAD:** `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`
+- **Previous task branch:** `fix/mvp1-colab-output-clarity-v0.3` remains
+  available but is no longer the active project branch
+- **Human Colab validation:** completed and approved
+- **ChatGPT Project audit and merge recommendation:** completed and approved
+- **last_updated_utc:** `2026-07-27T17:32:44Z`
 
 ## Implemented capabilities
 
@@ -93,10 +95,11 @@
   content, manual fallback isolation, unchanged bootstrap source, unchanged
   developer notebook, and durable PR governance.
 - `pre-commit run --all-files`: passed all six hooks.
-- GitHub Actions PR run
-  [`30218205280`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30218205280)
-  passed every required gate on Python 3.11 and 3.12 for human-tested commit
-  `80c8015`. The HumanValidationUXCloseout final run is recorded in PR evidence.
+- GitHub Actions PR runs were green for the authorized task HEAD. Post-merge
+  `main` run
+  [`30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659)
+  passed every required gate on Python 3.11 and 3.12 for merge commit
+  `141915416606abd47831775e677d89c6877643fb`.
 
 ## Human Colab evidence
 
@@ -111,8 +114,9 @@ reports, source manifest, provenance summary, and checksums.
 
 The same run identified five presentation-only defects: singular grammar,
 internal format tokens, INFO log noise, premature final status, and combined
-topology/attribute headings. All five have focused local corrections and
-synthetic tests; final human confirmation remains pending.
+topology/attribute headings. All five received focused corrections and
+synthetic tests. Final human Colab validation of the corrected experience and
+latest-only second-run behavior was completed and approved.
 
 ## Current limitations
 
@@ -124,26 +128,32 @@ desktop environment.
 
 The expected `origin` is configured. GitHub reports
 `datanicaragua/nica-geofetch` as public and the authenticated owner as `ADMIN`.
-The task branch was pushed normally and public PR #1 is open against `main`.
-No direct `main` commit, force push, merge, auto-merge, tag, or release was
-performed. Anonymous
+PR #1 was merged into `main` on 2026-07-27 using the authorized merge-commit
+method after exact-HEAD, file-scope, mergeability, and CI verification. Local
+`main` was synchronized by fast-forward only. The source branch remains
+available locally and remotely but is no longer the active project branch. No
+direct `main` commit, force push,
+auto-merge, branch deletion, tag, or release was performed. Anonymous
 HTTP access to the repository, raw notebook, and Colab badge returned 200.
 A clean temporary Python environment installed the Colab Git requirement from
 public `main`, resolved `c6d5829`, imported the package, and printed `0.1.0`.
 
-## Blocked items
+## Remaining `v0.1.0` release gates
 
-- Final human Colab confirmation remains pending for the five presentation
-  corrections and second-run latest-only archive behavior.
-- ChatGPT Project merge recommendation remains pending after that confirmation.
-- Institutional redistribution terms remain unclarified; no source data may be
-  attached to a software release.
-- Merge and `v0.1.0` remain unauthorized and blocked until independent review,
-  human validation, and separate human decisions.
+Human Colab validation and the ChatGPT Project audit/merge recommendation are
+complete and no longer block `v0.1.0`. Release readiness is not yet declared.
+The remaining gates are:
+
+1. Stable notebook pin decision.
+2. Software-only legal and distribution review; institutional data must not be
+   included.
+3. Release audit.
+4. Explicit human authorization for the tag and release.
 
 ## Next recommended action
 
-Confirm the five micro-fixes in a fresh PR-backed Colab run, including the N6
-singular phrase and latest-only second execution. Then request a ChatGPT Project
-merge recommendation. Do not merge, tag, or release without the applicable
-human authorization.
+Complete the stable notebook pin decision, software-only legal/distribution
+review, and release audit. Then request separate explicit human authorization
+before creating any tag or release. Do not create a GitHub release, PyPI
+publication, data release, or institutional-data archive under the current
+authorization.
