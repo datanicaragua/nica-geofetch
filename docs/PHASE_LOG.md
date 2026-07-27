@@ -338,7 +338,11 @@
   and passed CLI help. The environment and `dist/` were removed.
 - No provider, download, validation, repair, manifest, archive, output-format,
   developer-notebook, or CLI behavior changed.
-- Implementation commit, normal push, draft PR, and release-branch CI remain
-  pending. Release readiness is not declared; merge, tag, GitHub Release, PyPI
+- Created implementation commit
+  `52da0d7f9c36687f73b154b270072d8ecc2d696c`, pushed
+  `release/v0.1.0` normally, and opened draft
+  [PR #3](https://github.com/datanicaragua/nica-geofetch/pull/3). Release-branch
+  CI and independent audit remain pending.
+- Release readiness is not declared; merge, tag, GitHub Release, PyPI
   publication, institutional-data publication, repository-setting changes,
   force push, and branch deletion remain unperformed and unauthorized.

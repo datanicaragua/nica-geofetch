@@ -42,7 +42,11 @@ push, tag, release, visibility/protection change, or data publication.
 - Verified post-merge CI:
   [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085).
 - Release-preparation branch: `release/v0.1.0`.
-- Release-preparation PR: pending creation from the verified branch.
+- Release-preparation implementation commit:
+  `52da0d7f9c36687f73b154b270072d8ecc2d696c`.
+- Release-preparation PR: draft
+  [#3](https://github.com/datanicaragua/nica-geofetch/pull/3), open and
+  unmerged.
 - No `v0.1.0` tag or GitHub Release existed at preflight.
 
 ## PR #1 merge evidence

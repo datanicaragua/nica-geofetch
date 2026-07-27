@@ -1,12 +1,14 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-27T19:11:05Z`
+- **last_updated_utc:** `2026-07-27T19:18:47Z`
 
 ## What is being done
 
 Prepare the software-only Nica-GeoFetch v0.1.0 release candidate on
-`release/v0.1.0`, push it normally, and open an unmerged draft pull request for
-independent audit. The governing prompt is
+`release/v0.1.0`. Implementation commit
+`52da0d7f9c36687f73b154b270072d8ecc2d696c` was pushed normally and draft
+PR [#3](https://github.com/datanicaragua/nica-geofetch/pull/3) is open and
+unmerged for independent audit. The governing prompt is
 `NicaGeoFetch_CodexDesktop_v0.1.0_ReleasePreparation_v0.1`.
 
 ## Verified starting state
@@ -42,6 +44,9 @@ independent audit. The governing prompt is
 - Archived the exact 855-line governing prompt with identical normalized text.
 - Preserved provider, validation, repair, manifest, archive, format, CLI, and
   developer-notebook behavior.
+- Created implementation commit
+  `52da0d7f9c36687f73b154b270072d8ecc2d696c`, pushed the release branch
+  normally, and opened unmerged draft PR #3.
 
 ## Local verification completed
 
@@ -68,9 +73,9 @@ independent audit. The governing prompt is
 
 ## Verification still to complete
 
-- Final diff review.
-- Implementation commit and normal push.
-- Draft release-preparation PR and GitHub CI.
+- GitHub Actions for the final release branch.
+- Final evidence comment with the branch HEAD and CI URLs.
+- Independent ChatGPT Project audit.
 
 The committed stable pin must not be weakened for pre-tag validation. Local
 execution may use a temporary untracked override or the built wheel. Final
@@ -79,10 +84,11 @@ tag is created.
 
 ## Release governance
 
-Release readiness is not yet declared. ChatGPT Project audit remains pending.
-Merge remains pending human authorization. The tag remains pending separate
-human authorization. A GitHub Release remains pending further separate human
-authorization. No data publication is authorized.
+Release readiness is not yet declared. Draft PR #3 is open and unmerged.
+ChatGPT Project audit remains pending. Merge remains pending human
+authorization. The tag remains pending separate human authorization. A GitHub
+Release remains pending further separate human authorization. No data
+publication is authorized.
 
 No merge, tag, GitHub Release, PyPI publication, institutional-data
 publication, repository-setting change, force push, or branch deletion is
@@ -91,9 +97,9 @@ authorized by this task.
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Review the final diff, commit and push the release branch, open the draft
-release-preparation PR, wait for green CI, and submit the open PR and evidence
-to ChatGPT Project for independent audit. Do not merge, tag, or publish.
+Wait for green CI on draft PR #3, add final branch and CI evidence, and submit
+the open PR and evidence to ChatGPT Project for independent audit. Do not
+merge, tag, or publish.
 
 ## Resume commands
 
@@ -125,6 +131,5 @@ pre-commit run --all-files
 
 ## Working tree expectation
 
-Before the implementation commit, only the intended release-preparation files
-may be modified. After each commit and final push, the working tree must be
-clean on `release/v0.1.0`.
+After the focused PR-evidence continuity commit and final push, the working
+tree must be clean on `release/v0.1.0`.

@@ -6,8 +6,11 @@
 - **Verified starting and `origin/main` SHA:**
   `483ecb4836126109f90de1796d4bd6c5c5ec01ba`
 - **Release-preparation branch:** `release/v0.1.0`
-- **Release-preparation implementation commit:** pending
-- **Release-preparation pull request:** pending creation
+- **Release-preparation implementation commit:**
+  `52da0d7f9c36687f73b154b270072d8ecc2d696c`
+- **Release-preparation pull request:** draft
+  [#3](https://github.com/datanicaragua/nica-geofetch/pull/3), open and
+  unmerged
 - **PR #2:** merged
 - **PR #2 source HEAD:**
   `7d08a244f16bdae704c620ee35fae19b02392390`
@@ -16,7 +19,7 @@
 - **Verified post-merge CI:** run
   [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085)
   passed for the PR #2 merge commit
-- **last_updated_utc:** `2026-07-27T19:11:05Z`
+- **last_updated_utc:** `2026-07-27T19:18:47Z`
 
 ## Implemented MVP-1 capabilities
 
@@ -114,8 +117,9 @@ The preflight independently confirmed:
 
 ## Governance state
 
-Release readiness is not yet declared. The release-preparation PR, independent
-ChatGPT Project audit, human merge authorization, separate tag authorization,
+Release readiness is not yet declared. Draft release-preparation PR #3 is
+open and unmerged. Its GitHub Actions result and independent ChatGPT Project
+audit remain pending. Human merge authorization, separate tag authorization,
 post-tag fresh-Colab check, and further GitHub Release authorization remain
 pending. No data publication is authorized.
 
@@ -138,7 +142,6 @@ These settings are recommendations only and were not applied.
 
 ## Next recommended action
 
-Review the final diff, commit and push `release/v0.1.0`, open the draft
-release-preparation PR, wait for green CI, and submit the open PR and evidence
-to ChatGPT Project for independent audit. Do not merge, tag, publish, or change
-repository settings under the current authorization.
+Wait for green CI on draft PR #3, add final branch/CI evidence, and submit the
+open PR and evidence to ChatGPT Project for independent audit. Do not merge,
+tag, publish, or change repository settings under the current authorization.
