@@ -108,3 +108,26 @@ archives.
 tests, and clearly synthetic fixtures. Excluding manually uploaded runtime
 archives and institutional artifacts reduces legal-distribution and accidental
 data-publication risk without broadening Apache-2.0 to third-party data.
+
+## D013 - Immutable released-version policy
+
+**Decision:** Treat annotated tag `v0.1.0` and its published GitHub Release as
+immutable project records. Do not move, replace, delete, or republish them.
+Corrections require a new version, such as `v0.1.1`.
+
+**Rationale:** Stable tag identity protects reproducible installation, the
+tag-pinned beginner notebook, release citations, and the audited merge-to-tag
+chain. This governance decision does not claim that a GitHub release
+immutability feature retroactively protects v0.1.0.
+
+## D014 - Bounded Dependabot version-update proposals
+
+**Decision:** Enable weekly Dependabot version-update checks for pip and
+GitHub Actions at the repository root, with at most five open PRs per
+ecosystem. Do not configure auto-merge, invented reviewers, assignees, or
+labels.
+
+**Rationale:** Dependency changes should arrive as visible, reviewable PRs
+without bypassing the project's human review, CI, data-governance, or release
+controls. Security-update availability remains controlled through GitHub
+repository settings rather than this version-update file.
