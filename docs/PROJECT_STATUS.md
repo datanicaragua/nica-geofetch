@@ -2,9 +2,9 @@
 
 - **Current milestone:** MVP-1 post-merge release handoff; release readiness is
   not yet declared
-- **Active project baseline:** `main` at
+- **MVP-1 implementation baseline from merged PR #1:**
   `141915416606abd47831775e677d89c6877643fb`
-- **Continuity task branch:** `docs/mvp1-pr1-merge-continuity`
+- **PR #2 continuity source branch:** `docs/mvp1-pr1-merge-continuity`
 - **Merged pull request:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
   into `main` with merge commit `141915416606abd47831775e677d89c6877643fb`
 - **Merged task HEAD:** `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`
@@ -12,7 +12,7 @@
   available but is no longer the active project branch
 - **Human Colab validation:** completed and approved
 - **ChatGPT Project audit and merge recommendation:** completed and approved
-- **last_updated_utc:** `2026-07-27T17:32:44Z`
+- **last_updated_utc:** `2026-07-27T17:53:19Z`
 
 ## Implemented capabilities
 

@@ -287,3 +287,18 @@
 - No direct `main` commit, auto-merge, force push, branch deletion, tag, GitHub
   release, PyPI publication, data release, protection/visibility change, or
   institutional-data publication was performed.
+
+## 2026-07-27 - PR #2 continuity self-reference correction
+
+- Identified two continuity statements that were accurate before PR #2 but
+  would become stale immediately after its future merge.
+- Recast `141915416606abd47831775e677d89c6877643fb` as the historical MVP-1
+  implementation baseline from merged PR #1 rather than a permanent current
+  `main` HEAD.
+- Documented that PR #2 integration will create the then-current repository
+  HEAD, whose exact SHA must be read from GitHub PR metadata, followed by a
+  fast-forward-only synchronization of local `main`.
+- Archived and registered the governing self-reference-fix prompt. The change
+  is documentation-only and uses a normal follow-up commit on the existing PR
+  branch; no amend, force push, merge, tag, release, or data publication is
+  authorized.

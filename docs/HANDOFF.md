@@ -1,16 +1,17 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-27T17:32:44Z`
+- **last_updated_utc:** `2026-07-27T17:53:19Z`
 
 ## What was being done
 
 Public PR [#1](https://github.com/datanicaragua/nica-geofetch/pull/1) was merged
 into `main` using the authorized merge-commit method. Its exact source HEAD was
 `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`; the resulting merge commit is
-`141915416606abd47831775e677d89c6877643fb`, which remains the active project
-baseline on `main`. Human Colab validation and the ChatGPT Project audit/merge
-recommendation are complete and approved. This separate task branch publishes
-the corrected release handoff without committing directly to `main`.
+`141915416606abd47831775e677d89c6877643fb`, the historical MVP-1
+implementation baseline from PR #1. Human Colab validation and the ChatGPT
+Project audit/merge recommendation are complete and approved. PR #2 publishes
+the corrected release handoff from `docs/mvp1-pr1-merge-continuity` without
+committing directly to `main`.
 
 ## Complete
 
@@ -214,8 +215,11 @@ pre-commit run --all-files
 ## Working tree
 
 Expected after this closeout: clean tracked working tree on task branch
-`docs/mvp1-pr1-merge-continuity`, based on merge commit `1419154`. Local and
-remote `main` remain at `1419154`; the merged source branch remains retained but
-is no longer the active project branch.
+`docs/mvp1-pr1-merge-continuity`, created from PR #1 implementation baseline
+`141915416606abd47831775e677d89c6877643fb`. After PR #2 integration, synchronize
+local `main` from `origin/main` using fast-forward only. The actual PR #2 merge
+commit, once created, becomes the repository HEAD; GitHub PR metadata is the
+source of truth for that future merge SHA. The merged PR #1 source branch
+remains retained but is no longer the active project branch.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.
