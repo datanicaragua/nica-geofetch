@@ -1,21 +1,21 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-27T22:01:23Z`
+- **last_updated_utc:** `2026-07-27T22:15:10Z`
 
-## What is being done
+## Post-release closeout record
 
-Close out the completed software-only v0.1.0 release on
-`chore/v0.1.0-post-release-closeout`. This branch records the final release
-state and adds conservative weekly Dependabot version-update proposals for pip
-and GitHub Actions. It does not change software, provider, validation, repair,
-CLI, or notebook behavior.
+[PR #4](https://github.com/datanicaragua/nica-geofetch/pull/4) is the
+traceable review record for the v0.1.0 continuity updates and conservative
+weekly Dependabot version-update proposals for pip and GitHub Actions. It
+changes no software, provider, validation, repair, CLI, or notebook behavior.
 
-The branch must remain unmerged until its draft PR and CI receive human review.
+This static document does not declare PR #4 open or merged. Use live GitHub PR
+metadata and CI as the authoritative integration state.
 
 ## Verified released state
 
 - Repository: `datanicaragua/nica-geofetch`.
-- Local and remote `main`:
+- Released `main` baseline and PR #3 merge commit:
   `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
 - PR [#3](https://github.com/datanicaragua/nica-geofetch/pull/3):
   merged.
@@ -53,7 +53,7 @@ Every local and remote head was an ancestor of `main`, and no open PR
 referenced any of them. All six branch refs were deleted normally. The merged
 PRs and their commits remain in repository history.
 
-## Closeout branch scope
+## Closeout scope
 
 - Update `PROJECT_STATUS.md`, `HANDOFF.md`, `PHASE_LOG.md`,
   `DECISION_LOG.md`, and `PUBLICATION_CHECKLIST.md`.
@@ -83,8 +83,15 @@ release immutability feature.
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Review the draft PR for `chore/v0.1.0-post-release-closeout`, confirm its CI,
-and decide whether to merge it. Do not merge automatically.
+Query the live state of
+[PR #4](https://github.com/datanicaragua/nica-geofetch/pull/4).
+
+1. If it is open, verify its exact HEAD and green CI before submitting it for
+   final audit or making a human merge decision.
+2. If it is merged, verify post-merge CI, fast-forward local `main` to
+   `origin/main`, and continue post-release observation.
+3. Treat GitHub PR metadata as authoritative; do not infer current PR state
+   from this static handoff.
 
 ## Resume commands
 
@@ -112,5 +119,8 @@ pre-commit run --all-files
 
 ## Working tree expectation
 
-The task branch must be clean and synchronized with its remote after the
-closeout commit is pushed. The draft PR must remain open and unmerged.
+Start every continuation from a clean working tree and the branch appropriate
+to the live PR state. While PR #4 is open, use its existing head branch for
+authorized follow-ups. After it is merged, synchronize `main` using
+fast-forward only. Any later correction requires a new focused task branch and
+PR; do not reuse the closeout branch as a permanent working context.

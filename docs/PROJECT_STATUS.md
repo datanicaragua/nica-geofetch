@@ -4,8 +4,11 @@
   complete; the project is in post-release observation.
 - **Released `main` commit:**
   `15edd9b7f181ec791c800f28fdbb48a14958cabc`.
-- **Release closeout branch:** `chore/v0.1.0-post-release-closeout`.
-- **last_updated_utc:** `2026-07-27T22:01:23Z`.
+- **Post-release closeout record:**
+  [PR #4](https://github.com/datanicaragua/nica-geofetch/pull/4);
+  GitHub PR metadata and CI are authoritative for its current integration
+  state.
+- **last_updated_utc:** `2026-07-27T22:15:10Z`.
 
 ## v0.1.0 release record
 
@@ -87,6 +90,13 @@ remain available.
 
 ## Next recommended action
 
-Review the draft post-release closeout PR from
-`chore/v0.1.0-post-release-closeout` and its CI. Do not merge it
-automatically.
+Use GitHub as the authoritative source for the current state of
+[PR #4](https://github.com/datanicaragua/nica-geofetch/pull/4).
+
+1. If PR #4 is still open, verify its exact HEAD and green CI before any human
+   merge decision.
+2. If PR #4 is merged, verify its post-merge CI, synchronize local `main` with
+   `origin/main` using fast-forward only, and continue post-release
+   observation.
+3. Create a new focused task branch, PR, and version for any future corrective
+   release; do not move or replace `v0.1.0`.
