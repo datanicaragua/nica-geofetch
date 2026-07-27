@@ -9,7 +9,7 @@ description = "Reproducible access to trusted institutional geodata for Nicaragu
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
-authors = [{name = "DataNicaTools contributors"}]
+authors = [{name = "Gustavo Ernesto Martínez Cárdenas"}]
 keywords = ["Nicaragua", "geospatial", "INETER", "Pfafstetter", "KML"]
 classifiers = [
   "Development Status :: 3 - Alpha",

@@ -302,3 +302,43 @@
   is documentation-only and uses a normal follow-up commit on the existing PR
   branch; no amend, force push, merge, tag, release, or data publication is
   authorized.
+
+## 2026-07-27 - v0.1.0 software-only release preparation
+
+- Completed the read-only preflight on clean synchronized `main` at exact SHA
+  `483ecb4836126109f90de1796d4bd6c5c5ec01ba`; verified PR #2 merged from
+  source HEAD `7d08a244f16bdae704c620ee35fae19b02392390`.
+- Independently confirmed post-merge CI run
+  [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085)
+  passed for the merge SHA, and confirmed no `v0.1.0` tag or GitHub Release.
+- Audited repository metadata without changing it: description, website, and
+  topics were empty. Verified GitHub Private Vulnerability Reporting was
+  disabled and documented an actionable no-details public contact request.
+- Created `release/v0.1.0` only from the verified baseline.
+- Pinned the public notebook to `GIT_REF = "v0.1.0"` and added focused tests
+  for the exact pin, visible selected reference, selected-ref requirement,
+  absence of a release-facing `main` default, and nbformat v4.
+- Reordered both READMEs for the Colab beginner path, three numbered actions,
+  stable-tag installation, CLI use, bounded downstream examples, limitations,
+  support, and separate software/source-data citation.
+- Aligned `CITATION.cff` and package authorship, removed the premature release
+  date, retained version `0.1.0`, and introduced no contact, ORCID, DOI, or
+  release-date claim.
+- Added the empty `[Unreleased]` section plus `[0.1.0]` changelog, release PR
+  checks, software-only asset allowlist, prohibited-asset list, and no-manual-
+  asset recommendation.
+- Archived the complete 855-line governing prompt with identical normalized
+  text.
+- Editable install, Ruff, mypy, 72 offline tests, both notebook validations,
+  CLI help, publication audit, and all six pre-commit hooks passed.
+- Publication audit inspected 80 candidates before and after cleanup and found
+  no institutional data, sensitive filename, or supported secret signature.
+- Wheel and sdist built and passed Twine checks. Their contents were inspected;
+  a clean temporary environment installed the wheel, imported version `0.1.0`,
+  and passed CLI help. The environment and `dist/` were removed.
+- No provider, download, validation, repair, manifest, archive, output-format,
+  developer-notebook, or CLI behavior changed.
+- Implementation commit, normal push, draft PR, and release-branch CI remain
+  pending. Release readiness is not declared; merge, tag, GitHub Release, PyPI
+  publication, institutional-data publication, repository-setting changes,
+  force push, and branch deletion remain unperformed and unauthorized.

@@ -9,6 +9,7 @@ private information, or knowingly misrepresenting source institutions and
 licenses. Project maintainers may remove contributions or participation that
 violate these expectations.
 
-Report conduct concerns privately to the project maintainers. They should
-respond fairly, protect confidentiality as practical, and avoid conflicts of
-interest.
+For a concern that cannot be described safely in public, open a public issue
+requesting a private contact channel without including sensitive details.
+Maintainers should respond fairly, protect confidentiality as practical, and
+avoid conflicts of interest.
