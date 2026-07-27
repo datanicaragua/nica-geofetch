@@ -253,3 +253,52 @@
   closeout commit SHA, push, and final CI are recorded in PR #1 evidence.
 - No live download was repeated. Merge, auto-merge, tags, releases, protection
   changes, and institutional-data publication remain unauthorized.
+
+## 2026-07-27 - PR #1 merge and post-merge verification
+
+- Confirmed public PR [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
+  remained open, non-draft, mergeable, and `CLEAN`, with exact authorized HEAD
+  `8a9b9a2e6f04e4ad5972f52383e291f4e3f997c1`.
+- Confirmed all final PR checks passed and the diff still contained only the
+  three reviewed commits and 19 expected files; the local task branch was clean
+  and synchronized.
+- Merged PR #1 using the merge-commit method with exact-head enforcement.
+  GitHub created merge commit
+  `141915416606abd47831775e677d89c6877643fb` with parents `5da9e4e` and
+  `8a9b9a2`.
+- Synchronized local `main` from `5da9e4e` to `1419154` using fast-forward only
+  and verified that `304b8a5`, `80c8015`, and `8a9b9a2` remain retained
+  ancestors. The source branch remains available locally and remotely.
+- Post-merge Ruff, mypy, 71 offline tests, CLI help, and publication audit
+  passed. The audit inspected 78 candidates and found no institutional data,
+  sensitive filename, or supported secret signature.
+- Post-merge `main` CI run
+  [`30288177659`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30288177659)
+  passed every required job on Python 3.11 and 3.12.
+- Prepared this separate documentation branch to publish the continuity record
+  through the documented branch-and-PR workflow without committing directly to
+  `main`.
+- Recorded the verified final review state: human Colab validation completed
+  and approved, and ChatGPT Project audit and merge recommendation completed
+  and approved. These items no longer block `v0.1.0`.
+- Reduced the remaining release gates to the stable notebook pin decision,
+  software-only legal/distribution review, release audit, and separate explicit
+  human tag/release authorization. Release readiness is not yet declared.
+- No direct `main` commit, auto-merge, force push, branch deletion, tag, GitHub
+  release, PyPI publication, data release, protection/visibility change, or
+  institutional-data publication was performed.
+
+## 2026-07-27 - PR #2 continuity self-reference correction
+
+- Identified two continuity statements that were accurate before PR #2 but
+  would become stale immediately after its future merge.
+- Recast `141915416606abd47831775e677d89c6877643fb` as the historical MVP-1
+  implementation baseline from merged PR #1 rather than a permanent current
+  `main` HEAD.
+- Documented that PR #2 integration will create the then-current repository
+  HEAD, whose exact SHA must be read from GitHub PR metadata, followed by a
+  fast-forward-only synchronization of local `main`.
+- Archived and registered the governing self-reference-fix prompt. The change
+  is documentation-only and uses a normal follow-up commit on the existing PR
+  branch; no amend, force push, merge, tag, release, or data publication is
+  authorized.
