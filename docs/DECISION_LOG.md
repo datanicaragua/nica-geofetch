@@ -86,3 +86,25 @@ the six questions in the architecture component value gate.
 **Rationale:** Comparable data can be useful without being equivalent. Explicit
 identity and value evidence prevent source ambiguity and speculative
 architecture.
+
+## D011 - Stable public-notebook release pin
+
+**Decision:** Commit `GIT_REF = "v0.1.0"` as the public beginner notebook
+default while retaining deliberate advanced-user override and package-ZIP
+fallback.
+
+**Rationale:** A stable Git tag gives beginner runs a reproducible software
+reference. The tag does not exist during release preparation, so local
+pre-tag verification uses the built wheel and final fresh-Colab validation
+remains a post-tag human gate.
+
+## D012 - Source-archive-only v0.1.0 release assets
+
+**Decision:** If a separately authorized GitHub Release is later created, do
+not manually upload assets for v0.1.0; use only GitHub-generated source
+archives.
+
+**Rationale:** The software tree contains source, documentation, configuration,
+tests, and clearly synthetic fixtures. Excluding manually uploaded runtime
+archives and institutional artifacts reduces legal-distribution and accidental
+data-publication risk without broadening Apache-2.0 to third-party data.

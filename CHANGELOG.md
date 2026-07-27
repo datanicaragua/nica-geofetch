@@ -4,6 +4,8 @@ All notable changes are documented here.
 
 ## [Unreleased]
 
+## [0.1.0]
+
 ### Added
 
 - MVP-1 foundation for the INETER Pfafstetter 2025 provider.
@@ -30,6 +32,8 @@ All notable changes are documented here.
 - Dynamic Colab preflight expectations and per-level Spanish result
   explanations based on selected levels, formats, repair state, and the latest
   verified audit.
+- Stable-tag installation guidance, release-asset policy, security-reporting
+  instructions, and separate software/source-data citation guidance.
 
 ### Changed
 
@@ -62,6 +66,8 @@ All notable changes are documented here.
   and one ZIP, not one consolidated GeoPackage.
 - Nontrivial repository changes now use the documented task-branch, draft-PR,
   CI, independent-review, and human-approval workflow.
+- The public beginner notebook and user-facing installation examples now
+  default to the stable Git tag `v0.1.0`.
 
 ### Fixed
 
@@ -77,3 +83,13 @@ All notable changes are documented here.
   automatic download button.
 - Beginner output now separates topology findings that affect analytical
   generation from attribute observations retained for review.
+
+### Known limitations
+
+- INETER levels 5, 6, and 7 contain 2, 1, and 2 known invalid source
+  geometries respectively.
+- Original KML remains retained. Without explicit repair, analytical
+  derivatives for an affected level are omitted; repair is opt-in and audited.
+- No explicit open-data license has been identified for the institutional
+  source data, and no institutional dataset is included with the software.
+- The software is installed from the Git tag; no PyPI package is published.

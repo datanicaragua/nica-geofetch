@@ -12,13 +12,15 @@
 MVP-1 is complete. Every acceptance command and the offline real-seed level 4
 workflow pass as recorded in `PROJECT_STATUS.md`.
 
-## Public-release hardening gate
+## v0.1.0 release-preparation gate
 
-The local code/notebook hardening and context/lineage closeout are complete,
-but publication is gated by `PUBLICATION_CHECKLIST.md`. GitHub CI, real
-fresh-Colab execution from the public badge, visibility authorization, and
-stable-tag verification must pass before v0.1.0. These gates do not expand
-provider or platform scope.
+The software-only release candidate pins the public notebook to `v0.1.0` and
+adds adoption, citation, security-reporting, and release-asset guidance.
+Publication remains gated by `PUBLICATION_CHECKLIST.md`, independent audit,
+human merge authorization, separate tag authorization, and a further GitHub
+Release authorization. Fresh-Colab execution of the committed stable pin can
+occur only after the tag exists. These gates do not expand provider or
+platform scope.
 
 ## Next milestone - MVP-2 hardening and source clarification
 

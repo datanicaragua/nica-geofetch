@@ -125,7 +125,7 @@ def test_public_notebook_structure_and_safety() -> None:
         "summary_rows",
         "files.download",
         "https://github.com/datanicaragua/nica-geofetch",
-        'GIT_REF = "main"',
+        'GIT_REF = "v0.1.0"',
         'INSTALL_SOURCE = "github"',
         'INSTALL_SOURCE == "zip"',
         "etiqueta estable",
@@ -137,6 +137,24 @@ def test_public_notebook_structure_and_safety() -> None:
         assert expected in source
     assert "verify=False" not in source
     assert "pyproject.toml" not in source
+
+
+def test_public_notebook_release_pin_is_stable_visible_and_configurable() -> None:
+    notebook = public_notebook()
+    bootstrap = public_bootstrap_cell().source
+    guidance = public_cell("bootstrap-ayuda").source
+    source = "\n".join(cell.source for cell in notebook.cells)
+
+    assert notebook.nbformat == 4
+    assert 'GIT_REF = "v0.1.0"' in bootstrap
+    assert 'GIT_REF = "main"' not in source
+    assert "Referencia Git seleccionada: {GIT_REF}" in bootstrap
+    assert "@{GIT_REF}" in bootstrap
+    assert "v0.1.0` es la referencia estable predeterminada" in guidance
+    assert "usuarios avanzados pueden cambiar `GIT_REF` deliberadamente" in guidance
+    assert "software se instala desde esa etiqueta estable de Git" in guidance
+    assert "No pegue tokens de GitHub ni otras credenciales" in guidance
+    assert "`main`" not in guidance
 
 
 def test_public_notebook_has_ordered_static_steps_and_one_automatic_zip_button() -> None:
@@ -476,11 +494,11 @@ def test_fresh_colab_bootstrap_does_not_require_pyproject(
     exec(compile(bootstrap.source, "public-colab-bootstrap", "exec"), namespace)
     assert calls
     requirement = calls[0][-1]
-    assert "git+https://github.com/datanicaragua/nica-geofetch.git@main" in requirement
+    assert "git+https://github.com/datanicaragua/nica-geofetch.git@v0.1.0" in requirement
     assert namespace["BOOTSTRAP_OK"] is True
     output = capsys.readouterr().out
     assert "Versión instalada:" in output
-    assert "Referencia Git seleccionada: main" in output
+    assert "Referencia Git seleccionada: v0.1.0" in output
     assert "Fuente de instalación: github" in output
 
 
@@ -592,7 +610,7 @@ def test_public_notebook_bootstrap_is_first_executable_cell() -> None:
     assert code_cells[0].get("id") == "bootstrap"
     assert (
         hashlib.sha256(code_cells[0].source.encode()).hexdigest()
-        == "991c76bdb5ffc2dda8dd62e3325c536a1aac04903de9b0cde0f431f720493619"
+        == "fb90f75766bb90ae3c599691e7e08fc17e33ab4a00d3656b31fe7f79affe0e6c"
     )
     controls_source = code_cells[1].source
     assert controls_source.index("BOOTSTRAP_OK") < controls_source.index("from nica_geofetch")

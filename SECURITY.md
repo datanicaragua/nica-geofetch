@@ -6,9 +6,16 @@ Security fixes target the latest `0.1.x` development version during MVP-1.
 
 ## Reporting
 
-Do not open a public issue for a vulnerability that exposes credentials, local
-paths, proxy configuration, or exploitable details. Contact the maintainers
-privately and include a minimal reproduction with synthetic data.
+GitHub Private Vulnerability Reporting is not currently enabled for this
+repository. Open a public
+[GitHub issue](https://github.com/datanicaragua/nica-geofetch/issues/new)
+requesting a private contact channel, but do **not** include vulnerability
+details, credentials, local paths, proxy configuration, or exploitable
+information in that issue.
+
+After a maintainer provides a private channel, include a minimal reproduction
+using only synthetic or redacted data. Enabling GitHub Private Vulnerability
+Reporting remains a recommended human-owner repository-setting action.
 
 ## Threat model
 
