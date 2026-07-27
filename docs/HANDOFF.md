@@ -1,14 +1,15 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-25T17:30:07Z`
+- **last_updated_utc:** `2026-07-26T21:59:11Z`
 
 ## What was being done
 
-Prompt
-`NicaGeoFetch_CodexDesktop_MVP1_ColabSourceRetentionDeliveryUX_v1.0` is
-implemented at `0be8580`. Local gates and the single-level N4 live test pass.
-The implementation is pushed, GitHub Actions run `30167669342` passed on
-Python 3.11 and 3.12, and the existing GitHub repository remains public.
+Prompt `NicaGeoFetch_CodexDesktop_MVP1_HumanValidationUXCloseout_v0.1`
+continues on `fix/mvp1-colab-output-clarity-v0.3` and public PR
+[#1](https://github.com/datanicaragua/nica-geofetch/pull/1). A fresh human
+Colab run validated `80c8015` and exposed five presentation-only defects. Their
+focused correction is the commit following `80c8015`; its exact SHA and final
+CI are recorded in the PR evidence comment.
 
 ## Complete
 
@@ -66,18 +67,80 @@ Python 3.11 and 3.12, and the existing GitHub repository remains public.
   for automated testing.
 - Implementation commit `0be8580` was pushed normally to `origin/main`; CI run
   `30167669342` passed every required job on Python 3.11 and 3.12.
+- The public notebook now has five static steps, one authoritative automatic
+  ZIP button, a collapsed subordinate manual fallback, dynamic preflight and
+  per-level explanations, compact Spanish results, localized warnings, and
+  collapsed implementation cells.
+- `raw/`, `processed/`, one-ZIP execution, and separate per-level GeoPackages
+  are explained before and after execution.
+- Every final ZIP uses a descriptive level/format/UTC filename and contains
+  `LEEME_RESULTADOS.md` with retained, generated, skipped, audit, provenance,
+  opening, and licensing guidance.
+- The public bootstrap cell source and developer notebook remain unchanged.
+- The complete v0.3 prompt is archived; the task-branch/PR workflow is durable
+  in `CONTRIBUTING.md` and concisely referenced from `AGENTS.md`.
+- Editable installation, Ruff, mypy, 66 tests, both notebooks, CLI help,
+  publication audit, and all six pre-commit hooks pass locally.
+- Only `fix/mvp1-colab-output-clarity-v0.3` was pushed. Draft PR #1 was created
+  against `main`, and its first CI run passed every gate for Python 3.11 and
+  3.12.
+- Human Colab validated N4-N7, GeoPackage, repair disabled, temporary storage
+  against `80c8015`: four KML files retained; only
+  `processed/pfaf_level4.gpkg` generated; N5-N7 omitted with 2, 1, and 2
+  topology findings; no traceback; one automatic ZIP button.
+- The downloaded archive was
+  `nica_geofetch_ineter_pfaf_n4-n7_gpkg_20260726T212025Z.zip` and contained the
+  expected raw/processed folders, `LEEME_RESULTADOS.md`, audits, manifest,
+  provenance, and checksums.
+- Singular/plural topology grammar, friendly format labels, notebook-only INFO
+  suppression, final-status ordering, and topology/attribute separation are
+  corrected with focused synthetic tests.
+- Technical issue codes/messages, validation/repair semantics, bootstrap
+  source, developer notebook, archive structure, and CLI logging remain
+  unchanged.
+- The complete 468-line HumanValidationUXCloseout prompt is archived with
+  identical normalized text.
 
 ## Incomplete
 
-The badge-launched human Colab retest remains. The human must exercise N4+N5
-without repair, all levels, explicit repair, the primary ZIP button, repeated
-execution, and optional manual import. No tag, GitHub release, PyPI package,
-data release, or institutional-data archive was created.
+Final human Colab confirmation of the five micro-fixes and second-run
+latest-only state remains pending, followed by ChatGPT Project merge
+recommendation. Merge approval and release approval remain pending. No merge,
+auto-merge, direct `main` push, force push, branch deletion, tag, GitHub
+release, PyPI package, data release, protection change, or institutional-data
+archive was performed.
 
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Human public-Colab retesting from a fresh anonymous runtime.
+Final human Colab confirmation of the micro-fixes and second-run latest-only
+behavior, followed by ChatGPT Project merge recommendation.
+
+## Open pull request
+
+- **PR:** [#1](https://github.com/datanicaragua/nica-geofetch/pull/1)
+- **Branch:** `fix/mvp1-colab-output-clarity-v0.3`
+- **Base:** `main`
+- **Commits before this closeout:** `304b8a5`, `80c8015`
+- **Human-validation UX closeout:** the following commit; exact SHA and final CI
+  are recorded in PR #1 evidence
+- **Green CI for human-tested HEAD:** [run
+  `30218205280`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30218205280)
+  on Python 3.11 and 3.12
+- **Merge authorized:** no
+- **Release authorized:** no
+
+## Required human public-Colab tests
+
+1. N6 progress and `LEEME_RESULTADOS.md` say `1 advertencia topológica`, while
+   N5/N7 use the plural.
+2. Initial and skipped progress use GeoPackage rather than `gpkg`.
+3. No internal `INFO | Created ... records` line appears.
+4. `Proceso terminado.` appears only after the summary, explanation, archive
+   location, and enabled ZIP button.
+5. N4 attribute observations appear separately from topology findings and
+   explicitly do not imply invalid geometry.
+6. A second automatic execution exposes only its latest archive.
 
 ## Verify environment
 
@@ -106,9 +169,13 @@ pre-commit run --all-files
 - Real level 7 input is large (about 35 MB and 2,337 placemarks), so parsing
   must remain bounded and conversions must be verified after writing.
 - Shapefile field-name constraints require deterministic mappings.
-- The automated public Git installation passes, but interactive Colab behavior
-  still requires the human top-to-bottom retest of the corrected warning and
-  delivery flows.
+- Automated notebook/package tests pass, but interactive rendering of the five
+  corrected messages and latest-only second-run state still require human
+  confirmation.
+- GitHub reports `main` as unprotected and no repository rulesets were found.
+  The new workflow is documented but not technically enforced. A future
+  human-approved governance task should consider required PR/status checks and
+  force-push/branch-deletion restrictions.
 - HydroBASINS or another comparable source must never be substituted under the
   INETER dataset identifier.
 
@@ -127,9 +194,9 @@ pre-commit run --all-files
 - `scripts/audit_seed_inputs.py`
 - `pyproject.toml`
 
-## Dirty working tree
+## Working tree
 
-Expected after the source-retention/Colab closeout commit: clean tracked working
-tree synchronized with `origin/main`.
+Expected after the human-validation UX closeout: clean tracked working tree on
+`fix/mvp1-colab-output-clarity-v0.3`, synchronized with the remote task branch.
 `seed_inputs/`, `.venv/`, `.pytest_tmp/`, `.pre-commit-cache/`, and `tmp/` are
 ignored local artifacts and must remain untracked.

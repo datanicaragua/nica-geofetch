@@ -24,6 +24,12 @@ All notable changes are documented here.
   import.
 - Separate acquisition, original-geometry, and analytical-readiness statuses
   with retained-source and repair-checksum evidence.
+- A concise `LEEME_RESULTADOS.md` in every final ZIP, listing retained source
+  files, generated analytical files, skipped outputs, and audit/provenance
+  locations.
+- Dynamic Colab preflight expectations and per-level Spanish result
+  explanations based on selected levels, formats, repair state, and the latest
+  verified audit.
 
 ### Changed
 
@@ -48,3 +54,26 @@ All notable changes are documented here.
 - Every completed workflow includes retained original KML in the final ZIP,
   even when the selected analytical format cannot be generated for a warning
   level.
+- The public Colab now has static five-step guidance, one authoritative
+  automatic ZIP button, a subordinate manual fallback, compact result columns,
+  localized common warnings, and collapsed implementation cells.
+- Final archives use descriptive level/format/UTC names and preserve separate
+  per-level analytical outputs; all-level selection still means one execution
+  and one ZIP, not one consolidated GeoPackage.
+- Nontrivial repository changes now use the documented task-branch, draft-PR,
+  CI, independent-review, and human-approval workflow.
+
+### Fixed
+
+- Public Colab now uses correct singular/plural Spanish for topology-warning
+  counts in progress, result explanations, and `LEEME_RESULTADOS.md`.
+- Beginner progress consistently displays KML, GeoPackage, GeoJSON, and
+  Shapefile ZIP labels instead of internal format identifiers.
+- Package INFO logging is suppressed only in the public beginner notebook;
+  notebook progress, expected warnings, errors, CLI logging, and the developer
+  notebook remain available as before.
+- The definitive `Proceso terminado.` state now appears only after the summary,
+  per-level explanation, archive location, existence check, and enabled
+  automatic download button.
+- Beginner output now separates topology findings that affect analytical
+  generation from attribute observations retained for review.

@@ -7,11 +7,13 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from nica_geofetch.conversion import convert_report
+from nica_geofetch.diagnostics import utc_now
 from nica_geofetch.exceptions import ValidationError
 from nica_geofetch.manifests import (
     write_audit_reports,
     write_checksums,
     write_provenance_summary,
+    write_results_guide,
     write_source_manifest,
 )
 from nica_geofetch.models import (
@@ -21,7 +23,7 @@ from nica_geofetch.models import (
     ValidationReport,
     WorkflowResult,
 )
-from nica_geofetch.packaging import create_final_archive
+from nica_geofetch.packaging import build_archive_name, create_final_archive
 from nica_geofetch.providers.ineter_pfafstetter import (
     IneterPfafstetterProvider,
     ProgressCallback,
@@ -53,6 +55,7 @@ def _finalize(
     formats: list[OutputFormat],
     progress_callback: ProgressCallback | None = None,
 ) -> WorkflowResult:
+    generated_at_utc = utc_now()
     requested_formats = list(dict.fromkeys([OutputFormat.KML, *formats]))
     conversions: list[ConversionResult] = []
     for report in reports:
@@ -73,10 +76,22 @@ def _finalize(
     audit_json, audit_markdown = write_audit_reports(output_directory, reports, conversions)
     write_source_manifest(output_directory, reports, conversions)
     write_provenance_summary(output_directory, reports, conversions)
+    results_guide = write_results_guide(
+        output_directory,
+        reports,
+        conversions,
+        formats,
+        generated_at_utc=generated_at_utc,
+    )
     write_checksums(output_directory)
     if progress_callback:
         progress_callback("creating_archive", None, None)
-    archive = create_final_archive(output_directory)
+    archive_name = build_archive_name(
+        levels=(report.level for report in reports),
+        formats=formats,
+        generated_at_utc=generated_at_utc,
+    )
+    archive = create_final_archive(output_directory, archive_name=archive_name)
     if progress_callback:
         progress_callback("completed", None, None)
     return WorkflowResult(
@@ -86,6 +101,9 @@ def _finalize(
         archive_path=archive,
         audit_json_path=audit_json,
         audit_markdown_path=audit_markdown,
+        results_guide_path=results_guide,
+        requested_formats=formats,
+        generated_at_utc=generated_at_utc,
     )
 
 

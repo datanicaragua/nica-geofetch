@@ -22,6 +22,9 @@ commit or publish real KML or converted institutional data. Do not call INETER
 data open unless an explicit license is found. Never push, publish, or upload
 institutional data from this repository.
 
+Nontrivial changes must use a task branch and pull request. Read
+`CONTRIBUTING.md` for the full workflow.
+
 ## Resume protocol
 
 Before continuing any future task:

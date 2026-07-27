@@ -182,3 +182,74 @@
   the release gate; no tag, release, or institutional dataset was created.
 - Pushed `0be8580` normally to the existing `origin/main`. GitHub Actions run
   `30167669342` passed every required job on Python 3.11 and 3.12.
+
+## 2026-07-26 - Colab output-clarity release candidate
+
+- Started from clean synchronized public `main` at `5da9e4e` and created
+  `fix/mvp1-colab-output-clarity-v0.3`; no work occurred directly on `main`.
+- Converted the public notebook to a static five-step beginner flow with one
+  automatic ZIP control, subordinate click-triggered manual fallback, exact
+  temporary-storage guidance, compact Spanish results, localized expected
+  warnings, dynamic preflight expectations, per-level generated/skipped
+  explanations, and collapsed implementation cells.
+- Preserved the public bootstrap cell source and the complete developer
+  notebook byte for byte.
+- Clarified that `raw/` retains unchanged institutional KML, `processed/`
+  contains analytical derivatives, all-level selection means one execution and
+  one ZIP, and each GeoPackage contains only its named level.
+- Added descriptive level/format/UTC archive names and concise UTF-8
+  `LEEME_RESULTADOS.md` content to every final ZIP.
+- Documented the durable task-branch and pull-request workflow in
+  `CONTRIBUTING.md` with a concise reference from `AGENTS.md`.
+- Archived the complete 1,117-line v0.3 prompt with text identical to the
+  supplied attachment after newline normalization.
+- Editable installation, Ruff, mypy, 66 tests, CLI help, both notebook
+  validations, publication audit, and all six pre-commit hooks passed locally.
+- Publication audit inspected 77 candidates and found no institutional data,
+  sensitive filename, or supported secret signature.
+- The existing 2026-07-25 polite N4 live evidence was retained because source
+  download, validation, and remote behavior did not change; no N4-N7 live run
+  was performed.
+- Created implementation commit `304b8a5`, pushed only the authorized task
+  branch, and opened draft PR
+  [#1](https://github.com/datanicaragua/nica-geofetch/pull/1).
+- GitHub Actions run
+  [`30217903826`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30217903826)
+  passed every gate on Python 3.11 and 3.12 for `304b8a5`. The documentation
+  closeout commit and its final CI result are recorded in PR evidence.
+- ChatGPT Project audit, human public-Colab validation, merge, and release
+  decisions remain pending. No merge, tag, release, protection change, or
+  institutional-data publication was performed.
+
+## 2026-07-26 - Human-validation UX closeout
+
+- Recorded a fresh public-Colab N4-N7/GeoPackage/repair-off run against
+  `80c8015`. All four original KML files were retained; only
+  `processed/pfaf_level4.gpkg` was generated; levels 5-7 were omitted with
+  2, 1, and 2 topology findings.
+- Confirmed the compact summary, dynamic generated/skipped explanation,
+  traceback-free completion, one enabled automatic ZIP button, and downloaded
+  archive
+  `nica_geofetch_ineter_pfaf_n4-n7_gpkg_20260726T212025Z.zip`.
+- Confirmed the archive contained `raw/`, `processed/`,
+  `LEEME_RESULTADOS.md`, both audit reports, source manifest, provenance
+  summary, and checksum map.
+- Corrected Spanish number agreement for 0, 1, and multiple topology findings
+  in public messages and the results guide.
+- Replaced beginner-visible internal format identifiers with KML, GeoPackage,
+  GeoJSON, and Shapefile ZIP labels.
+- Suppressed package INFO noise only in the public notebook while retaining
+  notebook progress, warnings, error handling, CLI logging, and the unchanged
+  developer notebook.
+- Changed the workflow callback's completed message to a non-final ZIP state
+  and deferred `Proceso terminado.` until summary, explanation, archive
+  assignment/location/existence, and button enablement all succeed.
+- Separated topology findings from attribute observations and explained that
+  attribute observations do not by themselves mean invalid geometry.
+- Preserved all technical issue codes/messages, validation/repair behavior,
+  output policy, manifests, provenance, archive structure, bootstrap source,
+  and developer notebook.
+- Expanded the focused offline suite from 66 to 71 tests. Final local gates,
+  closeout commit SHA, push, and final CI are recorded in PR #1 evidence.
+- No live download was repeated. Merge, auto-merge, tags, releases, protection
+  changes, and institutional-data publication remain unauthorized.
