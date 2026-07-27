@@ -341,8 +341,13 @@
 - Created implementation commit
   `52da0d7f9c36687f73b154b270072d8ecc2d696c`, pushed
   `release/v0.1.0` normally, and opened draft
-  [PR #3](https://github.com/datanicaragua/nica-geofetch/pull/3). Release-branch
-  CI and independent audit remain pending.
+  [PR #3](https://github.com/datanicaragua/nica-geofetch/pull/3).
+- Release-branch CI run
+  [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847)
+  passed every required gate on Python 3.11 and 3.12 for branch HEAD
+  `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`. Current checks and the final PR
+  evidence comment remain the operational source of truth.
+- Independent ChatGPT Project audit remains pending.
 - Release readiness is not declared; merge, tag, GitHub Release, PyPI
   publication, institutional-data publication, repository-setting changes,
   force push, and branch deletion remain unperformed and unauthorized.

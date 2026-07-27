@@ -26,6 +26,7 @@ push, tag, release, visibility/protection change, or data publication.
 | Public visibility gate | Passed | Existing `datanicaragua/nica-geofetch` changed from private to public after every automated gate passed. |
 | Security reporting | Actionable; owner recommendation pending | Private vulnerability reporting was verified disabled through the GitHub API. `SECURITY.md` instructs reporters to request a private channel without disclosing details; enabling the GitHub setting remains a human-owner recommendation. |
 | Build and clean-wheel audit | Passed locally | Wheel and sdist built and passed Twine checks; contents were inspected; a clean temporary environment installed the wheel, printed `0.1.0`, and passed CLI help; generated artifacts were removed. |
+| Release-branch CI | Passed | Run [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847) passed every required gate on Python 3.11 and 3.12 for branch HEAD `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`. Current checks and the final PR evidence comment are the source of truth for later evidence-only HEADs. |
 | v0.1.0 release gate | **Pending — readiness not declared** | The stable notebook pin and software-only policy are prepared on `release/v0.1.0`. Independent PR audit, human merge authorization, separate tag authorization, post-tag fresh-Colab validation, and separate GitHub Release authorization remain pending. |
 
 ## Release-preparation baseline

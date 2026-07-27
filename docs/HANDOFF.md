@@ -1,6 +1,6 @@
 # Handoff
 
-- **last_updated_utc:** `2026-07-27T19:18:47Z`
+- **last_updated_utc:** `2026-07-27T19:29:54Z`
 
 ## What is being done
 
@@ -47,6 +47,10 @@ unmerged for independent audit. The governing prompt is
 - Created implementation commit
   `52da0d7f9c36687f73b154b270072d8ecc2d696c`, pushed the release branch
   normally, and opened unmerged draft PR #3.
+- Release-branch CI run
+  [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847)
+  passed on Python 3.11 and 3.12 for branch HEAD
+  `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`.
 
 ## Local verification completed
 
@@ -73,9 +77,10 @@ unmerged for independent audit. The governing prompt is
 
 ## Verification still to complete
 
-- GitHub Actions for the final release branch.
-- Final evidence comment with the branch HEAD and CI URLs.
 - Independent ChatGPT Project audit.
+
+The PR's current checks and final evidence comment are the operational source
+of truth for the latest branch HEAD and CI URLs.
 
 The committed stable pin must not be weakened for pre-tag validation. Local
 execution may use a temporary untracked override or the built wheel. Final
@@ -97,9 +102,9 @@ authorized by this task.
 ## NEXT_ACTION
 
 NEXT_ACTION:
-Wait for green CI on draft PR #3, add final branch and CI evidence, and submit
-the open PR and evidence to ChatGPT Project for independent audit. Do not
-merge, tag, or publish.
+Use draft PR #3's current checks and final evidence comment as the source of
+truth, then submit the open PR and evidence to ChatGPT Project for independent
+audit. Do not merge, tag, or publish.
 
 ## Resume commands
 

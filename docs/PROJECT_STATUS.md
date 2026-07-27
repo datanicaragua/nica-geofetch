@@ -11,6 +11,10 @@
 - **Release-preparation pull request:** draft
   [#3](https://github.com/datanicaragua/nica-geofetch/pull/3), open and
   unmerged
+- **Recorded release-branch CI:** run
+  [`30298032847`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30298032847)
+  passed on Python 3.11 and 3.12 for branch HEAD
+  `a307e6cc54b16ea45df9def1a6070f5f018c6bbe`
 - **PR #2:** merged
 - **PR #2 source HEAD:**
   `7d08a244f16bdae704c620ee35fae19b02392390`
@@ -19,7 +23,7 @@
 - **Verified post-merge CI:** run
   [`30292686085`](https://github.com/datanicaragua/nica-geofetch/actions/runs/30292686085)
   passed for the PR #2 merge commit
-- **last_updated_utc:** `2026-07-27T19:18:47Z`
+- **last_updated_utc:** `2026-07-27T19:29:54Z`
 
 ## Implemented MVP-1 capabilities
 
@@ -118,10 +122,11 @@ The preflight independently confirmed:
 ## Governance state
 
 Release readiness is not yet declared. Draft release-preparation PR #3 is
-open and unmerged. Its GitHub Actions result and independent ChatGPT Project
-audit remain pending. Human merge authorization, separate tag authorization,
-post-tag fresh-Colab check, and further GitHub Release authorization remain
-pending. No data publication is authorized.
+open, mergeable, and unmerged. Release-branch CI is green; the PR checks and
+final evidence comment remain the source of truth for the current HEAD.
+Independent ChatGPT Project audit remains pending. Human merge authorization,
+separate tag authorization, post-tag fresh-Colab check, and further GitHub
+Release authorization remain pending. No data publication is authorized.
 
 This task does not authorize a merge, tag, GitHub Release, PyPI publication,
 institutional-data publication, repository-setting change, force push, or
@@ -142,6 +147,7 @@ These settings are recommendations only and were not applied.
 
 ## Next recommended action
 
-Wait for green CI on draft PR #3, add final branch/CI evidence, and submit the
-open PR and evidence to ChatGPT Project for independent audit. Do not merge,
-tag, publish, or change repository settings under the current authorization.
+Use draft PR #3's current checks and final evidence comment as the source of
+truth, then submit the open PR and evidence to ChatGPT Project for independent
+audit. Do not merge, tag, publish, or change repository settings under the
+current authorization.
